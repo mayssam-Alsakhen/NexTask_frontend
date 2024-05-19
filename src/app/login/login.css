@@ -1,0 +1,85 @@
+.wrapper.active{
+  height: 520px;
+}
+.wrapper .formBox.login{
+  transition: translate  .18s ease;
+  translate: 0;
+  background: transparent;
+}
+.wrapper.active .formBox.login{
+  transition: none;
+  translate: -400px;
+}
+
+.wrapper .formBox.register{
+  transition: none;
+  translate: 400px;
+ 
+}
+.wrapper.active .formBox.register{
+  transition: translate  .18s ease;
+  translate: 0; 
+}
+
+/*  */
+.inputBox input:focus,
+.inputBox input:valid {
+    border-color: rgb(65, 131, 197);
+}
+
+.inputBox label {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: #fff;
+    pointer-events: none;
+    transition: .5s ease;
+}
+
+.inputBox input:focus~label,
+.inputBox input:valid~label {
+    top: 1px;
+    font-size: .8em;
+    background: #05142ce5;
+    padding: 0 6px;
+    color: rgb(65, 131, 197);
+}
+
+/*  'prime': "#0A356D",
+      'second': '#E5F0FF' */
+form button {
+  background: linear-gradient(15deg, #042148 50%, #E5F0FF 50%);
+  background-size: 200% 100%;
+  color: #E5F0FF;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  transition: background-position 0.8s ease;
+}
+
+form button:hover {
+  background-position: -100% 0;
+  color: #050d2b;
+}
+
+
+
+/* glow */
+/* form button {
+  background-color: #042148;
+  color: #fff;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 40px #0A356D;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+form button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px #007bff, 
+    0 0 20px #007bff, 
+    0 0 20px #007bff;
+} */

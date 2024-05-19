@@ -1,0 +1,65 @@
+  aside {
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 0;
+    z-index: 1;
+    /* height: 100%;  */
+    position: absolute;
+    top: 80px;
+    left: 0;
+    bottom: 12px;
+    background-color: #11264a;
+    transition: width 0.5s ease-in-out;
+    ul {
+      list-style: none;
+      padding: 20px 0px;
+      li {
+        display: flex;
+        align-items: center;
+        color: #E5F0FF;
+        padding: 12px 0 12px 22px;
+        font-weight: 400;
+        transition: transform 1s;
+        cursor: pointer;
+      }
+      li:hover {
+        transform: translateX(5px);
+        color: #0288d1 !important;
+        border-left: 5px solid #0288d1;
+      }
+    }
+  }
+  .drawerMin {
+    width: 70px;
+    border: 2px solid #0288d1;
+    border-radius: 8px;
+    border-left: 0px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .drawerOpen {
+    width: 240px;
+    border: 2px solid #0288d1;
+    border-radius: 8px;
+    border-left: 0px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  /* to be removed */
+  main {
+    position: absolute;
+    top: 80px;
+    padding: 1em;
+    margin-left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    transition: margin-left 0.5s ease-in-out;
+  }
+  .mainMin {
+    margin-left: 70px;
+  }
+  .mainOpen {
+    margin-left: 240px;
+  }
+  
