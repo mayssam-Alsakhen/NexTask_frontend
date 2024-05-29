@@ -33,7 +33,7 @@ function Card() {
       status: 'In Progress',
       isImportant: false,
       start_date: '02/3/2023',
-      end_date: '09/3/2023'
+      due_date: '09/3/2023'
 
     },
     {
@@ -43,7 +43,7 @@ function Card() {
       status: 'Pending',
       isImportant: false,
       start_date: '02/3/2023',
-      end_date: '09/3/2023'
+      due_date: '09/3/2023'
 
     },
     {
@@ -53,7 +53,7 @@ function Card() {
       status: 'Completed',
       isImportant: false,
       start_date: '02/3/2023',
-      end_date: '09/3/2023'
+      due_date: '09/3/2023'
 
     },
     {
@@ -63,7 +63,7 @@ function Card() {
       status: 'Testing',
       isImportant: false,
       start_date: '02/3/2023',
-      end_date: '09/3/2023'
+      due_date: '09/3/2023'
 
     },
     {
@@ -73,7 +73,7 @@ function Card() {
       status: 'Pending',
       isImportant: true,
       start_date: '02/3/2023',
-      end_date: '09/3/2023'
+      due_date: '09/3/2023'
 
     }
   ]
