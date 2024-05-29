@@ -29,7 +29,7 @@ function Card() {
     {
       id: 1,
       title: 'In Progress',
-      descretion: 'doing all my task',
+      description: 'doing all my task',
       status: 'In Progress',
       isImportant: false,
       start_date: '02/3/2023',
@@ -39,7 +39,7 @@ function Card() {
     {
       id: 2,
       title: 'Pending',
-      descretion: 'doing all my task to have it done on time so i should start',
+      description: 'doing all my task to have it done on time so i should start',
       status: 'Pending',
       isImportant: false,
       start_date: '02/3/2023',
@@ -49,7 +49,7 @@ function Card() {
     {
       id: 3,
       title: 'Completed',
-      descretion: 'doing all my task having it completed is the best thing you will see on your task board doing all my task having it completed is the best thing you will see on your task board doing all my task having it completed is the best thing you will see on your task board',
+      description: 'doing all my task having it completed is the best thing you will see on your task board doing all my task having it completed is the best thing you will see on your task board doing all my task having it completed is the best thing you will see on your task board',
       status: 'Completed',
       isImportant: false,
       start_date: '02/3/2023',
@@ -59,7 +59,7 @@ function Card() {
     {
       id: 4,
       title: 'Testing',
-      descretion: 'doing all my task',
+      description: 'doing all my task',
       status: 'Testing',
       isImportant: false,
       start_date: '02/3/2023',
@@ -69,7 +69,7 @@ function Card() {
     {
       id: 5,
       title: 'Pending important',
-      descretion: 'doing all my task',
+      description: 'doing all my task',
       status: 'Pending',
       isImportant: true,
       start_date: '02/3/2023',
