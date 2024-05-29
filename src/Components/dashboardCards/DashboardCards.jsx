@@ -8,9 +8,9 @@ import { RiAdminFill } from "react-icons/ri";
 
 function DashboardCards() {
     return (
-        <div className='flex justify-center gap-14'>
+        <div className='flex lg:flex-row sm:flex-col justify-center gap-14'>
             {/* projects card */}
-            <div className=' bg-[#b6c6ff] text-designing w-[47%] min-h-64 rounded-2xl p-3 flex flex-col justify-around'>
+            <div className=' bg-[#b6c6ff] text-designing lg:w-[47%] sm:w-full min-h-64 rounded-2xl p-3 flex flex-col justify-around'>
                 <div className='w-[90px] h-[90px] bg-second rounded-full flex justify-center items-center bg-opacity-25'>
                     <script src="https://cdn.lordicon.com/lordicon.js"></script>
                     <lord-icon
@@ -75,7 +75,7 @@ function DashboardCards() {
             </div>
 
             {/* tasks card */}
-            <div className=' bg-[#b6c6ff] text-designing w-[47%] min-h-64 rounded-2xl p-3 flex flex-col justify-around'>
+            <div className=' bg-[#b6c6ff] text-designing lg:w-[47%] sm:w-full min-h-64 rounded-2xl p-3 flex flex-col justify-around'>
                 <div className='w-[90px] h-[90px] bg-second rounded-full flex justify-center items-center bg-opacity-25'>
                     <script src="https://cdn.lordicon.com/lordicon.js"></script>
                     <lord-icon
@@ -86,6 +86,7 @@ function DashboardCards() {
                     </lord-icon>
                 </div>
                 <h2 className='text-xl font-bold'>Tasks</h2>
+                <div>total task number</div>
                 {/* tasks info */}
                 <div className='flex justify-center gap-x-12 gap-y-14 flex-wrap'>
                     {/* pending info */}

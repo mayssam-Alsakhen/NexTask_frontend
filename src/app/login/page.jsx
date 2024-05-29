@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import Link from 'next/link';
 import './login.css' 
 
 function Login() {
@@ -38,7 +39,7 @@ setAction('active')
                 </label>
                 <a href="#"> Forgot password ?</a>
             </div> */}
-            <button type='submit' className=' w-full h-11 rounded-[40px] cursor-pointer font-bold'>Login</button>
+            <button type='submit' className=' w-full h-11 rounded-[40px] cursor-pointer font-bold'><Link href='/dashboard'>Login</Link></button>
             <div className='registerLink text-center mt-5 mb-4'>
                 Don not have an account? <a href="#" className=' font-semibold' onClick={registerLink}> Register</a>
             </div>
@@ -69,7 +70,7 @@ setAction('active')
                 </label>
                 <a href="#"> agree terms..</a>
             </div> */}
-            <button type='submit' className=' w-full h-11 rounded-[40px] cursor-pointer font-bold '>Register</button>
+            <button type='submit' className=' w-full h-11 rounded-[40px] cursor-pointer font-bold '><Link href='/dashboard'>Register</Link></button>
             <div className='registerLink text-center mt-5 mb-4'>
                  Already have an account? <a href="#" className='font-semibold' onClick={loginLink}> Login</a>
             </div>

@@ -41,18 +41,19 @@ module.exports = {
 
       colors:{
         // 050d2b 11264a
+        //pending #edee63, prog , done #94f6a4 test #64c8f7 impo #f8acb9
         'prime': "#050d2b",
         'second': '#E5F0FF',
         'secondDark':'#020c30',
         'designing' : '#0288d1',
-        'pending': '#fcfd95',
-        'progress':'#e8c7fd',
-        'testing':'#b1f2ff',
-        'done':'#baffc5',
-        'important':'#ffcccc',
+        'pending': '#edee63',
+        'progress':'#c97bfa',
+        'testing':'	#64c8f7',
+        'done':'#94f6a4',
+        'important':'#f8acb9',
         'importanttext':'#f16667',
         'progresstext':'#cb40f5',
-        'pendingtext':'#fef24e',
+        'pendingtext':'#f4d201',
         'donetext':'#04c005',
         'testingtext':'#35a8c0'
       }

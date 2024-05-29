@@ -11,7 +11,7 @@
 .rwd-table td:before {
   content: attr(data-th) ": ";
   font-weight: bold;
-  width: 150px;
+  width: 120px;
   display: inline-block;
   color: #050d2b;
 }

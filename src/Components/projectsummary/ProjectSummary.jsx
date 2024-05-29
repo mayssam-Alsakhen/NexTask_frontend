@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import '../projectsummary/projectsummary.css'
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 // table data
 const projects = [
@@ -19,7 +19,7 @@ const data = [
   { name: 'Group D', value: 200 },
 ];
 // colors
-const COLORS = ['#fef24e', '#cb40f5', '#35a8c0', '#04c005'];
+const COLORS = ['#c97bfa', '#edee63', '#64c8f7', '#94f6a4'];
 
 // label custemization
 const RADIAN = Math.PI / 180;                            
@@ -37,9 +37,10 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 
 function ProjectSummary() {
   return (
-    <div className='flex lg:flex-row sm:flex-col items-center gap-x-10 gap-y-10'>
-          <div className='lg:w-[60%] max-w-full bg-[#b6c6ff] md:p-5 sm:py-2 rounded-lg overflow-auto h-[420px]'>
-        <table className='rwd-table w-full text-prime overflow-hidden'>
+    // flex lg:flex-row sm:flex-col items-center gap-x-10 gap-y-10
+    <div className='flex sm:flex-col gap-10 lg:flex-row'>
+          <div className='lg:w-[60%] sm:w-full text-prime bg-[#b5c5ff] md:p-5 sm:py-2 rounded-lg overflow-auto h-[420px]'>
+        <table className='rwd-table w-full overflow-hidden'>
             <thead>
                 <tr>
                 <th>Project Name</th>
@@ -54,14 +55,14 @@ function ProjectSummary() {
                 <td data-th="Project Name">{project.Name}</td>
                 <td data-th="Project Manager">{project.manager}</td>
                 <td data-th="Due Date">{project.due_date}</td>
-                <td data-th="Status"><p className={` whitespace-nowrap text-center text-sm p-1 sm:inline-block md:block rounded-full ${project.status=='Pending'?'bg-pendingtext': project.status=='In Progress'? 'bg-progresstext':project.status=='Testing'?'bg-testingtext': project.status=='Completed'?'bg-donetext':''}`}>{project.status}</p></td>
+                <td data-th="Status"><p className={` whitespace-nowrap text-center text-sm p-1 sm:inline-block md:block rounded-full w-24 ${project.status=='Pending'?'bg-pending': project.status=='In Progress'? 'bg-progress':project.status=='Testing'?'bg-testing': project.status=='Completed'?'bg-done':''}`}>{project.status}</p></td>
                 </tr>
-                ))}
+                ))} 
             </tbody>
         </table>
         </div>
         {/* chart */}
-        <div className='lg:w-[40%] h-[400px] md:w-full sm:w-[300px] flex justify-center'>
+        <div className='lg:w-[40%] h-[400px] md:w-full sm:w-[300px] flex justify-center self-center'>
         <ResponsiveContainer width="100%" height='100%'>
           <PieChart>
             <Pie  data={data}
@@ -77,7 +78,7 @@ function ProjectSummary() {
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
             </Pie>
-          <Tooltip />
+          {/* <Tooltip /> */}
           </PieChart>
         </ResponsiveContainer>
         </div>

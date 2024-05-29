@@ -1,8 +1,30 @@
 "use client"
 import Image from 'next/image';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 function Card() {
+  console.log(new Date());
+  const [card, setCards] = useState([]);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost/nextask/');
+        const result = await response.json();
+        if (response.ok) {
+          setCards(result);
+        } else {
+          setError(result.error );
+        }
+      } catch (error) {
+        setError('Error fetching data.');
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const cards = [
     {
       id: 1,
@@ -60,15 +82,15 @@ function Card() {
     <div className='flex gap-[30px] flex-wrap justify-center gap-y-16'>
       {/* card  */}
       {cards.map(card => (
-        <div key={card.id} onMouseEnter={() => setCardOpen(card.id)} onClick={() => setCardOpen(card.id)} onMouseLeave={() => setCardOpen(null)} className={`relative flex justify-center items-start md:w-[350px] sm:w-[230px] max-w-full h-[300px]  transition-all duration-500 rounded-2xl ${cardOpen == card.id? "h-[400px]" :''} ${card.status == 'In Progress' && card.isImportant ? "bg-important" : card.status == 'In Progress' && !card.isImportant ? "bg-progress" : card.status == 'Pending' && card.isImportant ? "bg-important" : card.status == 'Pending' && !card.isImportant ? 'bg-pending' : card.status == 'Completed' ? 'bg-done' : card.status == 'Testing' ? 'bg-testing' : "bg-prime"} `}>
+        <div key={card.id} onMouseEnter={() => setCardOpen(card.id)} onClick={() => setCardOpen(card.id)} onMouseLeave={() => setCardOpen(null)} className={`relative flex justify-center items-start lg:w-[350px] md:w-full sm:w-[230px] h-[300px] ${cardOpen == card.id? "h-[400px]" :''}  transition-all duration-500 rounded-2xl ${card.status == 'In Progress' && card.isImportant ? "bg-important" : card.status == 'In Progress' && !card.isImportant ? "bg-progress" : card.status == 'Pending' && card.isImportant ? "bg-important" : card.status == 'Pending' && !card.isImportant ? 'bg-pending' : card.status == 'Completed' ? 'bg-done' : card.status == 'Testing' ? 'bg-testing' : "bg-prime"} `}>
           {/* image of the card */}
           <div className={`${cardOpen == card.id ? "top-[-80px] scale-75 transform" : ""} absolute top-5 md:w-[300px] sm:w-[185px] h-[220px] bg-prime rounded-xl overflow-hidden transition-all duration-500 `}>
-            <Image className='absolute top-0 left-0 w-full h-full object-cover' />
+            <Image src={`${card.status == 'Testing'? "/testing.png" : card.status=='Pending' && !card.isImportant? '/pending.png':card.status=='Completed'? "/done.jpg" : card.status =='In Progress' && !card.isImportant? '/progress.jpg': card.status=='In Progress' ?'/important.jpg' :card.status=='Pending' ? '/important.jpg' :''}`} width={200} height={200} className='absolute top-0 left-0 w-full h-full object-cover hover:scale-125 transition-all duration-500 transform' />
           </div>
             {/* content of the card */}
           <div className={` ${cardOpen == card.id ? ' top-32 h-[256px] overflow-auto' : 'overflow-hidden top-[252px] h-8'}  text-prime absolute w-full px-12 text-center transition-all duration-500`}>
             <h1 className={`text-xl`}>{card.title}</h1>
-            <p className={`text-sm `}>{card.end_date}</p>
+            <p className={`text-sm `}>{card.due_date}</p>
 
             {/* icon */}
             {card.status == 'In Progress' ? <div>
@@ -110,7 +132,7 @@ function Card() {
               </lord-icon>
             </div> : ''}
             {/* text desc */}
-            <p className='text-justify'>{card.descretion}</p>
+            <p className='text-justify'>{card.description}</p>
             {/* footer */}
             <div className=' border-t border-prime my-8 py-3'>
                     <div>

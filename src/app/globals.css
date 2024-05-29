@@ -29,4 +29,8 @@ body {
     )
     rgb(var(--background-start-rgb)); */
 }
+::-webkit-scrollbar {
+  width: 0px; /* Width of the scrollbar */
+}
+
 
