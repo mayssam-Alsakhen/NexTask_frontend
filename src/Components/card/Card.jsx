@@ -1,8 +1,16 @@
 "use client"
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react'
+import Comment from '../comments/comments';
+import React, { useEffect, useState } from 'react';
+import comments from "../../../public/comment.svg"
 
 function Card() {
+const [openCommentId, setOpenCommentId] = useState(null);
+
+const toggleComments = (id) => {
+  setOpenCommentId(openCommentId === id ? null : id); 
+};
+
   console.log(new Date());
   const [card, setCards] = useState([]);
   const [error, setError] = useState(null);
@@ -29,7 +37,7 @@ function Card() {
     {
       id: 1,
       title: 'In Progress',
-      description: 'doing all my task',
+      description: 'doing all my task on time and trackng your tasks',
       status: 'In Progress',
       isImportant: false,
       start_date: '02/3/2023',
@@ -68,7 +76,7 @@ function Card() {
     },
     {
       id: 5,
-      title: 'Pending important',
+      title: 'Pending important ',
       description: 'doing all my task',
       status: 'Pending',
       isImportant: true,
@@ -82,14 +90,24 @@ function Card() {
     <div className='flex gap-[30px] flex-wrap justify-center gap-y-16'>
       {/* card  */}
       {cards.map(card => (
-        <div key={card.id} onMouseEnter={() => setCardOpen(card.id)} onClick={() => setCardOpen(card.id)} onMouseLeave={() => setCardOpen(null)} className={`relative flex justify-center items-start lg:w-[350px] md:w-full sm:w-[230px] h-[300px] ${cardOpen == card.id? "h-[400px]" :''}  transition-all duration-500 rounded-2xl ${card.status == 'In Progress' && card.isImportant ? "bg-important" : card.status == 'In Progress' && !card.isImportant ? "bg-progress" : card.status == 'Pending' && card.isImportant ? "bg-important" : card.status == 'Pending' && !card.isImportant ? 'bg-pending' : card.status == 'Completed' ? 'bg-done' : card.status == 'Testing' ? 'bg-testing' : "bg-prime"} `}>
+        <div key={card.id} onMouseEnter={() => setCardOpen(card.id)} onClick={() => setCardOpen(card.id)} onMouseLeave={() => setCardOpen(null)} 
+        className={`relative flex justify-center items-start lg:w-[350px] md:w-full sm:w-[230px] h-[300px] ${cardOpen == card.id? "h-[400px]" :''}  transition-all duration-500 rounded-2xl 
+        ${card.status == 'In Progress' && card.isImportant ? "bg-important" : card.status == 'In Progress' && !card.isImportant ? "bg-progress" : card.status == 'Pending' && card.isImportant ? "bg-important" : card.status == 'Pending' && !card.isImportant ? 'bg-pending' : card.status == 'Completed' ? 'bg-done' : card.status == 'Testing' ? 'bg-testing' : "bg-prime"} `}>
           {/* image of the card */}
           <div className={`${cardOpen == card.id ? "top-[-80px] scale-75 transform" : ""} absolute top-5 md:w-[300px] sm:w-[185px] h-[220px] bg-prime rounded-xl overflow-hidden transition-all duration-500 `}>
             <Image src={`${card.status == 'Testing'? "/testing.png" : card.status=='Pending' && !card.isImportant? '/pending.png':card.status=='Completed'? "/done.jpg" : card.status =='In Progress' && !card.isImportant? '/progress.jpg': card.status=='In Progress' ?'/important.jpg' :card.status=='Pending' ? '/important.jpg' :''}`} width={200} height={200} className='absolute top-0 left-0 w-full h-full object-cover hover:scale-125 transition-all duration-500 transform' />
           </div>
             {/* content of the card */}
-          <div className={` ${cardOpen == card.id ? ' top-32 h-[256px] overflow-auto' : 'overflow-hidden top-[252px] h-8'}  text-prime absolute w-full px-12 text-center transition-all duration-500`}>
-            <h1 className={`text-xl`}>{card.title}</h1>
+            {/* title */}
+          <div className={` ${cardOpen == card.id ? ' top-32 h-[256px] overflow-auto' : 'overflow-hidden top-[252px] h-8'}  text-prime absolute w-full md:px-12 sm:px-2 text-center transition-all duration-500`}>
+           <div className='flex justify-between items-center mb-3 '>
+            <h1 className={`text-xl max-w-56 text-left`}>{card.title}</h1>
+            <div className=' cursor-pointer' onClick={() => toggleComments(card.id)} onBlur={() => toggleComments(null)}>
+            <Image src={comments} width={25 } height={25} alt='comments'/>
+            </div>
+            </div>
+            {openCommentId === card.id? <div><Comment/></div> :
+            <div>
             <p className={`text-sm `}>{card.due_date}</p>
 
             {/* icon */}
@@ -132,7 +150,9 @@ function Card() {
               </lord-icon>
             </div> : ''}
             {/* text desc */}
-            <p className='text-justify'>{card.description}</p>
+            
+            <p className='text-justify' >{card.description}</p> 
+            </div>}
             {/* footer */}
             <div className=' border-t border-prime my-8 py-3'>
                     <div>

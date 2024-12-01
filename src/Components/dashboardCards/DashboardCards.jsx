@@ -11,7 +11,9 @@ function DashboardCards() {
         <div className='flex lg:flex-row sm:flex-col justify-center gap-14'>
             {/* projects card */}
             <div className=' bg-[#b6c6ff] text-designing lg:w-[47%] sm:w-full min-h-64 rounded-2xl p-3 flex flex-col justify-around'>
-                <div className='w-[90px] h-[90px] bg-second rounded-full flex justify-center items-center bg-opacity-25'>
+              {/* card head projects*/}
+               <div className='flex items-center mx-4 mb-7'>
+                <div className='w-[80px] h-[80px] bg-second rounded-full flex justify-center items-center bg-opacity-25 mr-3'>
                     <script src="https://cdn.lordicon.com/lordicon.js"></script>
                     <lord-icon
                         src="https://cdn.lordicon.com/ppyvfomi.json"
@@ -20,14 +22,15 @@ function DashboardCards() {
                         style={{ width: '60px', height: '60px' }}>
                     </lord-icon>
                 </div>
-                <h2 className='text-xl font-bold'>Projects</h2>
+                <h2 className='text-2xl font-bold'>Projects</h2>
+                </div>
                 {/* project info */}
                 <div className='flex justify-center gap-x-12 gap-y-14 flex-wrap'>
                     {/* first info */}
                     <div className='flex flex-col items-center'>
                         <div className='flex gap-1 items-center'>
                             <span><IoPerson className='text-testingtext' /></span>
-                            <span className='text-testingtext'> Personal Projects </span>
+                            <span> Personal Projects </span>
                         </div>
                         <p className='font-bold text-4xl'>
                             <CountUp end={25} />
@@ -37,7 +40,7 @@ function DashboardCards() {
                     <div className='flex flex-col items-center'>
                         <div className='flex gap-1 items-center'>
                             <span><MdGroups2 className='text-importanttext text-xl' /></span>
-                            <span className='text-importanttext cursor-pointer group relative transition-all duration-700 '> Team Projects
+                            <span className='cursor-pointer group relative transition-all duration-700 '> Team Projects
                                 {/* dropdown */}
                                 <div className={`absolute left-0 top-7 w-full text-center rounded-lg bg-second opacity-0 px-1 py-2 transition-all duration-700 transform translate-y-[-80%] group-hover:translate-y-0 group-hover:opacity-100 group-hover:bg-opacity-35`}>
                                     <div className='flex flex-col items-center'>
@@ -67,7 +70,7 @@ function DashboardCards() {
                     <div className='flex flex-col items-center'>
                         <div className='flex gap-1 items-center'>
                             <span><MdWork className='text-donetext' /></span>
-                            <span className='text-donetext'> Total Projects </span>
+                            <span> Total Projects </span>
                         </div>
                         <p className='font-bold text-4xl'><CountUp end={25} /></p>
                     </div>
@@ -76,7 +79,9 @@ function DashboardCards() {
 
             {/* tasks card */}
             <div className=' bg-[#b6c6ff] text-designing lg:w-[47%] sm:w-full min-h-64 rounded-2xl p-3 flex flex-col justify-around'>
-                <div className='w-[90px] h-[90px] bg-second rounded-full flex justify-center items-center bg-opacity-25'>
+              {/* card head tasks */}
+              <div className='flex items-center mx-4 mb-7'>
+                <div className='w-[80px] h-[80px] bg-second rounded-full flex justify-center items-center bg-opacity-25 mr-3'>
                     <script src="https://cdn.lordicon.com/lordicon.js"></script>
                     <lord-icon
                         src="https://cdn.lordicon.com/ppyvfomi.json"
@@ -85,15 +90,15 @@ function DashboardCards() {
                         style={{ width: '60px', height: '60px' }}>
                     </lord-icon>
                 </div>
-                <h2 className='text-xl font-bold'>Tasks</h2>
-                <div>total task number</div>
+                <h2 className='text-2xl font-bold'>Tasks</h2>
+                </div>
                 {/* tasks info */}
                 <div className='flex justify-center gap-x-12 gap-y-14 flex-wrap'>
                     {/* pending info */}
                     <div className='flex flex-col items-center'>
                         <div className='flex gap-1 items-center'>
                             <span><IoPerson className='text-pendingtext' /></span>
-                            <span className='text-pendingtext cursor-pointer group relative transition-all duration-700 text-sm'>Pending 
+                            <span className='cursor-pointer group relative transition-all duration-700 text-sm'>Pending 
                             <div className={`absolute left-0 top-7 min-w-full text-center rounded-lg bg-second opacity-0 px-1 py-2 transition-all duration-700 transform translate-y-[-80%] group-hover:translate-y-0 group-hover:opacity-100 group-hover:bg-opacity-35`}>
                                     <div className='flex flex-col items-center text-importanttext'>
                                         <div className='flex gap-[2px] items-center'>
@@ -118,7 +123,7 @@ function DashboardCards() {
                     <div className='flex flex-col items-center'>
                         <div className='flex gap-1 items-center'>
                             <span><MdGroups2 className='text-progresstext text-xl' /></span>
-                            <span className='text-progresstext cursor-pointer group relative transition-all duration-700 text-sm'> In Progress
+                            <span className='cursor-pointer group relative transition-all duration-700 text-sm'> In Progress
                                 {/* dropdown */}
                                 <div className={`absolute left-0 top-7 min-w-full text-center rounded-lg bg-second opacity-0 px-1 py-2 transition-all duration-700 transform translate-y-[-80%] group-hover:translate-y-0 group-hover:opacity-100 group-hover:bg-opacity-35`}>
                                     <div className='flex flex-col items-center'>
@@ -144,7 +149,7 @@ function DashboardCards() {
                     <div className='flex flex-col items-center'>
                         <div className='flex gap-1 items-center'>
                             <span><MdWork className='text-testingtext' /></span>
-                            <span className='text-testingtext cursor-pointer group relative transition-all duration-700 text-sm'> Testing
+                            <span className='cursor-pointer group relative transition-all duration-700 text-sm'> Testing
                             {/* dropdown */}
                             <div className={`absolute left-0 top-7 min-w-full text-center rounded-lg bg-second opacity-0 px-1 py-2 transition-all duration-700 transform translate-y-[-80%] group-hover:translate-y-0 group-hover:opacity-100 group-hover:bg-opacity-35`}>
                                     <div className='flex flex-col items-center'>
@@ -170,7 +175,7 @@ function DashboardCards() {
                     <div className='flex flex-col items-center'>
                         <div className='flex gap-1 items-center'>
                             <span><MdWork className='text-donetext' /></span>
-                            <span className='text-donetext cursor-pointer group relative transition-all duration-700 text-sm'> Completed
+                            <span className='cursor-pointer group relative transition-all duration-700 text-sm'> Completed
                             {/* dropdown */}
                             <div className={`absolute left-0 top-7 min-w-full text-center rounded-lg bg-second opacity-0 px-1 py-2 transition-all duration-700 transform translate-y-[-80%] group-hover:translate-y-0 group-hover:opacity-100 group-hover:bg-opacity-35`}>
                                     <div className='flex flex-col items-center'>
