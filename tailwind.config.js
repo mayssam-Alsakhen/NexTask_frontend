@@ -22,6 +22,10 @@ module.exports = {
       dropShadow: {
         '3xl': '0px -2px 4px #0288d1',
       },
+      boxShadow:{
+        'button': '0 4px 5px rgba(0,0,0,0.3)',
+        'hoverButton': '0 6px 10px 2px'
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

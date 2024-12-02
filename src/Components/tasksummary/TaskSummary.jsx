@@ -189,7 +189,7 @@ function TaskSummary() {
           <p className={`cursor-pointer hover:text-designing ${overview == 0 ? ' text-designing border-b border-designing' : ''}`} onClick={() => setoverview(0)}>All</p>
           <p className={`cursor-pointer hover:text-designing ${overview == 1 ? ' text-designing border-b border-designing' : ''}`} onClick={() => setoverview(1)}>Important</p>
           <p className={`cursor-pointer hover:text-designing ${overview == 2 ? ' text-designing border-b border-designing' : ''}`} onClick={() => setoverview(2)}>Due Soon</p>
-          <p className={`cursor-pointer hover:text-designing ${overview == 3 ? ' text-designing border-b border-designing' : ''}`} onClick={() => setoverview(3)}>pending</p>
+          {/* <p className={`cursor-pointer hover:text-designing ${overview == 3 ? ' text-designing border-b border-designing' : ''}`} onClick={() => setoverview(3)}>pending</p> */}
         </div>
         <div className='sm:block md:hidden border-b border-prime py-4'>
         <select value={overview} onChange={(e) => setoverview(parseInt(e.target.value))} className={`text-designing font-bold text-lg bg-second bg-opacity-40 px-3 py-2 ml-4 outline-none rounded-2xl cursor-pointer`}>
@@ -236,7 +236,9 @@ function TaskSummary() {
                 <p>{task.due_date}</p>
                 <p>{dateDifferenceFromCurrent(task.due_date)===0? 'Due today': `Due in ${dateDifferenceFromCurrent(task.due_date)} days`}</p>
               </div>
-            ) : overview===3 && task.status ==='Pending'?(<div key={task.id}> <p> {task.title}</p></div>): null
+            ) 
+            // overview===3 && task.status ==='Pending'?(<div key={task.id}> <p> {task.title}</p></div>)
+            : null
         ))}
       </div>
 
