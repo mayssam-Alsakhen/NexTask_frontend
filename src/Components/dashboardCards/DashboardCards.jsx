@@ -1,6 +1,9 @@
 'use client'
 import React from 'react'
 import CountUp from 'react-countup';
+import Image from 'next/image';
+import project from '../../../public/project.svg'
+import task from '../../../public/task.svg'
 import { MdGroups2 } from "react-icons/md";
 import { IoPerson } from "react-icons/io5";
 import { MdWork } from "react-icons/md";
@@ -14,13 +17,7 @@ function DashboardCards() {
               {/* card head projects*/}
                <div className='flex items-center mx-4 mb-7'>
                 <div className='w-[80px] h-[80px] bg-second rounded-full flex justify-center items-center bg-opacity-25 mr-3'>
-                    <script src="https://cdn.lordicon.com/lordicon.js"></script>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/ppyvfomi.json"
-                        trigger="hover"
-                        colors="primary:#0288d1"
-                        style={{ width: '60px', height: '60px' }}>
-                    </lord-icon>
+                    <div><Image src={project} width={45} height={45} alt='project'/></div>
                 </div>
                 <h2 className='text-2xl font-bold'>Projects</h2>
                 </div>
@@ -82,13 +79,7 @@ function DashboardCards() {
               {/* card head tasks */}
               <div className='flex items-center mx-4 mb-7'>
                 <div className='w-[80px] h-[80px] bg-second rounded-full flex justify-center items-center bg-opacity-25 mr-3'>
-                    <script src="https://cdn.lordicon.com/lordicon.js"></script>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/ppyvfomi.json"
-                        trigger="hover"
-                        colors="primary:#0288d1"
-                        style={{ width: '60px', height: '60px' }}>
-                    </lord-icon>
+                <div><Image src={task} width={45} height={45} alt='project'/></div>
                 </div>
                 <h2 className='text-2xl font-bold'>Tasks</h2>
                 </div>
