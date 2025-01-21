@@ -5,7 +5,6 @@ import "./globals.css";
 import Sidebar from "@/Components/sidebar/Sidebar";
 import React ,{ useState } from "react";
 import Navbar from "@/Components/Navbar/Navbar";
-import { useRouter } from "next/navigation";
 import { usePathname } from 'next/navigation'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,7 +14,7 @@ const inter = Inter({ subsets: ["latin"] });
 // };
 
 export default function RootLayout({ children }) {
-const router =useRouter();
+// const router =useRouter();
 const pathname = usePathname()
 
   const [drawerPos, setDrawerPos] = useState(0);

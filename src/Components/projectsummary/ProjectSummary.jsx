@@ -43,10 +43,10 @@ function ProjectSummary() {
         <table className='rwd-table w-full overflow-hidden'>
             <thead>
                 <tr>
-                <th>Project Name</th>
-                <th>Project Manager</th>
-                <th>Due Date</th>
-                <th>Status</th>
+                <th>Project Title</th>
+                <th>Task Count</th>
+                <th>Completed Tasks</th>
+                {/* <th>Status</th> */}
                 </tr>
             </thead>
             <tbody>
@@ -55,7 +55,7 @@ function ProjectSummary() {
                 <td data-th="Project Name">{project.Name}</td>
                 <td data-th="Project Manager">{project.manager}</td>
                 <td data-th="Due Date">{project.due_date}</td>
-                <td data-th="Status"><p className={` whitespace-nowrap text-center text-sm p-1 sm:inline-block md:block rounded-full w-24 ${project.status=='Pending'?'bg-pending': project.status=='In Progress'? 'bg-progress':project.status=='Testing'?'bg-testing': project.status=='Completed'?'bg-done':''}`}>{project.status}</p></td>
+                {/* <td data-th="Status"><p className={` whitespace-nowrap text-center text-sm p-1 sm:inline-block md:block rounded-full w-24 ${project.status=='Pending'?'bg-pending': project.status=='In Progress'? 'bg-progress':project.status=='Testing'?'bg-testing': project.status=='Completed'?'bg-done':''}`}>{project.status}</p></td> */}
                 </tr>
                 ))} 
             </tbody>
@@ -65,6 +65,7 @@ function ProjectSummary() {
         <div className='lg:w-[40%] h-[400px] md:w-full sm:w-[300px] flex justify-center self-center'>
         <ResponsiveContainer width="100%" height='100%'>
           <PieChart>
+             <Tooltip />
             <Pie  data={data}
         cx="50%"
         cy="50%"
