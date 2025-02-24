@@ -2,52 +2,71 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './login.css' 
+import { useRouter } from "next/navigation";
 
 function Login() {
     const [action , setAction] = useState('');
+    const router = useRouter();
     //fetsh start
     const [loginData, setLoginData] = useState({ email: '', password: '' });
-    const [registerData, setRegisterData] = useState({ username: '', email: '', password: '' });
+    const [registerData, setRegisterData] = useState({ name: '', email: '', password: '' });
     const [errorMessage, setErrorMessage] = useState('');
-    const [error, setError] = useState('');
 
     const handleLoginSubmit = async (e) => {
-        e.preventDefault();
-        try {
-          const response = await axios.post('http://localhost/nextask/login.php', loginData, {headers : {'Content-Type': 'application/json'}});
-          console.log(response.data); 
-          if (response.data.message === "Login successful") {
-            localStorage.setItem('user_id', response.data.user.id);
-            setLoginData({email:'', password:''})
-            window.location.href = '/dashboard';
+      e.preventDefault();
+      setErrorMessage('');
+      
+      try {
+          const response = await axios.post('http://127.0.0.1:8000/api/login', loginData, {
+              headers: { 'Content-Type': 'application/json' }
+          });
+  
+          console.log("Login Response:", response.data);
+  
+          if (response.data.token) {
+              // Store token
+              localStorage.setItem('token', response.data.token);
+  
+              // Fetch user details after login
+              const meResponse = await axios.get('http://127.0.0.1:8000/api/me', {
+                  headers: { Authorization: `Bearer ${response.data.token}` }
+              });
+  
+              console.log("Me Response:", meResponse.data);
+  
+              // Store user data
+              localStorage.setItem('user', JSON.stringify(meResponse.data));
+              localStorage.setItem("user_id", meResponse.data.id);
+  
+              // Redirect to dashboard by changing `window.location`
+              window.location.href = '/dashboard';
           } else {
-            setErrorMessage(response.data.error || "Login failed");
+              setErrorMessage(response.data.error || "Login failed");
           }
-        } catch (error) {
-          console.error(error);
-          setErrorMessage("An error occurred during login");
-        }
-      };
+      } catch (error) {
+          console.error("Error:", error);
+          setErrorMessage(error.response?.data?.error || "An error occurred during login");
+      }
+  };
+  
     
       const handleRegisterSubmit = async (e) => {
         e.preventDefault();
+        setErrorMessage('');
         try {
-          const response = await axios.post('http://localhost/nextask/register.php', registerData,{headers:{'Content-Type': 'application/json'}} );
+          const response = await axios.post('http://127.0.0.1:8000/api/register', registerData,{headers:{'Content-Type': 'application/json'}} );
           console.log(response.data);   
-          if (response.data.message === "User registered successfully") {
-            setRegisterData({ username: '', email: '', password: '' });
-            window.location.href = '/dashboard';
-          }
-            //   else if(response.data.error === "Email already registered"){
-            //     setErrorMessage("Email already registered, please login ");
-            //     setAction('');
-            //   }
-           else {
-            setErrorMessage( "Registration failed");
-          }
+          if (response.data.token) {
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user_id', response.data.user.id);
+            setRegisterData({ name: '', email: '', password: '' });
+            router.push('/dashboard');
+        } else {
+            setErrorMessage("Registration failed");
+        }
         } catch (error) {
           console.error(error);
-          setErrorMessage( "An error occurred during registration");
+          setErrorMessage(error.response?.data?.error || "An error occurred during registration");
         }
       };
     
@@ -109,7 +128,7 @@ setErrorMessage('');
         <form onSubmit={handleRegisterSubmit}>
             <h1 className='text-4xl text-center'>Registration</h1>
             <div className='inputBox  relative w-full h-[50px] my-8 mx-0'>
-                <input type="text" name="username" required className='w-full h-full outline-none border border-solid border-[#ffffff2a] p-3 rounded-[40px] bg-[transparent]' 
+                <input type="text" name="name" required className='w-full h-full outline-none border border-solid border-[#ffffff2a] p-3 rounded-[40px] bg-[transparent]' 
                 onChange={(e) => handleInputChange(e, 'register')}
                 />
                 <label>Username</label>

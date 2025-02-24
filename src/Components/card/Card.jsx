@@ -44,7 +44,9 @@ function Card({cards}) {
         ${card.status == 'In Progress' && card.isImportant ? "bg-important" : card.status == 'In Progress' && !card.isImportant ? "bg-progress" : card.status == 'Pending' && card.isImportant ? "bg-important" : card.status == 'Pending' && !card.isImportant ? 'bg-pending' : card.status == 'Completed' ? 'bg-done' : card.status == 'Testing' ? 'bg-testing' : "bg-prime"} `}>
           {/* image of the card */}
           <div className={`${cardOpen == card.id ? "top-[-80px] scale-75 transform" : ""} absolute top-5 md:w-[300px] sm:w-[185px] h-[220px] bg-prime rounded-xl overflow-hidden transition-all duration-500 `}>
-            <Image src={`${card.status == 'Testing' ? "/testing.png" : card.status == 'Pending' && !card.isImportant ? '/pending.png' : card.status == 'Completed' ? "/done.jpg" : card.status == 'In Progress' && !card.isImportant ? '/progress.jpg' : card.status == 'In Progress' ? '/important.jpg' : card.status == 'Pending' ? '/important.jpg' : ''}`} width={200} height={200} className='absolute top-0 left-0 w-full h-full object-cover hover:scale-125 transition-all duration-500 transform' />
+            <Image src={`${card.status == 'Testing' ? "/testing.png" : card.status == 'Pending' && !card.isImportant ? '/pending.png' : card.status == 'Completed' ? "/done.jpg" : card.status == 'In Progress' && !card.isImportant ? '/progress.jpg' : card.status == 'In Progress' ? '/important.jpg' : card.status == 'Pending' ? '/important.jpg' : ''}`} 
+            width={200} height={200} alt='task image'
+            className='absolute top-0 left-0 w-full h-full object-cover hover:scale-125 transition-all duration-500 transform' />
           </div>
           {/* content of the card */}
           {/* title */}

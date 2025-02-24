@@ -1,5 +1,8 @@
-import React from 'react'
+'use client';
+import React, { useContext, useEffect } from 'react'
 import Card from '@/Components/card/Card'
+import { AuthContext } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 const cards = [
     {
       id: 1,
@@ -53,6 +56,18 @@ const cards = [
   ]
 
 function page() {
+  const { user, loading } = useContext(AuthContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login"); // Redirect only after checking authentication
+    }
+  }, [loading, user, router]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!user) return null; // Prevent rendering before redirection
+
   return (
     <div className='w-full h-full overflow-y-auto bg-secondDark md:p-10 sm:px-0 sm:py-10 border border-[#00334e] rounded-lg'>
      <Card cards={cards}/>

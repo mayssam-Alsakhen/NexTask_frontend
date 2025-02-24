@@ -31,22 +31,22 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
-     
-      // keyframes: {
-      //   wiggle: {
-      //     '0%, 100%': { transform: 'rotate(-3deg)' },
-      //     '50%': { transform: 'rotate(3deg)' },
-      //   }
-      // },
-      // animation: {
-      //   'wiggle': 'wiggle 1s ease-in-out 3',
-      //   'spin': 'spin 10s linear infinite',
-      // }
+      animation: {
+        slideFadeIn: 'slideFadeIn 0.8s ease-out forwards',
+      },
+      keyframes: {
+        slideFadeIn: {
+          '0%': { opacity: 0, transform: 'translateY(40px)' },
+          '50%': { opacity: 0.5, transform: 'translateY(20px)' },
+          '100%': { opacity: 1, transform: 'translateY(0)' },
+        },
+      },
 
       colors:{
         // 050d2b 11264a
         //pending #edee63, prog , done #94f6a4 test #64c8f7 impo #f8acb9
-        'prime': "#050d2b",
+        // 'prime': "#050d2b",
+        'prime': '#03045e',
         'second': '#E5F0FF',
         'secondDark':'#020c30',
         'designing' : '#0288d1',

@@ -1,16 +1,27 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/navigation";
+import { AuthContext } from "@/context/AuthContext";
 import axios from "axios";
 import Card from "@/Components/card/Card";
 
 const ProjectTasks = ({ params }) => {
   const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const { id: projectId } = params; // Extract `projectId` from route params
+  const { user, loading } = useContext(AuthContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login"); // Redirect only after checking authentication
+    }
+  }, [loading, user, router]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!user) return null; // Prevent rendering before redirection
+
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -25,15 +36,12 @@ const ProjectTasks = ({ params }) => {
         }
       } catch (err) {
         setError("Failed to fetch tasks");
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     fetchTasks();
   }, [projectId]);
 
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   return (

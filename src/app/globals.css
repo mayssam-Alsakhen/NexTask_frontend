@@ -19,18 +19,12 @@
 body {
   color: #E5F0FF;
   font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  background-color: #050d2b;
-  /* #D9D9D9; */
-  /* color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb)); */
+  /*  */
+  /* 03045e */
+  background-color: #3d5a80;
+
 }
 ::-webkit-scrollbar {
   width: 0px; /* Width of the scrollbar */
 }
-
 

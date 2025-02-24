@@ -78,7 +78,7 @@ function DashboardCards({title, total, fpart, fpartnb, spart, spartnb}) {
 
 
             {/* tasks card */}
-            <div className=' bg-[#b6c6ff] text-designing lg:w-[350px] sm:w-64 min-h-[300px] rounded-2xl flex flex-col justify-around'>
+            <div className=' bg-[#b6c6ff] text-designing lg:w-[350px] md:w-[310px] sm:w-64 min-h-[300px] rounded-2xl flex flex-col justify-around'>
               {/* card head tasks */}
               <div className='flex flex-col gap-y-7 items-center mx-4 '>
                 {/* <div className='w-[80px] h-[80px] bg-second rounded-full flex justify-center items-center bg-opacity-25 mr-3'>

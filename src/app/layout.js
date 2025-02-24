@@ -5,14 +5,12 @@ import "./globals.css";
 import Sidebar from "@/Components/sidebar/Sidebar";
 import React ,{ useState } from "react";
 import Navbar from "@/Components/Navbar/Navbar";
+import { AuthProvider } from "@/context/AuthContext";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { usePathname } from 'next/navigation'
 
 const inter = Inter({ subsets: ["latin"] });
-// export const metadata = {
-//   title: "NexTask",
-//   description: "task manager too can help a person or a team to manage the work easily ",
-// };
-
 export default function RootLayout({ children }) {
 // const router =useRouter();
 const pathname = usePathname()
@@ -24,10 +22,9 @@ const pathname = usePathname()
   };
 
   return (
+    <AuthProvider>
+    {/* <DndProvider backend={HTML5Backend}> */}
     <html lang="en">
-      {/* <Head>
-        <title>nextask</title>
-      </Head> */}
       <body className={inter.className}>
       {(pathname !== '/login' && pathname!=='/' )&& <Navbar handleDrawer={handleDrawerPosChange}/>}
         {/* <Navbar handleDrawer={handleDrawerPosChange}/> */}
@@ -39,5 +36,7 @@ const pathname = usePathname()
         </div>
         </body>
     </html>
+    {/* </DndProvider> */}
+    </AuthProvider>
   );
 }
