@@ -18,6 +18,9 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
   const [taskDots, setTaskDots] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [matchedUsers, setMatchedUsers] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -71,14 +74,15 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await axios.put(`http://127.0.0.1:8000/api/tasks/${task.id}`, formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
     const updatedTask = {
       ...task,
       ...formData,
+      assigned_users: selectedUsers.map((user) => user.id),
     };
+    try {
+      await axios.put(`http://127.0.0.1:8000/api/tasks/${task.id}`, updatedTask, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
 
     updateTask(updatedTask);
     setEditTask(false);
@@ -109,6 +113,46 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
         console.error("Error updating task:", error);
       }
     }; 
+        // search users
+    const handleSearchUsers = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You must be logged in to search users.");
+        return;
+      }  
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/user/search", 
+          { email: searchQuery }, // Sending the searchQuery as email to the API
+          {
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          }
+        );
+    
+        console.log("Response Data search:", response.data);
+        
+        
+        if (response.data && response.data.id) {
+          setMatchedUsers([response.data]);  
+        } else {
+          setMatchedUsers(response.data || []); 
+        }
+    
+      } catch (error) {
+        alert("Error searching users. Please check your API.");
+      }
+    };
+
+    const handleSelectUser = (user) => {
+      if (!selectedUsers.some((u) => u.id === user.id)) {
+        setSelectedUsers([...selectedUsers, user]); // Add user
+        console.log("selectedUsers", selectedUsers)
+      }
+    };
+  
+    const handleRemoveUser = (userId) => {
+      setSelectedUsers(selectedUsers.filter((user) => user.id !== userId)); // Remove user
+    };
 
   return (
     <div
@@ -137,6 +181,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
           <p className="hover:bg-second cursor-pointer p-1 rounded-lg" onClick={()=>setDel(true)}>Delete</p>
         </div>
       )}
+      {/* task delete */}
       <Popup trigger={del} onBlur={() => setDel(false)}>
                   <div className="text-prime text-xl font-bold p-4">
                     <p>Are you sure you want to delete this Task</p>
@@ -146,6 +191,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
                     </div>
                   </div>
             </Popup>
+            {/* task details */}
       <Popup trigger={taskOpen} onBlur={() => setTaskOpen(false)}>
         {loading ? (
           <p>Loading task details...</p>
@@ -166,12 +212,14 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
               </ul>
             ) : (
               <p className="text-gray-500">No users assigned</p>
-            )}
+            )
+            }
           </div>
         ) : (
           <p>Error loading task details</p>
         )}
       </Popup>
+      {/*  task edit */}
       <Popup trigger={editTask} onBlur={() => setEditTask(false)}>
         <div>
                      <form onSubmit={handleEditSubmit}>
@@ -225,6 +273,16 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
                             </label>
                             </div>
                             <p className="hover:underline hover:font-bold" onClick={()=> setAssignUser(true)}>Assign user</p>
+                            {/* Selected Users Display */}
+                            <div className="flex flex-wrap gap-2 mb-2 h-14 overflow-auto">
+                            {
+            selectedUsers.map((user) => (
+      <div key={user.id} className="flex items-center bg-secondDark text-white h-fit px-3 py-1 rounded-full">
+        <span>{user.name}</span>
+        <button onClick={() => handleRemoveUser(user.id)} className="ml-2 text-sm">✖</button>
+      </div>
+    ))}
+  </div>
                      <div className="flex justify-center gap-16"> 
                        <button onClick={() => {setEditTask(false), setTaskDots(null)}} className="w-20 bg-second rounded-lg hover:shadow-lg">Cancel</button>
                        <button type="submit" className="w-20 bg-second rounded-lg hover:shadow-lg">Save</button>
@@ -232,9 +290,35 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
                      </form>
                    </div>
       </Popup>
+      {/* assign user */}
       <Popup trigger={assignUser} onBlur={() => setAssignUser(false)}>
-        assigned user
-          </Popup>
+      
+          <div className='w-full flex justify-center gap-5 my-4'>
+            <input type="email" placeholder='search user by email' 
+            className=' outline-none p-2 border-b-2 border-prime focus:border-designing '
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button 
+            className='font-bold hover:text-designing hover:shadow-lg bg-prime text-second self-end px-6 py-1 rounded-lg'
+            onClick={handleSearchUsers}
+            >Search</button>
+          </div>
+          <div className='w-full p-2'>
+      {matchedUsers.length > 0 ? (
+        matchedUsers.map((user) => (
+          <div key={user.id} className='w-full flex items-center gap-2 text-lg py-1 cursor-pointer hover:bg-second p-2 rounded-lg' onClick={() => handleSelectUser(user)}>
+            <div className='md:w-9 md:h-9 sm:w-7 sm:h-7 md:text-base sm:text-sm rounded-full bg-blue-300 flex justify-center items-center font-semibold'>
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+            <p>{user.name}</p>
+          </div>
+        ))
+      ) : (
+        <p className='text-center text-gray-400'>No users found</p>
+      )}
+    </div>
+        </Popup>
     </div>
   );
 };
@@ -377,7 +461,6 @@ const ProjectTaskSection = ({ projectId }) => {
 
   const handleAddTask = async (e) => {
     e.preventDefault();
-
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/tasks",
@@ -396,7 +479,6 @@ const ProjectTaskSection = ({ projectId }) => {
           },
         }
       );
-
       if (response.status === 201) {
         setTasks([...tasks, response.data.task]);
         setAddTask(false);
@@ -427,6 +509,8 @@ const ProjectTaskSection = ({ projectId }) => {
             <IoIosAddCircleOutline />
           </span>
         </div>
+
+        {/* kanban category board */}
         <div className="flex justify-between gap-4 text-center overflow-auto">
           {Object.entries(categorizedTasks).map(([category, taskList]) => (
             <CategoryColumn
@@ -439,6 +523,8 @@ const ProjectTaskSection = ({ projectId }) => {
             />
           ))}
         </div>
+
+        {/* add task form */}
         <Popup trigger={addTask} onBlur={() => setAddTask(false)}>
           <form onSubmit={handleAddTask}>
             <input

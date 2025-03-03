@@ -50,6 +50,7 @@ export default function AddProject () {
   };
 
   const handleSelectUser = (user) => {
+    console.log("Selected user:", selectedUsers);
     if (!selectedUsers.some((u) => u.id === user.id)) {
       setSelectedUsers([...selectedUsers, user]); // Add user
     }
@@ -103,20 +104,17 @@ export default function AddProject () {
         }
       });
   
-      console.log("Response from backend:", response);  // Log the entire response
-  
-      // Check if response is successful
+      console.log("Response from backend:", response); 
       if (response.data.status === 200) {
         setFormData({ title: '', description: '', user_id: user_id });
         alert('Project added successfully');
-        // Redirect to the projects page using router.push
         router.push('/projects');
       } else {
         console.error("Error:", response.data.error || 'An error occurred');
         alert(response.data.error || 'An error occurred');
       }
     } catch (error) {
-      console.error("Error during the API request:", error);  // Log the error details
+      console.error("Error during the API request:", error); 
       alert('Error submitting the form');
     }
   };
