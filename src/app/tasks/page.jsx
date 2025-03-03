@@ -2,6 +2,7 @@
 import React, { useContext, useEffect } from 'react'
 import Card from '@/Components/card/Card'
 import { AuthContext } from '@/context/AuthContext';
+import ProjectTaskSection from '@/Components/project task section/ProjectTaskSection';
 import { useRouter } from 'next/navigation';
 const cards = [
     {
@@ -71,6 +72,7 @@ function page() {
   return (
     <div className='w-full h-full overflow-y-auto bg-secondDark md:p-10 sm:px-0 sm:py-10 border border-[#00334e] rounded-lg'>
      <Card cards={cards}/>
+     <ProjectTaskSection/>
     </div>
   )
 }

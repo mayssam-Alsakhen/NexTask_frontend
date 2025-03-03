@@ -6,8 +6,6 @@ import Sidebar from "@/Components/sidebar/Sidebar";
 import React ,{ useState } from "react";
 import Navbar from "@/Components/Navbar/Navbar";
 import { AuthProvider } from "@/context/AuthContext";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { usePathname } from 'next/navigation'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,7 +21,6 @@ const pathname = usePathname()
 
   return (
     <AuthProvider>
-    {/* <DndProvider backend={HTML5Backend}> */}
     <html lang="en">
       <body className={inter.className}>
       {(pathname !== '/login' && pathname!=='/' )&& <Navbar handleDrawer={handleDrawerPosChange}/>}
@@ -36,7 +33,6 @@ const pathname = usePathname()
         </div>
         </body>
     </html>
-    {/* </DndProvider> */}
     </AuthProvider>
   );
 }

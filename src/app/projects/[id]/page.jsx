@@ -118,7 +118,6 @@ const ProjectDetails = ({ params }) => {
             </div>
       </Popup>
       <Popup trigger={edit} onBlur={() => setEdit(false)}>
-          <div>
             <div>
               <form onSubmit={handleEdit}>
                 <div className="flex flex-col gap-7 text-prime">
@@ -129,7 +128,7 @@ const ProjectDetails = ({ params }) => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className=' outline-none p-2 border-b-2 border-prime focus:border-designing '
-                    placeholder="Project Name"
+                    placeholder="Project Title"
                   />
                   <input
                     name="description"
@@ -144,7 +143,6 @@ const ProjectDetails = ({ params }) => {
               </div>                </div>
               </form>
             </div>
-          </div>
       </Popup>
           </div>
   );
