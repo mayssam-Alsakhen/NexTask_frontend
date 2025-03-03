@@ -87,11 +87,6 @@ const ProjectUsersSection = ({ projectId }) => {
   };
 
   const handleRemoveUser = async (userId) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("You must be logged in.");
-      return;
-    }
     try {
       await axios.delete(`http://127.0.0.1:8000/api/projects/${projectId}/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },

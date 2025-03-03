@@ -9,10 +9,11 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import axios from "axios";
 
 
-const TaskCard = ({ task, updateTask }) => {
+const TaskCard = ({ task, updateTask, updateTaskList }) => {
   const [taskOpen, setTaskOpen] = useState(false);
   const [editTask, setEditTask] = useState(false);
   const [assignUser, setAssignUser] = useState(false);
+  const [del, setDel] = useState(false);
   const [taskDetails, setTaskDetails] = useState(null);
   const [taskDots, setTaskDots] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -92,6 +93,23 @@ const TaskCard = ({ task, updateTask }) => {
     }
   };  
 
+  const handleTaskDelete = async () => {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/tasks/${task.id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      alert("Task deleted successfully!");
+      updateTaskList(task.id); // Remove the task from the UI
+    } catch (error) {
+        if (error.response && error.response.status === 403) {
+          setErrorMessage("You must be an admin to edit this task.");
+        } else {
+          setErrorMessage("An error occurred while updating the task.");
+        }
+        console.error("Error updating task:", error);
+      }
+    }; 
+
   return (
     <div
       ref={drag}
@@ -116,9 +134,18 @@ const TaskCard = ({ task, updateTask }) => {
            onClick={() => {
             handleEditClick();
           }}>Edit</p>
-          <p className="hover:bg-second cursor-pointer p-1 rounded-lg" >Delete</p>
+          <p className="hover:bg-second cursor-pointer p-1 rounded-lg" onClick={()=>setDel(true)}>Delete</p>
         </div>
       )}
+      <Popup trigger={del} onBlur={() => setDel(false)}>
+                  <div className="text-prime text-xl font-bold p-4">
+                    <p>Are you sure you want to delete this Task</p>
+                    <div className="flex justify-center gap-16 mt-10"> 
+                    <button onClick={() => setDel(false)} className="w-20 bg-second rounded-lg hover:shadow-lg">No</button>
+                    <button onClick={handleTaskDelete} className="w-20 bg-second rounded-lg hover:shadow-lg">Yes</button>
+                    </div>
+                  </div>
+            </Popup>
       <Popup trigger={taskOpen} onBlur={() => setTaskOpen(false)}>
         {loading ? (
           <p>Loading task details...</p>
@@ -212,7 +239,7 @@ const TaskCard = ({ task, updateTask }) => {
   );
 };
 
-const CategoryColumn = ({ category, taskList, onTaskDrop, updateTask }) => {
+const CategoryColumn = ({ category, taskList, onTaskDrop, updateTask, updateTaskList }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "TASK",
     drop: (item) => onTaskDrop(item.id, category),
@@ -250,7 +277,7 @@ const CategoryColumn = ({ category, taskList, onTaskDrop, updateTask }) => {
           } bg-opacity-30`}
       >
         {taskList.length > 0 ? (
-          taskList.map((task) => <TaskCard key={task.id} task={task} updateTask={updateTask} />)
+          taskList.map((task) => <TaskCard key={task.id} task={task} updateTask={updateTask} updateTaskList={updateTaskList}/>)
         ) : (
           <p className="text-sm text-gray-500">No tasks</p>
         )}
@@ -269,10 +296,16 @@ const ProjectTaskSection = ({ projectId }) => {
   const [dueDate, setDueDate] = useState("");
   const [isImportant, setIsImportant] = useState();
 
+  //handle update task
   const updateTask = (updatedTask) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
+  };
+   
+  //handle delete task 
+  const updateTaskList = (taskId) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
   
 
@@ -402,6 +435,7 @@ const ProjectTaskSection = ({ projectId }) => {
               taskList={taskList}
               onTaskDrop={handleTaskDrop}
               updateTask={updateTask}
+              updateTaskList={updateTaskList} 
             />
           ))}
         </div>
