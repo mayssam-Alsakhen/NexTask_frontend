@@ -22,9 +22,7 @@ function Sidebar({drawerPos,  onDrawerPosChange }) {
         </ul>
       </aside>
       
-      <main className={mainClass}>
-        {/* Your main content here */}
-      </main>
+     
     </div>
   );
 }

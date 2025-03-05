@@ -70,6 +70,8 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
       isImportant: task.is_important ? "1" : "0",
     });
     setEditTask(true);
+    handleTaskClick();
+    setTaskOpen(false);
   };
 
   const handleEditSubmit = async (e) => {
@@ -162,11 +164,8 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
     >
       <p className="font-semibold"  onClick={() => setTaskOpen(true)}>{task.title}</p>
       <p className="text-xs text-gray-500"  onClick={() => setTaskOpen(true)}>{task.due_date}</p>
-      <div className="flex justify-end" onClick={(event) => {
-        event.stopPropagation();
-        setTaskDots(task.id);
-      }}> <AiOutlineMore /> </div>
-      {taskDots === task.id && (
+      <div className="flex justify-end" onClick={() => setTaskDots(task.id) }> <AiOutlineMore /> </div>
+      {taskDots == task.id && (
         <div className="bg-white rounded-lg shadow-md p-2 z-10 absolute bottom-0 right-0 text-start" style={{ display: taskDots ? 'block' : 'none' }}>
           <span className=" text-end text-lg cursor-pointer flex items-center justify-end "
           onClick={() => {
@@ -220,7 +219,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
         )}
       </Popup>
       {/*  task edit */}
-      <Popup trigger={editTask} onBlur={() => setEditTask(false)}>
+      <Popup trigger={editTask} onBlur={() => {setEditTask(false), setTaskDots(null)}}>
         <div>
                      <form onSubmit={handleEditSubmit}>
                      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
@@ -273,8 +272,24 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
                             </label>
                             </div>
                             <p className="hover:underline hover:font-bold" onClick={()=> setAssignUser(true)}>Assign user</p>
+                            { console.log("taskDetails", taskDetails)}
+                            
+                               {loading ? (
+                                <p>Loading assigned user...</p>
+                              ):
+                             taskDetails?( <div>
+                                <div className="flex flex-wrap gap-2 mb-2 h-10 overflow-auto">
+                                    {taskDetails.users.map((user) => (
+                                      <div key={user.id} className="flex items-center bg-secondDark text-white h-fit px-3 py-1 rounded-full">
+                                      <span>{user.name}</span>
+                                      <button onClick={() => handleRemoveUser(user.id)} className="ml-2 text-sm">✖</button>
+                                    </div>
+                                    ))}
+                                </div>
+                             </div>):null
+                            }
                             {/* Selected Users Display */}
-                            <div className="flex flex-wrap gap-2 mb-2 h-14 overflow-auto">
+                            <div className="flex flex-wrap gap-2 mb-2 h-10 overflow-auto">
                             {
             selectedUsers.map((user) => (
       <div key={user.id} className="flex items-center bg-secondDark text-white h-fit px-3 py-1 rounded-full">
@@ -358,7 +373,7 @@ const CategoryColumn = ({ category, taskList, onTaskDrop, updateTask, updateTask
                 : category === "Completed"
                   ? "bg-done"
                   : ""
-          } bg-opacity-30`}
+          } bg-opacity-30 h-40 overflow-auto`}
       >
         {taskList.length > 0 ? (
           taskList.map((task) => <TaskCard key={task.id} task={task} updateTask={updateTask} updateTaskList={updateTaskList}/>)
@@ -499,9 +514,9 @@ const ProjectTaskSection = ({ projectId }) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div>
-        <div className="flex justify-between items-center">
-          <h3 className="text-xl mb-5">Project Tasks</h3>
+      <div className="mt-5">
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-lg font-semibold">Project Tasks</h3>
           <span
             className="text-2xl cursor-pointer px-2"
             onClick={() => setAddTask(true)}

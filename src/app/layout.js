@@ -25,9 +25,9 @@ const pathname = usePathname()
       <body className={inter.className}>
       {(pathname !== '/login' && pathname!=='/' )&& <Navbar handleDrawer={handleDrawerPosChange}/>}
         {/* <Navbar handleDrawer={handleDrawerPosChange}/> */}
-        <div className="pt-11 flex justify-between h-full">
+        <div className="flex justify-between h-full">
           <Sidebar drawerPos={drawerPos} onDrawerPosChange={setDrawerPos}/>  
-          <div className={` ${pathname==='/'? 'px-0 top-0':'px-5 top-20'} absolute right-0 bottom-3  transition-all duration-500 ease-in-out ${drawerPos==2? "xl:w-[82%] lg:w-[7%]": drawerPos==1? "w-[90%]": "w-full"}`}>
+          <div className={` ${pathname==='/'? 'px-0 top-0':'px-5 top-20'}  transition-all duration-500 ease-in-out ${drawerPos==2? "xl:w-[82%] lg:w-[7%]": drawerPos==1? "w-[95%]": "w-full"}`}>
         {children}
           </div>
         </div>

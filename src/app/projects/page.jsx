@@ -44,7 +44,7 @@ function page() {
   if (!user) return null; // Prevent rendering before redirection
 
   return (
-    <div className='flex flex-wrap gap-x-12 gap-y-10 justify-center w-full h-full overflow-y-auto bg-[#355070] py-10 md:px-10 sm:px-0 border-[1px] border-[#6C9AFF] rounded-lg'>
+    <div className='flex flex-wrap gap-x-12 gap-y-10 justify-center w-full h-full overflow-y-auto py-10 md:px-10 sm:px-0'>
       <AddButton text={"Add A New Project"} link={"/addProject"}/>
 
       {projects.map((project) => (

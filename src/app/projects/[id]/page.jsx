@@ -2,7 +2,11 @@
 import React, { useEffect, useState, useContext, use } from "react";
 
 import axios from "axios";
+import { FaEdit } from "react-icons/fa";
+
 import { AuthContext } from "@/context/AuthContext";
+import { MdDelete } from "react-icons/md";
+
 import { useRouter } from "next/navigation";
 import Popup from "@/Components/popup/Popup";
 import ProjectTaskSection from "@/Components/project task section/ProjectTaskSection";
@@ -93,14 +97,16 @@ const ProjectDetails = ({ params }) => {
   if (!project) return <p>Loading project details...</p>;
 
   return (
-    <div className="w-full h-full bg-second p-6 border-2 border-designing rounded-lg overflow-auto text-prime">
-      <div className="flex justify-end gap-4">
-      <span className="p-2 w-20 text-center bg-designing text-white rounded-lg cursor-pointer hover:shadow-lg" onClick={()=> setDel(true)}>Delete</span>
-      <span className="p-2 w-20 text-center bg-designing text-white rounded-lg cursor-pointer hover:shadow-lg" onClick={()=> setEdit(true)}>Edit</span>
+    <div className="w-full p-2 overflow-auto text-prime">
+      <div className="flex justify-end gap-2">
+      <span className="text-lg text-center text-prime rounded-lg cursor-pointer hover:shadow-lg" onClick={()=> setDel(true)}><MdDelete />
+      </span>
+      <span className="text-center text-prime rounded-lg cursor-pointer hover:shadow-lg" onClick={()=> setEdit(true)}><FaEdit />
+      </span>
       </div>
       <div className="flex flex-col items-center">
-        <h1 className="text-4xl font-bold mb-6">{project.name}</h1>
-        <p className="text-lg mb-6">{project.description || "No description available"}</p>
+        <h1 className="text-2xl font-bold mb-2">{project.name}</h1>
+        <p>{project.description || "No description available"}</p>
       </div>
       <ProjectTaskSection projectId={project.id}/>
       <ProjectUsersSection projectId={project.id} />

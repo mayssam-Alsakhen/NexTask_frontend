@@ -63,7 +63,7 @@ export default function AddProject () {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login"); // Redirect only after checking authentication
+      router.push("/login"); 
     }
   }, [loading, user, router]);
 

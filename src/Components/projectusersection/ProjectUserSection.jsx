@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,} from "react";
 import axios from "axios";
 import Popup from "../popup/Popup";
 import { IoPersonAddOutline } from "react-icons/io5";
 import { IoMdMore } from "react-icons/io";
+import { BsChevronUp } from "react-icons/bs";
+import { BsChevronDown } from "react-icons/bs";
 
 const ProjectUsersSection = ({ projectId }) => {
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [matchedUsers, setMatchedUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [openUsers, setOpenUsers] = useState(false);
   const [addUser, setAddUser] = useState(false);
   const[userDots, setUserDots] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -33,7 +36,7 @@ const ProjectUsersSection = ({ projectId }) => {
 
     fetchProjectUsers();
   }, [projectId]);
-
+    
   const handleSearchUsers = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -42,7 +45,7 @@ const ProjectUsersSection = ({ projectId }) => {
     }  
     try {
       const response = await axios.post("http://127.0.0.1:8000/api/user/search", 
-        { email: searchQuery }, // Sending the searchQuery as email to the API
+        { email: searchQuery },
         {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         }
@@ -147,12 +150,18 @@ const ProjectUsersSection = ({ projectId }) => {
   };
 
   return (
-    <div className="mt-5 ">
+    <div className="mt-7">
       <div className="flex items-center justify-between mb-2">
       <h3 className="text-lg font-semibold">Project Team</h3>
-      <span className="text-2xl cursor-pointer px-2" onClick={()=> setAddUser(true)}><IoPersonAddOutline /></span>
+      <span className="text-2xl cursor-pointer px-2 flex gap-x-2"><IoPersonAddOutline onClick={()=> setAddUser(true)} /> {openUsers?<BsChevronUp onClick={()=>setOpenUsers(false)}/>:<BsChevronDown onClick={()=>setOpenUsers(true)}/>}</span>
       </div>
-      <ul>
+      <ul  
+       style={{
+        overflow:"auto",
+          height: openUsers ? "auto" : "100px",
+         transition: "all 0.1s ease-in-out",
+       }}
+      >
         {users.length > 0 ? (
           users.map((user) => (
             <li key={user.id} className="flex justify-between items-center p-1 bg-white bg-opacity-30 rounded-lg shadow mb-2 relative">

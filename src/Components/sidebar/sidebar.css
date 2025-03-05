@@ -45,21 +45,5 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
-  
-  /* to be removed */
-  main {
-    position: absolute;
-    top: 80px;
-    padding: 1em;
-    margin-left: 0;
-    bottom: 0;
-    overflow-y: auto;
-    transition: margin-left 0.5s ease-in-out;
-  }
-  .mainMin {
-    margin-left: 70px;
-  }
-  .mainOpen {
-    margin-left: 240px;
-  }
+
   

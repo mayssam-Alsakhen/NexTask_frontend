@@ -8,34 +8,34 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Retrieve the user from the backend on page load
+    
     useEffect(() => {
         const token = localStorage.getItem("token");
-        console.log("Token found in localStorage:", token); // Log the token
+        console.log("Token found in localStorage:", token);
     
         if (token) {
             axios.get("http://127.0.0.1:8000/api/me", {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {
-                console.log("User data fetched:", response.data); // Log the user data
+                console.log("User data fetched:", response.data); 
                 if (response.data) {
-                    setUser(response.data); // Set the user state with the response data
+                    setUser(response.data); 
                 } else {
                     console.warn("User data not found in response");
-                    setUser(null); // If no user found, clear user state
+                    setUser(null); 
                 }
             })
             .catch((error) => {
                 console.error("Error fetching user:", error);
-                localStorage.removeItem("token"); // Remove token if the request fails
-                setUser(null); // Clear the user state
+                localStorage.removeItem("token"); 
+                setUser(null); 
             })
             .finally(() => {
-                setLoading(false); // Done loading
+                setLoading(false); 
             });
         } else {
-            setLoading(false); // If no token, stop loading
+            setLoading(false); 
         }
     }, []);
     
