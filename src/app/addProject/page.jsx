@@ -120,25 +120,24 @@ export default function AddProject () {
   };
   
   return (
-    <div className='w-full h-full overflow-y-auto bg-secondDark p-10 border-2 border-designing rounded-lg'>
-    <div className=' w-full h-full flex justify-center items-center'>
-       <div className="w-[420px] sm:h-[370px] md:h-[450px] py-8 px-12 bg-slate-600 bg-opacity-40 text-prime ">
-        <h2 className='text-second sm:text-lg md:text-2xl text-center font-bold mb-4'>Add Your Project Details</h2>
+    <div className='flex justify-center items-center h-screen '>
+       <div className="w-[420px] py-8 sm:px-6 px-12 bg-[#d9e4ff] rounded-lg shadow-slate-500 md:shadow-xl text-prime ">
+        <h2 className='sm:text-lg md:text-2xl text-center font-bold mb-4 sm:mt-6 md:mt-0'>Project Details</h2>
     <form onSubmit={handleSubmit} className='h-full'>
-      <div className='h-full flex flex-col gap-3'>
-      <input type="text" name="name" onChange={handleInputChange} placeholder="Project Title" className=' outline-none p-2 bg-slate-600 text-white'/>
-      <textarea name="description" onChange={handleInputChange} placeholder='description' rows={5} className=' p-2 outline-none bg-slate-600 text-white'></textarea>
-    <p className='font-bold hover:underline cursor-pointer w-fit text-second' onClick={() => setAssign(true)}>Assign a user</p>
+      <div className='h-full flex flex-col gap-4 text-prime'>
+      <input type="text" name="name" onChange={handleInputChange} placeholder="Project Title" className=' outline-none p-2'/>
+      <textarea name="description" onChange={handleInputChange} placeholder='description' rows={5} className=' p-2 outline-none'></textarea>
+    <p className='hover:font-bold underline cursor-pointer w-fit' onClick={() => setAssign(true)}>Assign a user</p>
       {/* Selected Users Display */}
   <div className="flex flex-wrap gap-2 mb-2 h-14 overflow-auto">
     {selectedUsers.map((user) => (
-      <div key={user.id} className="flex items-center bg-secondDark text-white h-fit px-3 py-1 rounded-full">
+      <div key={user.id} className="flex items-center justify-between bg-prime text-white h-fit px-3 py-1 rounded-full">
         <span>{user.name}</span>
         <button onClick={() => handleRemoveUser(user.id)} className="ml-2 text-sm">✖</button>
       </div>
     ))}
   </div>
-      <button type="submit" className='shadow-button hover:shadow-hoverButton hover:font-extrabold bg-second py-2 rounded-lg'>ADD</button>
+      <button type="submit" className='hover:shadow-button hover:font-extrabold py-2 rounded-lg border-prime border-[1px]'>ADD</button>
       </div>
     </form>
     <Popup trigger={assign} onBlur={() => setAssign(false)}>
@@ -169,7 +168,6 @@ export default function AddProject () {
 </div>
     </Popup>
   </div>
-    </div>
     </div>
   )
 }

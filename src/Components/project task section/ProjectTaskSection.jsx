@@ -28,6 +28,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
     isImportant: "",
   });
 
+  // dragging package 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "TASK",
     item: { id: task.id },
@@ -42,6 +43,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
     }
   }, [taskOpen]);
 
+  // handle task click to display task info
   const handleTaskClick = async () => {
     setTaskOpen(true);
     setLoading(true);
@@ -62,6 +64,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
     }
   };
 
+  // edit task popup open
   const handleEditClick = () => {
     setFormData({
       title: task.title,
@@ -73,7 +76,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
     handleTaskClick();
     setTaskOpen(false);
   };
-
+// edit task
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     const updatedTask = {
@@ -99,6 +102,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
     }
   };  
 
+  // delete task
   const handleTaskDelete = async () => {
     try {
       await axios.delete(`http://127.0.0.1:8000/api/tasks/${task.id}`, {
@@ -145,6 +149,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
       }
     };
 
+    // add user to the task
     const handleSelectUser = (user) => {
       if (!selectedUsers.some((u) => u.id === user.id)) {
         setSelectedUsers([...selectedUsers, user]); // Add user
@@ -152,9 +157,11 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
       }
     };
   
+
     const handleRemoveUser = (userId) => {
       setSelectedUsers(selectedUsers.filter((user) => user.id !== userId)); // Remove user
     };
+    
 
   return (
     <div
@@ -348,7 +355,8 @@ const CategoryColumn = ({ category, taskList, onTaskDrop, updateTask, updateTask
   }));
 
   return (
-    <div ref={drop} className="lg:w-72 min-w-56">
+    <div ref={drop} className="lg:w-[300px] min-w-56  overflow-auto">
+      {/* status title */}
       <h4
         className={`text-lg font-semibold py-2 ${category === "Pending"
             ? "bg-pending"
@@ -363,8 +371,9 @@ const CategoryColumn = ({ category, taskList, onTaskDrop, updateTask, updateTask
       >
         {category}
       </h4>
+
       <div
-        className={`flex flex-col gap-2 p-4 ${category === "Pending"
+        className={`flex flex-col gap-2 p-4 overflow-auto h-[65vh] ${category === "Pending"
             ? "bg-pending"
             : category === "In Progress"
               ? "bg-progress"
@@ -373,7 +382,7 @@ const CategoryColumn = ({ category, taskList, onTaskDrop, updateTask, updateTask
                 : category === "Completed"
                   ? "bg-done"
                   : ""
-          } bg-opacity-30 h-40 overflow-auto`}
+          } bg-opacity-30 h-full`}
       >
         {taskList.length > 0 ? (
           taskList.map((task) => <TaskCard key={task.id} task={task} updateTask={updateTask} updateTaskList={updateTaskList}/>)
@@ -514,8 +523,9 @@ const ProjectTaskSection = ({ projectId }) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="mt-5">
-        <div className="flex justify-between items-center mb-2">
+      <div className="flex flex-col hf-full">
+        {/* title */}
+        <div className="flex justify-between items-center mb-2 text-prime ">
           <h3 className="text-lg font-semibold">Project Tasks</h3>
           <span
             className="text-2xl cursor-pointer px-2"
@@ -526,7 +536,7 @@ const ProjectTaskSection = ({ projectId }) => {
         </div>
 
         {/* kanban category board */}
-        <div className="flex justify-between gap-4 text-center overflow-auto">
+        <div className="flex gap-4 text-center flex-grow overflow-x-auto">
           {Object.entries(categorizedTasks).map(([category, taskList]) => (
             <CategoryColumn
               key={category}

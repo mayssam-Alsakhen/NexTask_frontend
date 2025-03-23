@@ -46,11 +46,12 @@ module.exports = {
         // 050d2b 11264a
         //pending #edee63, prog , done #94f6a4 test #64c8f7 impo #f8acb9
         // 'prime': "#050d2b",
+        'button':'#1E6AB0',
+        'baseText':'#333',
         'prime': '#03045e',
-        'second': '#E5F0FF',
-        'secondDark':'#020c30',
-        'designing' : '#0288d1',
-        'pending': '#edee63',
+        'second': '#dee5ff',
+        // 'designing' : '#0288d1',
+        'pending': '#fafab2',
         'progress':'#c97bfa',
         'testing':'	#64c8f7',
         'done':'#94f6a4',
