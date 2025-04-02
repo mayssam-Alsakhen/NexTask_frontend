@@ -17,7 +17,7 @@ const ProjectTasks = ({ params }) => {
     }
   }, [loading, user, router]);
   return (
-    <div className=" mt-11 p-3">
+    <div className=" pt-14 p-3">
         <ProjectTaskSection projectId={id} />
     </div>
   );

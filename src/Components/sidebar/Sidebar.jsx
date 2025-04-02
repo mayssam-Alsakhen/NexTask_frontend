@@ -15,10 +15,10 @@ function Sidebar({drawerPos,  onDrawerPosChange }) {
     <div>
       <aside className={drawerClass}>
         <ul>
-         <Link href="/dashboard"> <li><span><MdDashboard className='icons mr-5 text-3xl' /></span> <span>Dashboard</span></li></Link>
-         <Link href="/projects"> <li><span><MdOutlineWork className='icons mr-5 text-3xl' /></span><span>Projects</span></li> </Link>
-         <Link href="/tasks"> <li><span><BsListTask className='icons mr-5 text-3xl' /></span><span>My Tasks</span></li> </Link>
-         <Link href="/important"> <li><span><RiErrorWarningFill className='icons mr-5 text-3xl'/></span><span>Important</span></li> </Link>
+        <li><Link href="/dashboard"> <span><MdDashboard className='icons mr-5 text-3xl' /></span> <span>Dashboard</span></Link></li>
+        <li><Link href="/projects"> <span><MdOutlineWork className='icons mr-5 text-3xl' /></span><span>Projects</span> </Link></li>
+        <li><Link href="/tasks"><span><BsListTask className='icons mr-5 text-3xl' /></span><span>My Tasks</span></Link></li>
+        <li><Link href="/important"> <span><RiErrorWarningFill className='icons mr-5 text-3xl'/></span><span>Important</span></Link></li>
         </ul>
       </aside>
       

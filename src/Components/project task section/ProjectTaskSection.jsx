@@ -355,7 +355,7 @@ const CategoryColumn = ({ category, taskList, onTaskDrop, updateTask, updateTask
   }));
 
   return (
-    <div ref={drop} className="lg:w-[300px] min-w-56  overflow-auto">
+    <div ref={drop} className="lg:w-[300px] min-w-56 h-[75vh] overflow-y-hidden ">
       {/* status title */}
       <h4
         className={`text-lg font-semibold py-2 ${category === "Pending"
@@ -373,7 +373,7 @@ const CategoryColumn = ({ category, taskList, onTaskDrop, updateTask, updateTask
       </h4>
 
       <div
-        className={`flex flex-col gap-2 p-4 overflow-auto h-[65vh] ${category === "Pending"
+        className={`flex flex-col gap-2 p-4 overflow-auto ${category === "Pending"
             ? "bg-pending"
             : category === "In Progress"
               ? "bg-progress"
@@ -523,7 +523,7 @@ const ProjectTaskSection = ({ projectId }) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex flex-col hf-full">
+      <div className="flex flex-col h-full">
         {/* title */}
         <div className="flex justify-between items-center mb-2 text-prime ">
           <h3 className="text-lg font-semibold">Project Tasks</h3>
@@ -536,7 +536,7 @@ const ProjectTaskSection = ({ projectId }) => {
         </div>
 
         {/* kanban category board */}
-        <div className="flex gap-4 text-center flex-grow overflow-x-auto">
+        <div className="flex gap-4 text-center overflow-x-auto">
           {Object.entries(categorizedTasks).map(([category, taskList]) => (
             <CategoryColumn
               key={category}

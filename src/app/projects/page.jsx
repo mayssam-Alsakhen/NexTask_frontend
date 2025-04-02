@@ -1,8 +1,7 @@
 "use client";
 import React, { useState, useEffect, useContext } from 'react'
-import Link from 'next/link'
 import AddButton from '@/Components/add/AddButton'
-import Popup from '@/Components/Popup/Popup'
+import Popup from '@/Components/popup/Popup'
 import axios from 'axios'
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -120,14 +119,14 @@ function page() {
               {/* <Link href={`/projects/${project.id}`} className='hover:underline'>Details</Link> */}
             </div>
             <div className="opacity-100 text-button transition-opacity flex justify-end w-full gap-2 ">
-              <button className=" hover:font-bold">
+              <button className=" hover:font-bold" name='edit'>
                 <LiaEdit onClick={(e) => {
                   e.stopPropagation();
                   setEdit(project.id);
                   setFormData({ name: project.name, description: project.description });
                 }} />
               </button>
-              <button className="hover:text-red-600" onClick={(e) =>{e.stopPropagation();setDel(project.id)}}>
+              <button className="hover:text-red-600" onClick={(e) =>{e.stopPropagation();setDel(project.id)}} name='delete'>
                 <MdDeleteOutline />
               </button>
             </div>
