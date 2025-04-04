@@ -4,11 +4,10 @@ import axios from "axios";
 import { FaEdit } from "react-icons/fa";
 import { AuthContext } from "@/context/AuthContext";
 import { MdDelete } from "react-icons/md";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Popup from "@/Components/popup/Popup";
-import ProjectTaskSection from "@/Components/project task section/ProjectTaskSection";
 import ProjectUsersSection from "@/Components/projectusersection/ProjectUserSection";
+import ProjectTasksDetails from "@/Components/ProjectTasksDetails/ProjectTasksDetails";
 
 const ProjectDetails = ({ params }) => {
   const [tasks, setTasks] = useState([]);
@@ -73,8 +72,9 @@ const ProjectDetails = ({ params }) => {
   const taskCounts = {
     pending: tasks.filter(task => task.category === "Pending").length,
     inProgress: tasks.filter(task => task.category === "In Progress").length,
-    testing: tasks.filter(task => task.category === "Testing").length,
-    completed: tasks.filter(task => task.category === "Completed").length
+    testing: tasks.filter(task => task.category === "Test").length,
+    completed: tasks.filter(task => task.category === "Completed").length,
+    all: tasks.length,
   };
   // nabigating to the tasks page
     const handleNavigate = () => {
@@ -145,73 +145,14 @@ const ProjectDetails = ({ params }) => {
           {/* <Link href={`/projects/${id}/tasks`} className="text-[#1E6AB0] hover:text-[#1E6AB0] text-sm font-semibold">View All Tasks</Link> */}
         </div>
         <div className=" flex flex-wrap justify-center gap-4 text-black ">
-
-            <div className="w-48 h-20 bg-white border-b-[12px] border-pending flex flex-col items-center p-3 hover:shadow-lg hover:-translate-y-1 cursor-pointer relative group transition-transform overflow-hidden"
-              onClick={handleNavigate}>
-              {/* Animated Background Overlay */}
-              <div className="absolute inset-0 bg-black bg-opacity-50 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></div>
-              <p className="text-lg font-bold">
-                Pending
-              </p>
-              <p className="font-medium">{taskCounts.pending} Task</p>
-              {/* hover */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="text-white font-bold">See All Tasks</span>
-              </div>
-            </div>
-          
-            <div className="w-48 h-20 bg-white border-b-[12px] border-progress flex flex-col items-center p-3 hover:shadow-lg hover:-translate-y-1 cursor-pointer relative group transition-transform overflow-hidden"
-              onClick={handleNavigate}>
-              <div className="absolute inset-0 bg-black bg-opacity-50 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></div>
-              <p className="text-lg font-bold">
-                In Progress
-              </p>
-              <p className=" font-medium">{taskCounts.inProgress} Task</p>
-              {/* hover */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="text-white font-bold">See All Tasks</span>
-              </div>
-            </div>
-          
-          
-            <div className="w-48 h-20 bg-white border-b-[12px] border-testing flex flex-col items-center p-3 hover:shadow-lg hover:-translate-y-1 cursor-pointer relative group transition-transform overflow-hidden"
-              onClick={handleNavigate}>
-              <div className="absolute inset-0 bg-black bg-opacity-50 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></div>
-              <p className="text-lg font-bold">
-                Testing
-              </p>
-              <p className=" font-medium">{taskCounts.testing}Task</p>
-              {/* hover */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="text-white font-bold">See All Tasks</span>
-              </div>
-            </div>
-
-            <div className="w-48 h-20 bg-white border-b-[12px] border-done flex flex-col items-center p-3  hover:shadow-lg hover:-translate-y-1 cursor-pointer relative group transition-transform overflow-hidden"
-              onClick={handleNavigate}>
-              <div className="absolute inset-0 bg-black bg-opacity-50 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-in-out"></div>
-              <p className="text-lg font-bold">
-                Completed
-              </p>
-              <p className=" font-medium">{taskCounts.completed} Task</p>
-              {/* hover */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <span className="text-white font-bold">See All Tasks</span>
-              </div>
-            </div>
+            <ProjectTasksDetails borderColor="border-pending" taskCount={taskCounts.pending} handleNavigate={handleNavigate} statusTitle="Pending" projectId={project.id}/>
+            <ProjectTasksDetails borderColor="border-progress" taskCount={taskCounts.inProgress} handleNavigate={handleNavigate} statusTitle="In Progress" projectId={project.id}/>
+            <ProjectTasksDetails borderColor="border-testing" taskCount={taskCounts.testing} handleNavigate={handleNavigate} statusTitle="Testing" projectId={project.id}/>
+            <ProjectTasksDetails borderColor="border-done" taskCount={taskCounts.completed} handleNavigate={handleNavigate} statusTitle="Completed" projectId={project.id}/>
+            <ProjectTasksDetails borderColor="border-button" taskCount={taskCounts.all} handleNavigate={handleNavigate} statusTitle="All Tasks" projectId={project.id}/>
         </div>
-        {/* <div className="flex justify-center mt-4">
-          <AddButton text={"View All Tasks"} link={`/projects/${id}/tasks`} textSize={'sm'} px={2} />
-        </div> */}
-
       </div>
-
-      {/* <ProjectTaskSection projectId={project.id}/> */}
       <ProjectUsersSection projectId={project.id} />
-
-      {/* <Link href={`/projects/${id}/tasks`}>
-        <span className="p-2 bg-designing text-white rounded-lg cursor-pointer">View Tasks</span>
-      </Link> */}
 
       <Popup trigger={del} onBlur={() => setDel(false)}>
         <div className="text-prime text-xl font-bold p-4">
