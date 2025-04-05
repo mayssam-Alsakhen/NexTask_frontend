@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import axios from "axios";
 import CategoryColumn from '@/Components/categoryColumn/CategoryColumn';
 import Popup from "../popup/Popup";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import TaskCard from "../taskCard/TaskCard";
 
-const ProjectTaskSection = ({ projectId, statusFilter }) => {
+const ProjectTaskSection = ({ projectId}) => {
   const [tasks, setTasks] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [addTask, setAddTask] = useState(false);
@@ -16,7 +16,8 @@ const ProjectTaskSection = ({ projectId, statusFilter }) => {
   const [taskDescription, setTaskDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [isImportant, setIsImportant] = useState();
-  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");  
+  const router = useRouter();
 
 
   // Update a single task
@@ -33,6 +34,7 @@ const ProjectTaskSection = ({ projectId, statusFilter }) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
 
+  // Fetch tasks from the API when the component mounts or refresh changes
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -54,6 +56,16 @@ const ProjectTaskSection = ({ projectId, statusFilter }) => {
 
     fetchTasks();
   }, [projectId, refresh]);
+
+  // Handle pre-filtered status from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("selectedStatus");
+    if (stored) {
+      setSelectedStatus(stored); // Apply to actual filter
+      localStorage.removeItem("selectedStatus");
+    }
+  }, []);
+  
 
   // Categorize tasks for the Kanban board
   const categorizedTasks = {
@@ -135,8 +147,8 @@ const ProjectTaskSection = ({ projectId, statusFilter }) => {
 
   const handleFilterChange = (event) => {
     setSelectedStatus(event.target.value);
+    router.push(`/projects/${projectId}/tasks`);
   };
-  
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -153,9 +165,9 @@ const ProjectTaskSection = ({ projectId, statusFilter }) => {
               >
                 <option value="all">All Tasks</option>
                 <option value="pending">Pending</option>
-                <option value="in-progress">In Progress</option>
-                <option value="done">Done</option>
-                <option value="testing">Testing</option>
+                <option value="in progress">In Progress</option>
+                <option value="completed">Done</option>
+                <option value="test">Testing</option>
               </select>
             </div>
             <button onClick={() => setAddTask(true)}>
@@ -166,10 +178,13 @@ const ProjectTaskSection = ({ projectId, statusFilter }) => {
           
         {/* Kanban board with categorized tasks */}
         {selectedStatus==='all'? 
-        <div className="flex gap-4 text-center overflow-x-auto">
+        <div className="flex gap-3 text-center overflow-x-auto ">
           {Object.entries(categorizedTasks).map(
             ([category, taskList]) => (
               <CategoryColumn
+              mainClass={`lg:w-[25%] min-w-60 h-[75vh] overflow-y-hidden`}
+                cardDir={`flex-col gap-2 overflow-y-auto`}
+                card={`bg-white`}
                 key={category}
                 category={category}
                 taskList={taskList}
@@ -181,7 +196,20 @@ const ProjectTaskSection = ({ projectId, statusFilter }) => {
           )}
         </div>
         :
-        <TaskCard key={tasks.id} task={tasks.filter((task) => task.category === selectedStatus)} updateTask={updateTask} updateTaskList={updateTaskList} />}
+        <div className="flex gap-4 text-center">
+                <CategoryColumn
+                  mainClass={`w-full`}
+                  cardDir={`flex-row justify-center overflow-hidden h-full flex-wrap gap-5`} 
+                  card={`${selectedStatus==='pending'?'bg-pending':selectedStatus==='in progress'?"bg-progress":selectedStatus==='test'?'bg-testing':selectedStatus==='completed'?'bg-done':'bg-whte'}  md:w-56 sm:w-40 `}
+                  key={selectedStatus}
+                  category={selectedStatus}
+                  taskList={tasks.filter(task => task.category.toLowerCase() === selectedStatus)}
+                  onTaskDrop={handleTaskDrop}
+                  updateTask={updateTask}
+                  updateTaskList={updateTaskList}
+                />
+        </div>
+        }
 
         {/* Popup for adding a new task */}
         <Popup trigger={addTask} onBlur={() => setAddTask(false)}>

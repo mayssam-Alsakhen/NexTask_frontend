@@ -2,7 +2,10 @@ import { useDrop } from "react-dnd";
 import TaskCard from '../taskCard/TaskCard';
 
 const CategoryColumn = ({
+  mainClass,
   category,
+  cardDir,
+  card,
   taskList,
   onTaskDrop,
   updateTask,
@@ -15,9 +18,9 @@ const CategoryColumn = ({
       isOver: monitor.isOver(),
     }),
   }));
-
+console.log("mainClass:", mainClass);
   return (
-    <div ref={drop} className="lg:w-[300px] min-w-56 h-[75vh] overflow-y-hidden">
+    <div ref={drop} className={`${mainClass}`}>
       <h4
         className={`text-lg font-semibold py-2 ${
           category === "Pending"
@@ -35,7 +38,7 @@ const CategoryColumn = ({
       </h4>
 
       <div
-        className={`flex flex-col gap-2 p-4 overflow-auto ${
+        className={`flex ${cardDir} p-4 ${
           category === "Pending"
             ? "bg-pending"
             : category === "In Progress"
@@ -50,6 +53,7 @@ const CategoryColumn = ({
         {taskList.length > 0 ? (
           taskList.map((task) => (
             <TaskCard
+            card={`${card}`}
               key={task.id}
               task={task}
               updateTask={updateTask}

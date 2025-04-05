@@ -77,7 +77,8 @@ const ProjectDetails = ({ params }) => {
     all: tasks.length,
   };
   // nabigating to the tasks page
-    const handleNavigate = () => {
+    const handleNavigate = (status) => {
+      localStorage.setItem("selectedStatus", status);
       router.push(`/projects/${id}/tasks`);
     };
   useEffect(() => {
@@ -145,11 +146,11 @@ const ProjectDetails = ({ params }) => {
           {/* <Link href={`/projects/${id}/tasks`} className="text-[#1E6AB0] hover:text-[#1E6AB0] text-sm font-semibold">View All Tasks</Link> */}
         </div>
         <div className=" flex flex-wrap justify-center gap-4 text-black ">
-            <ProjectTasksDetails borderColor="border-pending" taskCount={taskCounts.pending} handleNavigate={handleNavigate} statusTitle="Pending" projectId={project.id}/>
-            <ProjectTasksDetails borderColor="border-progress" taskCount={taskCounts.inProgress} handleNavigate={handleNavigate} statusTitle="In Progress" projectId={project.id}/>
-            <ProjectTasksDetails borderColor="border-testing" taskCount={taskCounts.testing} handleNavigate={handleNavigate} statusTitle="Testing" projectId={project.id}/>
-            <ProjectTasksDetails borderColor="border-done" taskCount={taskCounts.completed} handleNavigate={handleNavigate} statusTitle="Completed" projectId={project.id}/>
-            <ProjectTasksDetails borderColor="border-button" taskCount={taskCounts.all} handleNavigate={handleNavigate} statusTitle="All Tasks" projectId={project.id}/>
+            <ProjectTasksDetails borderColor="border-pending" taskCount={taskCounts.pending} handleNavigate={()=>handleNavigate('pending')} statusTitle="Pending" projectId={project.id}/>
+            <ProjectTasksDetails borderColor="border-progress" taskCount={taskCounts.inProgress} handleNavigate={()=>handleNavigate('in progress')} statusTitle="In Progress" projectId={project.id}/>
+            <ProjectTasksDetails borderColor="border-testing" taskCount={taskCounts.testing} handleNavigate={()=>handleNavigate('test')} statusTitle="Testing" projectId={project.id}/>
+            <ProjectTasksDetails borderColor="border-done" taskCount={taskCounts.completed} handleNavigate={()=>handleNavigate('completed')} statusTitle="Completed" projectId={project.id}/>
+            <ProjectTasksDetails borderColor="border-button" taskCount={taskCounts.all} handleNavigate={()=>handleNavigate('all')} statusTitle="All Tasks" projectId={project.id}/>
         </div>
       </div>
       <ProjectUsersSection projectId={project.id} />

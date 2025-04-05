@@ -5,7 +5,7 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import Popup from "../popup/Popup";
 import axios from "axios";
 
-const TaskCard = ({ task, updateTask, updateTaskList }) => {
+const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
   const [taskOpen, setTaskOpen] = useState(false);
   const [editTask, setEditTask] = useState(false);
   const [assignUser, setAssignUser] = useState(false);
@@ -166,7 +166,7 @@ const TaskCard = ({ task, updateTask, updateTaskList }) => {
   return (
     <div
       ref={drag}
-      className={`bg-white p-2 relative rounded-lg shadow-md cursor-pointer ${
+      className={`${card} text-prime p-2 relative rounded-lg shadow-md cursor-pointer ${
         isDragging ? "opacity-50" : ""
       }`}
     >
