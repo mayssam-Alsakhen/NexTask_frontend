@@ -72,7 +72,7 @@ function page() {
   return (
     <div className='w-full h-full overflow-y-auto bg-secondDark md:p-10 sm:px-0 sm:py-10 border border-[#00334e] rounded-lg'>
      <Card cards={cards}/>
-     <ProjectTaskSection/>
+     <ProjectTaskSection api={'http://127.0.0.1:8000/api/tasks'}/>
     </div>
   )
 }

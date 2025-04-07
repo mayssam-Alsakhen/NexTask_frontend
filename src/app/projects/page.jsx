@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import AddButton from '@/Components/add/AddButton'
 import Popup from '@/Components/popup/Popup'
+import SearchInput from '@/Components/search input/SearchInput';
 import axios from 'axios'
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -15,41 +16,39 @@ function page() {
   const [del, setDel] = useState();
   const [edit, setEdit] = useState();
   const [projects, setProjects] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({ name: "", description: "" });
   const router = useRouter();
 
+  const fetchProjects = async () => {
+    if (!user) return;
+  
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/projects/user/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
+      if (response.data && response.data.data) {
+        setProjects(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      alert("Failed to fetch projects");
+    }
+  };
+  
   useEffect(() => {
     if (loading) return;
     if (!user) {
       router.push("/login");
       return;
     }
-    const fetchProjects = async () => {
-      try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/projects/user/${user.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        console.log("API Response:", response.data); // Debugging
-
-        if (response.data && response.data.data) {
-          setProjects(response.data.data);
-          projects.forEach(project => {
-            const taskCount = project.tasks ? project.tasks.length : 0;
-            console.log(`Project: ${project.name}, Task Count: ${taskCount}`);
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-        alert('Failed to fetch projects');
-      }
-    };
-
-    fetchProjects();
+  
+    fetchProjects(); // fetch on first load
   }, [loading, user, router]);
+  
 
   const handleDelete = async (id) => {
     try {
@@ -85,12 +84,40 @@ function page() {
     }
   };
 
+  // clear search
+  useEffect(() => {
+    if (searchTerm === '') {
+      fetchProjects();  // Clear projects when search term is empty
+    }
+  }, [searchTerm]);
+  // Search input change handler
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);  // Update search term as user types
+  };
+
+  // Search function
+  const handleSearch = async (value) => {
+    setSearchTerm(value);
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/search-project?search=${value}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setProjects(response.data.projects);
+    } catch (error) {
+      console.error("Search error:", error);
+    }
+  };
+  
+
   if (loading) return <p>Loading...</p>;
   if (!user) return null; // Prevent rendering before redirection
 
   return (
-    <div className='p-3 mt-12'>
-      <div className=' flex justify-end'>
+    <div className='p-3 lg:mt-10 mt-12'>
+      <div className=' flex justify-between '>
+  <SearchInput onSearch={handleSearch} onChange={handleSearchChange} />
         <AddButton text={"Add A Project"} link={"/addProject"} />
       </div>
       <div className='flex flex-wrap lg:gap-x-6 gap-x-4 gap-y-10 justify-center w-full mt-6'>
@@ -103,7 +130,7 @@ function page() {
           >
             {/* icons */}
             <h2 className='text-xl font-semibold text-button mb-1'> {project.name} </h2>
-            <p className='line-clamp-2 h-16 text-baseText text-sm overflow-auto'>{project.description}</p>
+            <p className='line-clamp-3 h-16 text-baseText text-sm'>{project.description}</p>
             {/* Task & User Count */}
             <div className="flex justify-between items-center text-baseText text-sm mb-2">
               <div className="flex items-center gap-1">

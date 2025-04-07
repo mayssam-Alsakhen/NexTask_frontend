@@ -7,7 +7,7 @@ import CategoryColumn from '@/Components/categoryColumn/CategoryColumn';
 import Popup from "../popup/Popup";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
-const ProjectTaskSection = ({ projectId}) => {
+const ProjectTaskSection = ({ projectId, api}) => {
   const [tasks, setTasks] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [addTask, setAddTask] = useState(false);
@@ -39,7 +39,7 @@ const ProjectTaskSection = ({ projectId}) => {
     const fetchTasks = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/tasks?project_id=${projectId}`,
+          `${api}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -147,7 +147,6 @@ const ProjectTaskSection = ({ projectId}) => {
 
   const handleFilterChange = (event) => {
     setSelectedStatus(event.target.value);
-    router.push(`/projects/${projectId}/tasks`);
   };
 
   return (

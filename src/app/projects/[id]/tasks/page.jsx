@@ -19,8 +19,8 @@ const ProjectTasks = ({ params }) => {
   }, [loading, user, router]);
  
   return (
-    <div className=" lg:pt-11 pt-12 p-2">
-        <ProjectTaskSection projectId={id}/>
+    <div className=" lg:mt-10 mt-12 p-2">
+        <ProjectTaskSection api={`http://127.0.0.1:8000/api/tasks?project_id=${id}`}/>
     </div>
   );
 };

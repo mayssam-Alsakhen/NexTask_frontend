@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useContext, use } from "react";
 import axios from "axios";
 import { FaEdit } from "react-icons/fa";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import { AuthContext } from "@/context/AuthContext";
 import { MdDelete } from "react-icons/md";
 import { useRouter } from "next/navigation";
@@ -16,7 +17,7 @@ const ProjectDetails = ({ params }) => {
   const [del, setDel] = useState(false);
   const [edit, setEdit] = useState(false);
   const { user, loading } = useContext(AuthContext);
-  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [formData, setFormData] = useState({ name: "", description: "", });
   const router = useRouter();
   const { id } = use(params);
 
@@ -76,11 +77,11 @@ const ProjectDetails = ({ params }) => {
     completed: tasks.filter(task => task.category === "Completed").length,
     all: tasks.length,
   };
-  // nabigating to the tasks page
-    const handleNavigate = (status) => {
-      localStorage.setItem("selectedStatus", status);
-      router.push(`/projects/${id}/tasks`);
-    };
+  // navigating to the tasks page
+  const handleNavigate = (status) => {
+    localStorage.setItem("selectedStatus", status);
+    router.push(`/projects/${id}/tasks`);
+  };
   useEffect(() => {
     if (project) {
       setFormData({ name: project.name, description: project.description });
@@ -124,33 +125,54 @@ const ProjectDetails = ({ params }) => {
   if (!project) return <p>Loading project details...</p>;
 
   return (
-    <div className="w-full mt-11 p-3 overflow-auto text-prime">
+    <div className="w-full mt-11 px-3 py-2 overflow-auto text-prime">
       {/* header secton  */}
       <div>
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-button">{project.name}</h1>
-          <div className="flex justify-end gap-2">
-            <span className="text-xl text-center text-prime rounded-lg cursor-pointer hover:shadow-lg" onClick={() => setDel(true)}><MdDelete />
-            </span>
-            <span className="text-xl text-center text-prime rounded-lg cursor-pointer hover:shadow-lg" onClick={() => setEdit(true)}><FaEdit />
-            </span>
+        <div className="flex justify-between items-start">
+          <div className="flex items-center gap-1">
+            <h1 className="text-3xl font-bold text-button">{project.name}</h1>
+            {/* Tooltip Trigger */}
+            <div className="relative group">
+              <AiOutlineInfoCircle className="text-button cursor-pointer" />
+              {/* Tooltip Box */}
+              <div className="absolute hidden group-hover:flex flex-col bg-white text-sm text-baseText p-2 border border-gray-300 rounded-md shadow-md top-6 left-16 -translate-x-1/2 w-60 z-10">
+                <span className="font-medium text-black">Created by:</span>
+                <span>{project.created_by.name}</span>
+                <span>{new Date(project.created_at).toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={() => setEdit(true)}
+              className="flex items-center gap-1 px-3 py-1 text-sm text-button border border-button rounded hover:bg-button hover:text-white transition"
+            >
+              <FaEdit /> Edit
+            </button>
+            <button
+              onClick={() => setDel(true)}
+              className="flex items-center gap-1 px-3 py-1 text-sm text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-white transition"
+            >
+              <MdDelete /> Delete
+            </button>
           </div>
         </div>
-        <p className="text-baseText mt-2 text-sm">{project.description || "No description available"}</p>
+        <p className="mt-4 md:px-4 text-lg text-gray-700 italic text-center">
+          {project.description || "No description available"}
+        </p>
       </div>
-
-      {/* task sectio */}
+      {/* task section */}
       <div className="mt-7">
         <div className="flex items-center justify-between mb-2">
           {/* <h3 className="text-lg font-semibold">Project Task</h3> */}
           {/* <Link href={`/projects/${id}/tasks`} className="text-[#1E6AB0] hover:text-[#1E6AB0] text-sm font-semibold">View All Tasks</Link> */}
         </div>
         <div className=" flex flex-wrap justify-center gap-4 text-black ">
-            <ProjectTasksDetails borderColor="border-pending" taskCount={taskCounts.pending} handleNavigate={()=>handleNavigate('pending')} statusTitle="Pending" projectId={project.id}/>
-            <ProjectTasksDetails borderColor="border-progress" taskCount={taskCounts.inProgress} handleNavigate={()=>handleNavigate('in progress')} statusTitle="In Progress" projectId={project.id}/>
-            <ProjectTasksDetails borderColor="border-testing" taskCount={taskCounts.testing} handleNavigate={()=>handleNavigate('test')} statusTitle="Testing" projectId={project.id}/>
-            <ProjectTasksDetails borderColor="border-done" taskCount={taskCounts.completed} handleNavigate={()=>handleNavigate('completed')} statusTitle="Completed" projectId={project.id}/>
-            <ProjectTasksDetails borderColor="border-button" taskCount={taskCounts.all} handleNavigate={()=>handleNavigate('all')} statusTitle="All Tasks" projectId={project.id}/>
+          <ProjectTasksDetails borderColor="border-pending" taskCount={taskCounts.pending} handleNavigate={() => handleNavigate('pending')} statusTitle="🕒 Pending" projectId={project.id} />
+          <ProjectTasksDetails borderColor="border-progress" taskCount={taskCounts.inProgress} handleNavigate={() => handleNavigate('in progress')} statusTitle="⚙️ In Progress" projectId={project.id} />
+          <ProjectTasksDetails borderColor="border-testing" taskCount={taskCounts.testing} handleNavigate={() => handleNavigate('test')} statusTitle="🧪 Testing" projectId={project.id} />
+          <ProjectTasksDetails borderColor="border-done" taskCount={taskCounts.completed} handleNavigate={() => handleNavigate('completed')} statusTitle="✅ Completed" projectId={project.id} />
+          <ProjectTasksDetails borderColor="border-gray-300" taskCount={taskCounts.all} handleNavigate={() => handleNavigate('all')} statusTitle="📋 All Tasks" projectId={project.id} />
         </div>
       </div>
       <ProjectUsersSection projectId={project.id} />
@@ -159,8 +181,8 @@ const ProjectDetails = ({ params }) => {
         <div className="text-prime text-xl font-bold p-4">
           <p>Are you sure you want to delete this project</p>
           <div className="flex justify-center gap-16 mt-10">
-            <button onClick={() => setDel(false)} className="w-20 bg-second rounded-lg hover:shadow-lg">No</button>
-            <button onClick={handleDelete} className="w-20 bg-second rounded-lg hover:shadow-lg">Yes</button>
+            <button onClick={() => setDel(false)} className="w-24 bg-second rounded-lg hover:shadow-lg">No</button>
+            <button onClick={handleDelete} className="w-24 py-2 bg-red-500 text-white rounded-lg hover:shadow-lg">Yes</button>
           </div>
         </div>
       </Popup>
@@ -168,8 +190,8 @@ const ProjectDetails = ({ params }) => {
       <Popup trigger={edit} onBlur={() => setEdit(false)}>
         <div>
           <form onSubmit={handleEdit}>
-            <div className="flex flex-col gap-7 text-prime">
-              <h1 className="text-4xl font-bold ">Edit Project</h1>
+            <div className="flex flex-col gap-4 text-prime">
+              <h1 className="text-2xl font-semibold">Update Project</h1>
               <input
                 type="text"
                 name="name"
@@ -179,6 +201,7 @@ const ProjectDetails = ({ params }) => {
                 placeholder="Project Title"
               />
               <input
+                type="text"
                 name="description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -188,7 +211,14 @@ const ProjectDetails = ({ params }) => {
               <div className="flex justify-center gap-16">
                 <button onClick={() => setEdit(false)} className="w-20 bg-second rounded-lg hover:shadow-lg">Cancel</button>
                 <button type="submit" className="w-20 bg-second rounded-lg hover:shadow-lg">Save</button>
-              </div>                </div>
+              </div>                
+              </div>
+               {/* Update Info Footer */}
+        {project.updated_by?  <div className="mt-6 text-sm text-gray-500 text-center border-t border-gray-200 pt-3">
+        <p>Updated by: <span className="font-medium">{project.updated_by.name}</span></p>
+        <p>Last updated: {new Date(project.updated_at).toLocaleString()}</p>
+      </div> : null}
+     
           </form>
         </div>
       </Popup>

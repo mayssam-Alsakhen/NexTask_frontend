@@ -158,9 +158,9 @@ const ProjectUsersSection = ({ projectId }) => {
           {/* {openUsers?<BsChevronUp onClick={()=>setOpenUsers(false)}/>:<BsChevronDown onClick={()=>setOpenUsers(true)}/>} */}
         </span>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-auto max-h-[220px]">
         <ul
-          className="px-20 p-3 min-w-[700px]"
+          className="lg:px-10 sm:px-2 p-3 min-w-[700px]"
         // className={`${openUsers? "h-auto":"h-28"} overflow-y-auto`}
         >
           {users.length > 0 ? (
