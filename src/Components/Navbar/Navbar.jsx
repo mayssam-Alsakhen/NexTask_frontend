@@ -1,8 +1,7 @@
 import React from 'react'
 import Image from 'next/image';
 import logo from "../../../public/logo.png"
-import nextask from "../../../public/nextask.webp"
-import { IoMenu } from "react-icons/io5";
+import UserDropdown from '../user dropdown/UserDropdown';
 import Link from 'next/link';
 
 
@@ -21,7 +20,11 @@ export default function Navbar({handleDrawer}) {
         </ul>
         </div>
         <div className='md:w-fit sm:w-32 justify-self-center'><Image src={logo} width={120} height='auto' alt='logo' priority/></div>
-      <div className='w-8 h-8 rounded-full bg-blue-300 flex justify-center items-center text-xl font-semibold justify-self-end'>M</div>
+      {/* <div className='w-8 h-8 rounded-full bg-blue-300 flex justify-center items-center text-xl font-semibold justify-self-end'>M</div>
+      <UserDropdown /> */}
+     <div className='justify-self-end'>
+  <UserDropdown />
+</div>
     </div>
        
   )

@@ -202,7 +202,7 @@ const ProjectTaskSection = ({ projectId, api}) => {
                   card={`${selectedStatus==='pending'?'bg-pending':selectedStatus==='in progress'?"bg-progress":selectedStatus==='test'?'bg-testing':selectedStatus==='completed'?'bg-done':'bg-whte'}  md:w-56 sm:w-40 `}
                   key={selectedStatus}
                   category={selectedStatus}
-                  taskList={tasks.filter(task => task.category.toLowerCase() === selectedStatus)}
+                  taskList={tasks.filter(task => task.category?.toLowerCase() === selectedStatus)}
                   onTaskDrop={handleTaskDrop}
                   updateTask={updateTask}
                   updateTaskList={updateTaskList}

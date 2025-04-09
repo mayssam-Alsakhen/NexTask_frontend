@@ -37,6 +37,7 @@ function Login() {
               // Store user data
               localStorage.setItem('user', JSON.stringify(meResponse.data));
               localStorage.setItem("user_id", meResponse.data.id);
+              localStorage.setItem("name", meResponse.data.name);
   
               // Redirect to dashboard by changing `window.location`
               window.location.href = '/dashboard';

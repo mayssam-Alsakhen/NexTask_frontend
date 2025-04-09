@@ -25,7 +25,7 @@ export default function SearchInput({ onSearch, onChange }) {
       placeholder="Search"
       value={query}
       onChange={handleChange}
-      className="border px-2 rounded-md "
+      className="border px-2 rounded-md py-1 text-baseText focus:outline-none focus:border-blue-500 transition duration-200 ease-in-out"
     />
   );
 }
