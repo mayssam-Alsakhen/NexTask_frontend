@@ -18,6 +18,7 @@ function page() {
   const [projects, setProjects] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({ name: "", description: "" });
+  const [currentUser, setCurrentUser] = useState(null);
   const router = useRouter();
 
   const fetchProjects = async () => {
@@ -40,6 +41,7 @@ function page() {
   };
   
   useEffect(() => {
+    setCurrentUser(localStorage.getItem("user_id"))
     if (loading) return;
     if (!user) {
       router.push("/login");
@@ -145,7 +147,7 @@ function page() {
             <div className='w-full flex justify-end text-sm font-medium text-button'>
               {/* <Link href={`/projects/${project.id}`} className='hover:underline'>Details</Link> */}
             </div>
-            <div className="opacity-100 text-button transition-opacity flex justify-end w-full gap-2 ">
+            {project.pivot.is_admin && project.pivot.user_id== currentUser ? (<div className="opacity-100 text-button transition-opacity flex justify-end w-full gap-2 ">
               <button className=" hover:font-bold" name='edit'>
                 <LiaEdit onClick={(e) => {
                   e.stopPropagation();
@@ -156,7 +158,19 @@ function page() {
               <button className="hover:text-red-600" onClick={(e) =>{e.stopPropagation();setDel(project.id)}} name='delete'>
                 <MdDeleteOutline />
               </button>
-            </div>
+            </div>) : null}
+            {/* <div className="opacity-100 text-button transition-opacity flex justify-end w-full gap-2 ">
+              <button className=" hover:font-bold" name='edit'>
+                <LiaEdit onClick={(e) => {
+                  e.stopPropagation();
+                  setEdit(project.id);
+                  setFormData({ name: project.name, description: project.description });
+                }} />
+              </button>
+              <button className="hover:text-red-600" onClick={(e) =>{e.stopPropagation();setDel(project.id)}} name='delete'>
+                <MdDeleteOutline />
+              </button>
+            </div> */}
           </div>
 
         ))}

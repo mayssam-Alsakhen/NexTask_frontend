@@ -9,7 +9,6 @@ export default function UserDropdown() {
   const [user, setUser] = useState(null);
   const [editPopup, setEditPopup] = useState(false);
   const dropdownRef = useRef(null);
-  const [showEdit, setShowEdit] = useState(false);
 
   const router = useRouter();
 

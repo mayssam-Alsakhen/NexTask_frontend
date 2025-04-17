@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import axios from "axios";
@@ -7,7 +6,7 @@ import CategoryColumn from '@/Components/categoryColumn/CategoryColumn';
 import Popup from "../popup/Popup";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
-const ProjectTaskSection = ({ projectId, api}) => {
+const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
   const [tasks, setTasks] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [addTask, setAddTask] = useState(false);
@@ -17,8 +16,8 @@ const ProjectTaskSection = ({ projectId, api}) => {
   const [dueDate, setDueDate] = useState("");
   const [isImportant, setIsImportant] = useState();
   const [selectedStatus, setSelectedStatus] = useState("all");  
-  const router = useRouter();
-
+  const [usersLoading, setUsersLoading] = useState(true); 
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Update a single task
   const updateTask = (updatedTask) => {
@@ -33,6 +32,39 @@ const ProjectTaskSection = ({ projectId, api}) => {
   const updateTaskList = (taskId) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
+
+  // Fetch project users to check admin status
+  useEffect(() => {
+    if (!projectId) {
+      setUsersLoading(false);
+      return;
+    }
+    const fetchProjectUsers = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/projects/${projectId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        
+        const currentUserId = localStorage.getItem("user_id");
+        const currentUser = response.data.data.users?.find(
+          user => user.id == currentUserId
+        );
+        
+        setIsAdmin(currentUser?.pivot?.is_admin === 1);
+      } catch (error) {
+        console.error("Error fetching project users:", error);
+      } finally {
+        setUsersLoading(false);
+      }
+    };
+
+    fetchProjectUsers();
+  }, [projectId]);
 
   // Fetch tasks from the API when the component mounts or refresh changes
   useEffect(() => {
@@ -65,7 +97,6 @@ const ProjectTaskSection = ({ projectId, api}) => {
       localStorage.removeItem("selectedStatus");
     }
   }, []);
-  
 
   // Categorize tasks for the Kanban board
   const categorizedTasks = {
@@ -143,7 +174,7 @@ const ProjectTaskSection = ({ projectId, api}) => {
     }
   };
 
-  if (loading) return <p>Loading tasks...</p>;
+  if (loading || usersLoading) return <p>Loading ...</p>;
 
   const handleFilterChange = (event) => {
     setSelectedStatus(event.target.value);
@@ -154,7 +185,7 @@ const ProjectTaskSection = ({ projectId, api}) => {
       <div className="flex flex-col h-full">
         {/* Header with title and add task button */}
         <div className="flex justify-between items-center mb-4 text-prime">
-          <h3 className="text-lg font-semibold">Project Tasks</h3>
+          <h3 className="text-lg font-semibold">{title}</h3>
           <span className="flex items-center gap-3 text-2xl cursor-pointer">
             <div>
               <select
@@ -169,9 +200,12 @@ const ProjectTaskSection = ({ projectId, api}) => {
                 <option value="test">Testing</option>
               </select>
             </div>
-            <button onClick={() => setAddTask(true)}>
-              <IoIosAddCircleOutline/>
-            </button>
+
+            {isAdmin && (
+              <button onClick={() => setAddTask(true)} className={addIcon}>
+                <IoIosAddCircleOutline/>
+              </button>
+            )}
           </span>
         </div>
           
@@ -199,14 +233,14 @@ const ProjectTaskSection = ({ projectId, api}) => {
                 <CategoryColumn
                   mainClass={`w-full`}
                   cardDir={`flex-row justify-center overflow-hidden h-full flex-wrap gap-5`} 
-                  card={`${selectedStatus==='pending'?'bg-pending':selectedStatus==='in progress'?"bg-progress":selectedStatus==='test'?'bg-testing':selectedStatus==='completed'?'bg-done':'bg-whte'}  md:w-56 sm:w-40 `}
+                  card={`${selectedStatus==='pending'?'bg-pending':selectedStatus==='in progress'?"bg-progress":selectedStatus==='test'?'bg-testing':selectedStatus==='completed'?'bg-done':'bg-whte'}  md:w-56 sm:w-60 `}
                   key={selectedStatus}
                   category={selectedStatus}
                   taskList={tasks.filter(task => task.category?.toLowerCase() === selectedStatus)}
                   onTaskDrop={handleTaskDrop}
                   updateTask={updateTask}
                   updateTaskList={updateTaskList}
-                />
+                  />
         </div>
         }
 
@@ -218,7 +252,7 @@ const ProjectTaskSection = ({ projectId, api}) => {
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
               placeholder="Task Title"
-              className="w-full p-2 my-2 border-b-2 border-prime focus:border-designing outline-none"
+              className="w-full p-2 my-2 border-b-2 border-prime focus:border-designing outline-none "
             />
             <input
               type="text"

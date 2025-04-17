@@ -14,7 +14,6 @@ const ProjectUsersSection = ({ projectId }) => {
   const [addUser, setAddUser] = useState(false);
   const [userDots, setUserDots] = useState(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchProjectUsers = async () => {
       try {
@@ -87,6 +86,12 @@ const ProjectUsersSection = ({ projectId }) => {
       alert(error.response?.data?.message || "Error adding user. Please try again.");
     }
   };
+  // Function to check if the current user is an admin
+  const isCurrentUserAdmin = () => {
+    const currentUserId = localStorage.getItem("user_id");
+    const currentUserInProject = users.find(user => user.id == currentUserId);
+    return currentUserInProject?.pivot?.is_admin === 1;
+  };
 
   const handleRemoveUser = async () => {
     if (!removeUser) return;
@@ -149,14 +154,15 @@ const ProjectUsersSection = ({ projectId }) => {
   const getUserTaskCount = (userId) => {
     return tasks.filter(task => task.users?.some(u => u.id === userId)).length;
   };
-
   return (
     <div className="mt-7">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-lg ">Team Members</h3>
-        <span className="text-2xl cursor-pointer px-2 flex gap-x-2"><IoPersonAddOutline onClick={() => setAddUser(true)} />
-          {/* {openUsers?<BsChevronUp onClick={()=>setOpenUsers(false)}/>:<BsChevronDown onClick={()=>setOpenUsers(true)}/>} */}
-        </span>
+        {isCurrentUserAdmin() &&
+        <span className="text-2xl cursor-pointer px-2 flex gap-x-2">
+   <IoPersonAddOutline onClick={() => setAddUser(true)} />
+</span>
+}
       </div>
       <div className="overflow-auto max-h-[220px]">
         <ul
@@ -175,26 +181,26 @@ const ProjectUsersSection = ({ projectId }) => {
                 </div>
                 <span className="text-baseText font-bold">{getUserTaskCount(user.id)} {getUserTaskCount(user.id) > 1 ? 'tasks' : 'task'} </span>
                 {user.pivot?.is_admin ? (
-                  <span className=" bg-done p-1 w-24 text-center text-sm">Admin</span>
+                  <span className=" bg-done p-1 w-24 text-center text-sm mr-2">Admin</span>
                 ) : (
-                  <span className="bg-testing p-1 w-24 text-center text-sm">Member</span>
+                  <span className="bg-testing p-1 w-24 text-center text-sm mr-2">Member</span>
 
                 )}
+                {isCurrentUserAdmin() && (
                 <div className="px-2 flex items-center gap-2">
                   <span className="cursor-pointer text-2xl " onClick={() => { user.pivot?.is_admin ? handleSetMember(user.id) : handleSetAdmin(user.id) }}><LiaEdit title={user.pivot?.is_admin ? "set as member" : "set as admin"} /></span>
                   <span className="cursor-pointer text-2xl text-red-500 hover:text-red-700" onClick={() => setRemoveUser(user.id)}><IoPersonRemoveOutline title="remove user" /></span>
                   {userDots === user.id && (
                     <div className="bg-white rounded-lg shadow-md p-2 z-10 absolute top-0 right-0" style={{ display: userDots ? 'block' : 'none' }}>
-                      {/* <span className="block text-end text-xl h-5 cursor-pointer" onClick={()=>setUserDots(null)}>x</span>   */}
                       {user.pivot?.is_admin ? (
                         <p className="hover:bg-second cursor-pointer p-1 rounded-lg" onClick={() => handleSetMember(user.id)}>Set as member</p>
                       ) : (
                         <p className="hover:bg-second cursor-pointer p-1 rounded-lg" onClick={() => handleSetAdmin(user.id)}>Set as admin</p>
                       )}
-                      {/* <p className="hover:bg-second cursor-pointer p-1 rounded-lg" onClick={() => handleRemoveUser(user.id)}>Remove member</p> */}
                     </div>
                   )}
                 </div>
+                )}
                 <Popup trigger={removeUser !== null} onBlur={() => setRemoveUser(null)}>
                   <div className="text-prime text-xl font-bold p-4">
                     <p>Are you sure you want to remove user from this project</p>

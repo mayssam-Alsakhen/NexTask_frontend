@@ -20,6 +20,7 @@ const ProjectDetails = ({ params }) => {
   const [formData, setFormData] = useState({ name: "", description: "", });
   const router = useRouter();
   const { id } = use(params);
+  const currentUser = localStorage.getItem("user_id");
 
   useEffect(() => {
     if (!loading && !user) {
@@ -142,7 +143,8 @@ const ProjectDetails = ({ params }) => {
               </div>
             </div>
           </div>
-          <div className="flex justify-end gap-3">
+          {project.users.map((user) => (user.pivot.is_admin && user.pivot.user_id == currentUser) ? (
+            <div key={user.id} className="flex justify-end gap-3">
             <button
               onClick={() => setEdit(true)}
               className="flex items-center gap-1 px-3 py-1 text-sm text-button border border-button rounded hover:bg-button hover:text-white transition"
@@ -155,7 +157,7 @@ const ProjectDetails = ({ params }) => {
             >
               <MdDelete /> Delete
             </button>
-          </div>
+          </div>): null)}
         </div>
         <p className="mt-4 md:px-4 text-lg text-gray-700 italic text-center">
           {project.description || "No description available"}
@@ -222,6 +224,10 @@ const ProjectDetails = ({ params }) => {
           </form>
         </div>
       </Popup>
+      <div className="border-t border-gray-300 text-gray-500 bottom-0 left-0 fixed w-full text-center text-xs py-1"> 
+        <span>Created by: </span>
+                <span>{project.created_by.name}</span>
+                <span>{new Date(project.created_at).toLocaleString()}</span> </div>
     </div>
   );
 };

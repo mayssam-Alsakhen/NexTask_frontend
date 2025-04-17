@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
-import { AiOutlineMore } from "react-icons/ai";
+import { MdMoreVert } from "react-icons/md";
+import CommentsSection from "../CommentsSection/CommentsSection";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { FaRegComment } from "react-icons/fa";
 import Popup from "../popup/Popup";
 import axios from "axios";
 
@@ -13,9 +15,13 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
   const [taskDetails, setTaskDetails] = useState(null);
   const [taskDots, setTaskDots] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("details");
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [usersLoading, setUsersLoading] = useState(true);
   const [matchedUsers, setMatchedUsers] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
@@ -23,6 +29,37 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
     due_date: "",
     isImportant: "",
   });
+// check if the user is admin
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (!task?.project_id) return;
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/projects/${task.project_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        
+        const currentUserId = localStorage.getItem("user_id");
+        const currentUser = response.data.data.users?.find(
+          user => user.id == currentUserId
+        );
+        
+        setIsAdmin(currentUser?.pivot?.is_admin === 1);
+      } catch (error) {
+        console.error("Admin check failed:", error?.response?.status, error?.message);
+            setIsAdmin(false);
+      } 
+      finally {
+        setUsersLoading(false);
+      }
+    };
+
+    checkAdminStatus();
+  }, [task.project_id]);
 
   // Set up dragging
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -170,18 +207,27 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
         isDragging ? "opacity-50" : ""
       }`}
     >
-      <p className="font-semibold" onClick={() => setTaskOpen(true)}>
+      <p className="font-semibold" onClick={() => {setTaskOpen(true), setActiveTab('details')}}>
         {task.title}
       </p>
       <p className="text-xs text-gray-500" onClick={() => setTaskOpen(true)}>
         {task.due_date}
       </p>
       <div
-        className="flex justify-end"
-        onClick={() => setTaskDots(task.id)}
+        className="flex justify-end gap-2"
+        
       >
-        <AiOutlineMore />
+        <FaRegComment  onClick={() => {setActiveTab('comments'), setTaskOpen(true)}}/>
+        {/* {!usersLoading && isAdmin && (
+          <MdMoreVert onClick={() => setTaskDots(task.id)}/>
+        )} */}
       </div>
+      {open && (
+        <div className="absolute right-0 mt-2 w-60 p-2 bg-white rounded-md shadow text-black z-50">
+         <CommentsSection taskId={task.id}/>
+        </div>
+      )}
+      
       {taskDots === task.id && (
         <div
           className="bg-white rounded-lg shadow-md p-2 z-10 absolute bottom-0 right-0 text-start"
@@ -231,9 +277,16 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
       </Popup>
       {/* Task details popup */}
       <Popup trigger={taskOpen} onBlur={() => setTaskOpen(false)}>
+        <div className="flex gap-5 w-full font-semibold mb-8 justify-center text-gray-400">
+          <span onClick={()=>setActiveTab('details')} className="hover:text-button hover:scale-105 transition-all">Details</span> 
+          <span onClick={()=> setActiveTab('comments')} className="hover:text-button hover:scale-105 transition-all">Comments</span>
+          {!usersLoading && isAdmin && (
+          <span onClick={()=> {setActiveTab('edeit'), setTaskOpen(false), setEditTask(true)}} className="hover:text-button hover:scale-105 transition-all">Edit</span>
+          )}
+          </div>
         {loading ? (
           <p>Loading task details...</p>
-        ) : taskDetails ? (
+        ) : taskDetails && activeTab==='details' ? (
           <div>
             <h2 className="text-lg font-semibold">{taskDetails.title}</h2>
             <p className="text-gray-600">{taskDetails.description}</p>
@@ -256,9 +309,9 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
               <p className="text-gray-500">No users assigned</p>
             )}
           </div>
-        ) : (
-          <p>Error loading task details</p>
-        )}
+        ) : taskDetails && activeTab==='comments' ?(
+          <CommentsSection taskId={taskDetails.id} />
+        ): <p>Error loading task details</p>}
       </Popup>
       {/* Edit task popup */}
       <Popup

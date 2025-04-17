@@ -20,7 +20,7 @@ const ProjectTasks = ({ params }) => {
  
   return (
     <div className=" lg:mt-10 mt-12 p-2">
-        <ProjectTaskSection projectId={id} api={`http://127.0.0.1:8000/api/tasks?project_id=${id}`}/>
+        <ProjectTaskSection projectId={id} api={`http://127.0.0.1:8000/api/tasks?project_id=${id}`} />
     </div>
   );
 };
