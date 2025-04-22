@@ -11,6 +11,7 @@ export default function CommentsSection({ taskId }) {
   // Fetch comments
   useEffect(() => {
     const fetchComments = async () => {
+      console.log("Fetching comments for task ID:", taskId);
       try {
         const res = await axios.get(`http://127.0.0.1:8000/api/comments/${taskId}`, {
           headers: {
@@ -114,7 +115,7 @@ export default function CommentsSection({ taskId }) {
       </div>
 
       {/* New Comment Input */}
-      <div className="mt-4 border-t pt-3">
+      <div className="mt-4 border-t pt-3 text-baseText">
         <textarea
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
