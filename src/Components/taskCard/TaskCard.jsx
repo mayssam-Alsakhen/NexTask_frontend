@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
 import { MdMoreVert } from "react-icons/md";
 import CommentsSection from "../CommentsSection/CommentsSection";
+import TaskProgressEditor from "../TaskProgressEditor/TaskProgressEditor"; 
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa";
 import Popup from "../popup/Popup";
 import axios from "axios";
+import Link from "next/link";
 
 const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
   const [taskOpen, setTaskOpen] = useState(false);
@@ -203,31 +205,39 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
   return (
     <div
       ref={drag}
-      className={`${card} text-prime p-2 relative rounded-lg shadow-md cursor-pointer ${
+      className={`${card} bg-white text-baseText p-2 relative rounded-lg shadow-md cursor-pointer ${
         isDragging ? "opacity-50" : ""
       }`}
     >
-      <p className="font-semibold" onClick={() => {setTaskOpen(true), setActiveTab('details')}}>
+        {/* <Link key={task.id}
+    href={`/projects/${task.project_id}/tasks/${task.id}`}> */}
+      <p className="font-semibold" 
+      onClick={() => {setTaskOpen(true), setActiveTab('details')}}
+      >
         {task.title}
       </p>
       <p className="text-xs text-gray-500" onClick={() => setTaskOpen(true)}>
         {task.due_date}
       </p>
+      {/* </Link> */}
+      {/* Progress bar */}
+<TaskProgressEditor task={task} projectId={task.project.id} />
+<div className="flex justify-between items-center">
+  <span className={`${task.category=='Completed'?'bg-done':task.category=='In Progress'?'bg-progress':task.category=='Pending'?'bg-pending':'bg-testing'} rounded-full text-sm px-2`}>{task.category}</span>
       <div
-        className="flex justify-end gap-2"
-        
-      >
+        className="flex justify-end items-center gap-2">
         <FaRegComment  onClick={() => {setActiveTab('comments'), setTaskOpen(true)}}/>
-        {/* {!usersLoading && isAdmin && (
+        {!usersLoading && isAdmin && (
           <MdMoreVert onClick={() => setTaskDots(task.id)}/>
-        )} */}
+        )}
+      </div>
       </div>
       {open && (
         <div className="absolute right-0 mt-2 w-60 p-2 bg-white rounded-md shadow text-black z-50">
          <CommentsSection taskId={task.id}/>
         </div>
       )}
-      
+
       {taskDots === task.id && (
         <div
           className="bg-white rounded-lg shadow-md p-2 z-10 absolute bottom-0 right-0 text-start"
@@ -281,7 +291,7 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
           <span onClick={()=>setActiveTab('details')} className="hover:text-button hover:scale-105 transition-all">Details</span> 
           <span onClick={()=> setActiveTab('comments')} className="hover:text-button hover:scale-105 transition-all">Comments</span>
           {!usersLoading && isAdmin && (
-          <span onClick={()=> {setActiveTab('edeit'), setTaskOpen(false), setEditTask(true)}} className="hover:text-button hover:scale-105 transition-all">Edit</span>
+          <span onClick={()=> {setActiveTab('edit'), setTaskOpen(false), setEditTask(true)}} className="hover:text-button hover:scale-105 transition-all">Edit</span>
           )}
           </div>
         {loading ? (

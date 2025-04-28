@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import Popup from "@/Components/popup/Popup";
 import ProjectUsersSection from "@/Components/projectusersection/ProjectUserSection";
 import ProjectTasksDetails from "@/Components/ProjectTasksDetails/ProjectTasksDetails";
+import TaskProgressEditor from "@/Components/TaskProgressEditor/TaskProgressEditor";
+import PieChartWithNeedle from "@/Components/utils/HalfPieChart";
 
 const ProjectDetails = ({ params }) => {
   const [tasks, setTasks] = useState([]);
@@ -17,12 +19,12 @@ const ProjectDetails = ({ params }) => {
   const [del, setDel] = useState(false);
   const [edit, setEdit] = useState(false);
   const { user, loading } = useContext(AuthContext);
-  const [formData, setFormData] = useState({ name: "", description: "", });
+  const [formData, setFormData] = useState({ name: "", description: "", status: "", due_date: "" });  
   const router = useRouter();
   const { id } = use(params);
-  const currentUser = localStorage.getItem("user_id");
-
+  const [currentUser, setCurrentUser] = useState(null);
   useEffect(() => {
+    setCurrentUser(localStorage.getItem("user_id"));
     if (!loading && !user) {
       router.push("/login");
     }
@@ -78,6 +80,17 @@ const ProjectDetails = ({ params }) => {
     completed: tasks.filter(task => task.category === "Completed").length,
     all: tasks.length,
   };
+  function calculateProjectProgress() {
+    if (tasks.length === 0) return 0; // No tasks = 0% progress
+  
+    const completedTasks =taskCounts.completed;
+    const testTasks = taskCounts.testing;
+    const progress = ((completedTasks+testTasks) / tasks.length) * 100;
+  
+    return Math.round(progress); // Rounded to nearest whole number
+  }
+  
+
   // navigating to the tasks page
   const handleNavigate = (status) => {
     localStorage.setItem("selectedStatus", status);
@@ -85,7 +98,7 @@ const ProjectDetails = ({ params }) => {
   };
   useEffect(() => {
     if (project) {
-      setFormData({ name: project.name, description: project.description });
+      setFormData({ name: project.name, description: project.description, status: project.status, due_date: project.due_date? project.due_date : "" }); 
     }
   }, [project]);
 
@@ -106,6 +119,7 @@ const ProjectDetails = ({ params }) => {
 
   const handleEdit = async (e) => {
     e.preventDefault();
+    setError(null); // Reset error state before making the request
     try {
       await axios.put(`http://127.0.0.1:8000/api/projects/${id}`, formData, {
         headers: {
@@ -115,8 +129,31 @@ const ProjectDetails = ({ params }) => {
       });
       setEdit(false);
       setProject({ ...project, ...formData }); // Update the UI immediately
+      alert('Project updated successfully!');
     } catch (err) {
       console.error("Error updating project:", err);
+      if (err.response) {
+      // The request was made and the server responded with a status code
+      const { status, data } = err.response;
+      
+      if (status === 400) {
+        // Handle validation errors
+        const errorMessage = data.message || 
+                           data.error || 
+                           'Invalid data. Please check your inputs.';
+        setError(errorMessage);
+      } else if (status === 401) {
+        setError('Unauthorized - Please login again');
+      } else {
+        setError(data.message || 'An error occurred');
+      }
+    } else if (err.request) {
+      // The request was made but no response was received
+      setError('No response from server. Please check your connection.');
+    } else {
+      // Something happened in setting up the request
+      setError('Request setup error: ' + err.message);
+    }
     }
   };
 
@@ -159,9 +196,14 @@ const ProjectDetails = ({ params }) => {
             </button>
           </div>): null)}
         </div>
-        <p className="mt-4 md:px-4 text-lg text-gray-700 italic text-center">
+        <div className="flex justify-around sm:justify-between flex-wrap items-center mt-2 border-b border-gray-300 p-2 md:mx-4  text-xs md:text-base">
+        <p className='text-gray-500'>Due Date: {project.due_date? project.due_date:<span className='text-donetext fon'> Open</span> }</p>
+            <div>Project Status:   <span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} rounded text-sm px-3 py-1`}>{project.status}</span>            </div>
+        <div className="w-full md:w-56"><PieChartWithNeedle value={calculateProjectProgress()}/></div>
+        </div>
+        <p className="mt-4 md:px-6 text-lg text-gray-700 italic text-center">
           {project.description || "No description available"}
-        </p>
+        </p>        
       </div>
       {/* task section */}
       <div className="mt-7">
@@ -194,6 +236,13 @@ const ProjectDetails = ({ params }) => {
           <form onSubmit={handleEdit}>
             <div className="flex flex-col gap-4 text-prime">
               <h1 className="text-2xl font-semibold">Update Project</h1>
+
+              {error && (
+          <div className="bg-red-100 text-red-700 p-2 rounded-md text-center">
+            {error}
+          </div>
+        )}
+
               <input
                 type="text"
                 name="name"
@@ -210,6 +259,29 @@ const ProjectDetails = ({ params }) => {
                 className=' outline-none p-2 border-b-2 border-prime focus:border-button '
                 placeholder="Description"
               />
+
+               {/* New Status Select */}
+        <select
+          name="status"
+          value={formData.status}
+          onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+          className="outline-none p-2 border-b-2 border-prime focus:border-button"
+        >
+          <option value="">Select Status</option>
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Testing">Testing</option>
+          <option value="Done">Done</option>
+        </select>
+
+        {/* New Due Date Field */}
+        <input
+          type="date"
+          name="due_date"
+          value={formData.due_date}
+          onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
+          className="outline-none p-2 border-b-2 border-prime focus:border-button"
+        />
               <div className="flex justify-center gap-16">
                 <button onClick={() => setEdit(false)} className="w-20 bg-second rounded-lg hover:shadow-lg">Cancel</button>
                 <button type="submit" className="w-20 bg-second rounded-lg hover:shadow-lg">Save</button>

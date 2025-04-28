@@ -1,0 +1,163 @@
+/* Base Calendar Styles */
+.fc {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100% !important;
+}
+.fc .fc-toolbar.fc-header-toolbar{
+  margin-bottom: 1rem !important;
+}
+.fc .fc-button-group{
+  width: 250px;
+  gap: 5px;
+}
+/* Header and Title Styles */
+.fc .fc-toolbar-title {
+  color: #1E6AB0;
+  font-size: 1.25rem;
+  margin: 0 0.5rem;
+}
+
+/* Day Number Styles */
+.fc .fc-daygrid-day-number {
+  color: #1E6AB0;
+  font-weight: bold;
+  padding: 4px !important;
+}
+
+/* Weekday Header Styles */
+.fc .fc-col-header-cell-cushion {
+  color: #1E6AB0;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 8px 4px !important;
+}
+
+/* Button Styles */
+.fc .fc-button {
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1E6AB0 !important;
+  padding: 0.35rem 0.7rem !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+}
+
+.fc .fc-button:hover {
+  background-color: #f1f5f9 !important;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #1E6AB0 !important;
+  color: white !important;
+}
+
+/* Event Styles */
+.fc-event {
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 2px 4px !important;
+  margin-bottom: 2px !important;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.fc-event:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.fc-event-time {
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+/* Today's Cell Highlight */
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #f0f7ff !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .fc {
+    min-height: 80vh !important;
+  }
+  
+  .fc-toolbar {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0 !important;
+  }
+  
+  .fc-toolbar-title {
+    order: -1;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .fc-header-toolbar .fc-toolbar-chunk {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 0.4rem;
+    width: 100%;
+  }
+  
+  .fc-button {
+    padding: 0.3rem 0.6rem !important;
+    font-size: 0.85rem !important;
+  }
+  
+  .fc-col-header-cell-cushion {
+    font-size: 0.8rem;
+    padding: 6px 2px !important;
+  }
+  
+  .fc-daygrid-day-number {
+    font-size: 0.8rem;
+  }
+  
+  .fc-event {
+    font-size: 0.75rem !important;
+    padding: 1px 2px !important;
+  }
+  
+  /* Compact month view for mobile */
+  .fc-daygrid-day-frame {
+    min-height: 50px !important;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 400px) {
+  .fc-toolbar-title {
+    font-size: 1rem;
+  }
+  
+  .fc-button {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .fc-col-header-cell {
+    font-size: 0.7rem;
+  }
+}
+
+/* Time column in week/day views */
+.fc .fc-timegrid-axis {
+  color: #1E6AB0 !important; /* Match your blue theme */
+  font-weight: 500;
+ 
+}
+
+/* Time slots in week/day views */
+.fc .fc-timegrid-slot-label-cushion {
+  color: #1E6AB0 !important;
+}
+
+
+
+
+

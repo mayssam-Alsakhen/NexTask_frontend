@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Popup from "../popup/Popup";
+import AddTaskForm from "../AddTaskForm/AddTaskForm";
+import './calendar.css';
 import TaskPopupContent from "../TaskPopupContent/TaskPopupContent";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -11,13 +13,22 @@ import interactionPlugin from "@fullcalendar/interaction";
 export default function Calendar() {
   const [events, setEvents] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [addTaskMessage, setAddTaskMessage] = useState(null);
+const [openPopup, setOpenPopup] = useState(false);
+
+const handleDateClick = (arg) => {
+  setSelectedDate(arg.dateStr); // Save the clicked date
+  setOpenPopup(true);           // Open the popup
+};
+
 
   const getCategoryColor = (category) => {
     switch (category.toLowerCase()) {
-      case 'pending': return '#F59E0B';
-      case 'in progress': return '#8B5CF6';
-      case 'test': return '#3B82F6';
-      case 'completed': return '#10B981';
+      case 'pending': return '#fffcab';
+      case 'in progress': return '#ffe2a3';
+      case 'test': return '#a9e4ff';
+      case 'completed': return '#a9ffb7';
       default: return '#9CA3AF';
     }
   };
@@ -43,7 +54,7 @@ export default function Calendar() {
           users: t.users,
           backgroundColor: getCategoryColor(t.category),
           borderColor: getCategoryColor(t.category),
-          textColor: 'white'
+          textColor:t.is_important ? 'red' : '#333'
         })));
       } catch (e) {
         console.error(e);
@@ -73,7 +84,7 @@ export default function Calendar() {
   
 
   return (
-    <div className="p-4">
+    <div className="md:px-4 w-full h-full">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -90,6 +101,7 @@ export default function Calendar() {
           center: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
+        dateClick={handleDateClick}
       />
 
       <Popup trigger={!!selectedTask} onBlur={() => setSelectedTask(null)}>
@@ -101,6 +113,10 @@ export default function Calendar() {
           />
         )}
       </Popup>
+      {/* add task  */}
+      <Popup trigger={openPopup} onBlur={setOpenPopup}>
+  <AddTaskForm defaultDueDate={selectedDate}  onTaskCreated={()=>{setOpenPopup(false)}}/>
+</Popup>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function Navbar({handleDrawer}) {
   return (
-    <div className='py-1 px-4 grid grid-cols-3 bg-[#2C5A89] text-white fixed top-0 w-full z-50'>
+    <div className='py-1 px-4 grid grid-cols-3 bg-[#6381a7] text-white fixed top-0 w-full z-50'>
       
         {/* <span onClick={handleDrawer}><IoMenu className='hover:text-[#0288d1] text-4xl transform transition duration-1000 hover:rotate-[360deg] cursor-pointer'/></span> */}
         <div className='flex gap-5 items-center'>

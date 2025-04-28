@@ -184,7 +184,7 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
     <DndProvider backend={HTML5Backend}>
       <div className="flex flex-col h-full">
         {/* Header with title and add task button */}
-        <div className="flex justify-between items-center mb-4 text-prime">
+        <div className="flex justify-between items-center mb-2 text-prime">
           <h3 className="text-lg font-semibold">{title}</h3>
           <span className="flex items-center gap-3 text-2xl cursor-pointer">
             <div>
@@ -215,9 +215,8 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
           {Object.entries(categorizedTasks).map(
             ([category, taskList]) => (
               <CategoryColumn
-              mainClass={`lg:w-[25%] min-w-60 h-[75vh] overflow-y-hidden`}
+              mainClass={`lg:w-[25%]  bg-main min-w-60 lg:h-[80vh] h-[75vh] overflow-y-hidden`}
                 cardDir={`flex-col gap-2 overflow-y-auto`}
-                card={`bg-white`}
                 key={category}
                 category={category}
                 taskList={taskList}
@@ -231,9 +230,10 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
         :
         <div className="flex gap-4 text-center">
                 <CategoryColumn
+                heading={'hidden'}
                   mainClass={`w-full`}
                   cardDir={`flex-row justify-center overflow-hidden h-full flex-wrap gap-5`} 
-                  card={`${selectedStatus==='pending'?'bg-pending':selectedStatus==='in progress'?"bg-progress":selectedStatus==='test'?'bg-testing':selectedStatus==='completed'?'bg-done':'bg-whte'}  md:w-56 sm:w-60 `}
+                  card={` md:w-56 sm:w-60 h-28`}
                   key={selectedStatus}
                   category={selectedStatus}
                   taskList={tasks.filter(task => task.category?.toLowerCase() === selectedStatus)}

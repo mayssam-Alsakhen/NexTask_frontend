@@ -239,7 +239,7 @@ export default function TaskPopupContent({ task, onClose, updateTask }) {
                   <div className="md:w-9 md:h-9 sm:w-7 sm:h-7 md:text-base sm:text-sm rounded-full bg-blue-300 flex justify-center items-center font-semibold">
                     {u.name.charAt(0).toUpperCase()}
                   </div>
-                  <p>{u.name}</p>
+                  <p>{searchResults.name}</p>
                 </div>
               ))
             : <p className="text-center text-gray-400">No users found</p>

@@ -2,6 +2,7 @@ import { useDrop } from "react-dnd";
 import TaskCard from '../taskCard/TaskCard';
 
 const CategoryColumn = ({
+  heading,
   mainClass,
   category,
   cardDir,
@@ -18,37 +19,17 @@ const CategoryColumn = ({
       isOver: monitor.isOver(),
     }),
   }));
-console.log("mainClass:", mainClass);
   return (
-    <div ref={drop} className={`${mainClass}`}>
+    <div ref={drop} className={`${mainClass} rounded-lg`}>
       <h4
-        className={`text-lg font-semibold py-2 ${
-          category === "Pending"
-            ? "bg-pending"
-            : category === "In Progress"
-            ? "bg-progress"
-            : category === "Test"
-            ? "bg-testing"
-            : category === "Completed"
-            ? "bg-done"
-            : ""
-        }`}
+        className={`text-lg font-semibold py-1 text-white ${heading}
+        `}
       >
         {category}
       </h4>
 
       <div
-        className={`flex ${cardDir} p-4 ${
-          category === "Pending"
-            ? "bg-pending"
-            : category === "In Progress"
-            ? "bg-progress"
-            : category === "Test"
-            ? "bg-testing"
-            : category === "Completed"
-            ? "bg-done"
-            : ""
-        } bg-opacity-30 h-full`}
+        className={`flex ${cardDir} px-4 pb-12 h-full `}
       >
         {taskList.length > 0 ? (
           taskList.map((task) => (

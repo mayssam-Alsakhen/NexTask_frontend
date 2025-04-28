@@ -31,23 +31,5 @@ body {
    /* Width of the scrollbar */
 }
 
-/* Change calendar day number color */
-/* number color */
-.fc .fc-daygrid-day-number {
-  color: #1E6AB0; /* Use any color you like */
-  font-weight: bold;
-}
-/* title color */
-.fc .fc-toolbar-title {
-  color: #1E6AB0;
-  font-weight: 600;
-  font-size: 1.25rem; /* Adjust size as needed */
-}
-/* weekday header header */
-.fc .fc-col-header-cell-cushion {
-  color: #1E6AB0;
-  font-weight: 500;
-  text-decoration: none; /* Removes underline if any */
-}
 
 

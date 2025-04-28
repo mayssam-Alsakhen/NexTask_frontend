@@ -1,8 +1,12 @@
 "use client";
 import React, { useState, useEffect, useContext } from 'react'
+import { MdOutlinePendingActions } from "react-icons/md";
 import AddButton from '@/Components/add/AddButton'
 import Popup from '@/Components/popup/Popup'
 import SearchInput from '@/Components/search input/SearchInput';
+import { FaRegCheckCircle } from "react-icons/fa";
+import { GiProgression } from "react-icons/gi";
+import { LuTestTubeDiagonal } from "react-icons/lu";
 import axios from 'axios'
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -10,6 +14,7 @@ import { LiaEdit } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaTasks } from "react-icons/fa";
 import { MdOutlineGroup } from "react-icons/md";
+import Tooltip from '@/Components/utils/Tooltip';
 
 function page() {
   const { user, loading } = useContext(AuthContext);
@@ -131,7 +136,12 @@ function page() {
             className={`flex flex-col justify-between w-[280px] h-[200px] bg-white rounded-3xl px-6 py-4 text-baseText shadow-lg hover:shadow-2xl transform hover:scale-105 transition-transform duration-300 relative group`}
           >
             {/* icons */}
+            <div>
+              <div className='flex justify-between items-center'>
             <h2 className='text-xl font-semibold text-button mb-1'> {project.name} </h2>
+           <p className='text-sm text-gray-500'>{project.due_date? project.due_date:<span className='text-donetext fon'> Open</span> }</p>
+           </div>
+            </div>
             <p className='line-clamp-3 h-16 text-baseText text-sm'>{project.description}</p>
             {/* Task & User Count */}
             <div className="flex justify-between items-center text-baseText text-sm mb-2">
@@ -147,7 +157,9 @@ function page() {
             <div className='w-full flex justify-end text-sm font-medium text-button'>
               {/* <Link href={`/projects/${project.id}`} className='hover:underline'>Details</Link> */}
             </div>
-            {project.pivot.is_admin && project.pivot.user_id== currentUser ? (<div className="opacity-100 text-button transition-opacity flex justify-end w-full gap-2 ">
+            <div className='flex justify-between'>
+            <span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} rounded-full text-center text-sm px-3 py[0.5px]`}>{project.status}</span>
+            {project.pivot.is_admin && project.pivot.user_id== currentUser ? (<div className="opacity-100 text-button transition-opacity flex justify-end gap-2 ">
               <button className=" hover:font-bold" name='edit'>
                 <LiaEdit onClick={(e) => {
                   e.stopPropagation();
@@ -159,20 +171,8 @@ function page() {
                 <MdDeleteOutline />
               </button>
             </div>) : null}
-            {/* <div className="opacity-100 text-button transition-opacity flex justify-end w-full gap-2 ">
-              <button className=" hover:font-bold" name='edit'>
-                <LiaEdit onClick={(e) => {
-                  e.stopPropagation();
-                  setEdit(project.id);
-                  setFormData({ name: project.name, description: project.description });
-                }} />
-              </button>
-              <button className="hover:text-red-600" onClick={(e) =>{e.stopPropagation();setDel(project.id)}} name='delete'>
-                <MdDeleteOutline />
-              </button>
-            </div> */}
+            </div>
           </div>
-
         ))}
       </div>
       <Popup trigger={del} onBlur={() => setDel(false)}>

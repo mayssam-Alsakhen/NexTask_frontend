@@ -43,18 +43,15 @@ export const theme = {
     },
 
     colors: {
-      // 050d2b 11264a
-      //pending #edee63, prog , done #94f6a4 test #64c8f7 impo #f8acb9
-      // 'prime': "#050d2b",
       'button': '#1E6AB0',
       'baseText': '#333',
       'prime': '#03045e',
       'second': '#dee5ff',
-      // 'designing' : '#0288d1',
-      'pending': '#fafab2',
-      'progress': '#c97bfa',
-      'testing': '	#64c8f7',
-      'done': '#94f6a4',
+      'main': '#88acd5',
+      'pending': '#fffcab',
+      'progress': '#ffe2a3',
+      'testing': '	#a9e4ff',
+      'done': '#a9ffb7',
       'important': '#f8acb9',
       'importanttext': '#f16667',
       'progresstext': '#cb40f5',
