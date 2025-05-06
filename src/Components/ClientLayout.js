@@ -27,7 +27,7 @@ export default function ClientLayout({ children }) {
         </Suspense>
         )}
          <Suspense fallback={<div>Loading Sidebar...</div>}>
-            <Sidebar drawerPos={drawerPos} onDrawerPosChange={setDrawerPos} />
+            {/* <Sidebar drawerPos={drawerPos} onDrawerPosChange={setDrawerPos} /> */}
           </Suspense>
         <div
           className={`transition-all duration-500 ease-in-out ${

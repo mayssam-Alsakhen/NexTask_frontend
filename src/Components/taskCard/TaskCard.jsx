@@ -10,27 +10,27 @@ import axios from "axios";
 import Link from "next/link";
 
 const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
-  const [taskOpen, setTaskOpen] = useState(false);
-  const [editTask, setEditTask] = useState(false);
-  const [assignUser, setAssignUser] = useState(false);
+  // const [taskOpen, setTaskOpen] = useState(false);
+  // const [editTask, setEditTask] = useState(false);
+  // const [assignUser, setAssignUser] = useState(false);
   const [del, setDel] = useState(false);
-  const [taskDetails, setTaskDetails] = useState(null);
+  // const [taskDetails, setTaskDetails] = useState(null);
   const [taskDots, setTaskDots] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("details");
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  // const [selectedUsers, setSelectedUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [usersLoading, setUsersLoading] = useState(true);
-  const [matchedUsers, setMatchedUsers] = useState([]);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    due_date: "",
-    isImportant: "",
-  });
+  // const [matchedUsers, setMatchedUsers] = useState([]);
+  // const [formData, setFormData] = useState({
+  //   title: "",
+  //   description: "",
+  //   due_date: "",
+  //   isImportant: "",
+  // });
 // check if the user is admin
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -72,77 +72,77 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
     }),
   }));
 
-  useEffect(() => {
-    if (taskOpen) {
-      handleTaskClick();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [taskOpen]);
+  // useEffect(() => {
+  //   if (taskOpen) {
+  //     handleTaskClick();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [taskOpen]);
 
   // Fetch task details when a task is clicked
-  const handleTaskClick = async () => {
-    setTaskOpen(true);
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/tasks/${task.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      setTaskDetails(response.data.task);
-    } catch (error) {
-      console.error("Error fetching task details:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleTaskClick = async () => {
+  //   setTaskOpen(true);
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios.get(
+  //       `http://127.0.0.1:8000/api/tasks/${task.id}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     );
+  //     setTaskDetails(response.data.task);
+  //   } catch (error) {
+  //     console.error("Error fetching task details:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // Open edit popup and initialize form data
-  const handleEditClick = () => {
-    setFormData({
-      title: task.title,
-      description: task.description,
-      due_date: task.due_date,
-      isImportant: task.is_important ? "1" : "0",
-    });
-    setEditTask(true);
-    handleTaskClick();
-    setTaskOpen(false);
-  };
+  // const handleEditClick = () => {
+  //   setFormData({
+  //     title: task.title,
+  //     description: task.description,
+  //     due_date: task.due_date,
+  //     isImportant: task.is_important ? "1" : "0",
+  //   });
+  //   setEditTask(true);
+  //   handleTaskClick();
+  //   setTaskOpen(false);
+  // };
 
   // Edit task submit handler
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
-    const updatedTask = {
-      ...task,
-      ...formData,
-      assigned_users: selectedUsers.map((user) => user.id),
-    };
-    try {
-      await axios.put(
-        `http://127.0.0.1:8000/api/tasks/${task.id}`,
-        updatedTask,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      updateTask(updatedTask);
-      setEditTask(false);
-      setTaskDots(null);
-    } catch (error) {
-      if (error.response && error.response.status === 403) {
-        setErrorMessage("You must be an admin to edit this task.");
-      } else {
-        setErrorMessage("An error occurred while updating the task.");
-      }
-      console.error("Error updating task:", error);
-    }
-  };
+  // const handleEditSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const updatedTask = {
+  //     ...task,
+  //     ...formData,
+  //     assigned_users: selectedUsers.map((user) => user.id),
+  //   };
+  //   try {
+  //     await axios.put(
+  //       `http://127.0.0.1:8000/api/tasks/${task.id}`,
+  //       updatedTask,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     );
+  //     updateTask(updatedTask);
+  //     setEditTask(false);
+  //     setTaskDots(null);
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 403) {
+  //       setErrorMessage("You must be an admin to edit this task.");
+  //     } else {
+  //       setErrorMessage("An error occurred while updating the task.");
+  //     }
+  //     console.error("Error updating task:", error);
+  //   }
+  // };
 
   // Delete task handler
   const handleTaskDelete = async () => {
@@ -163,44 +163,44 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
   };
 
   // Search users handler
-  const handleSearchUsers = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("You must be logged in to search users.");
-      return;
-    }
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/user/search",
-        { email: searchQuery },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.data && response.data.id) {
-        setMatchedUsers([response.data]);
-      } else {
-        setMatchedUsers(response.data || []);
-      }
-    } catch (error) {
-      alert("Error searching users. Please check your API.");
-    }
-  };
+  // const handleSearchUsers = async () => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     alert("You must be logged in to search users.");
+  //     return;
+  //   }
+  //   try {
+  //     const response = await axios.post(
+  //       "http://127.0.0.1:8000/api/user/search",
+  //       { email: searchQuery },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     if (response.data && response.data.id) {
+  //       setMatchedUsers([response.data]);
+  //     } else {
+  //       setMatchedUsers(response.data || []);
+  //     }
+  //   } catch (error) {
+  //     alert("Error searching users. Please check your API.");
+  //   }
+  // };
 
-  // Handle adding a user to the task
-  const handleSelectUser = (user) => {
-    if (!selectedUsers.some((u) => u.id === user.id)) {
-      setSelectedUsers([...selectedUsers, user]);
-    }
-  };
+  // // Handle adding a user to the task
+  // const handleSelectUser = (user) => {
+  //   if (!selectedUsers.some((u) => u.id === user.id)) {
+  //     setSelectedUsers([...selectedUsers, user]);
+  //   }
+  // };
 
   // Remove a selected user from the task
-  const handleRemoveUser = (userId) => {
-    setSelectedUsers(selectedUsers.filter((user) => user.id !== userId));
-  };
+  // const handleRemoveUser = (userId) => {
+  //   setSelectedUsers(selectedUsers.filter((user) => user.id !== userId));
+  // };
 
   return (
     <div
@@ -209,24 +209,26 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
         isDragging ? "opacity-50" : ""
       }`}
     >
-        {/* <Link key={task.id}
-    href={`/projects/${task.project_id}/tasks/${task.id}`}> */}
+        <Link key={task.id}
+    href={`/projects/${task.project_id}/tasks/${task.id}`}>
       <p className="font-semibold" 
-      onClick={() => {setTaskOpen(true), setActiveTab('details')}}
+      // onClick={() => {setTaskOpen(true), setActiveTab('details')}}
       >
         {task.title}
       </p>
-      <p className="text-xs text-gray-500" onClick={() => setTaskOpen(true)}>
+      <p className="text-xs text-gray-500" 
+      // onClick={() => setTaskOpen(true)}
+      >
         {task.due_date}
       </p>
-      {/* </Link> */}
+      </Link>
       {/* Progress bar */}
 <TaskProgressEditor task={task} projectId={task.project.id} />
 <div className="flex justify-between items-center">
   <span className={`${task.category=='Completed'?'bg-done':task.category=='In Progress'?'bg-progress':task.category=='Pending'?'bg-pending':'bg-testing'} rounded-full text-sm px-2`}>{task.category}</span>
       <div
         className="flex justify-end items-center gap-2">
-        <FaRegComment  onClick={() => {setActiveTab('comments'), setTaskOpen(true)}}/>
+        <FaRegComment  onClick={() => {setActiveTab('comments'), setOpen(true)}}/>
         {!usersLoading && isAdmin && (
           <MdMoreVert onClick={() => setTaskDots(task.id)}/>
         )}
@@ -286,7 +288,7 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
         </div>
       </Popup>
       {/* Task details popup */}
-      <Popup trigger={taskOpen} onBlur={() => setTaskOpen(false)}>
+      {/* <Popup trigger={taskOpen} onBlur={() => setTaskOpen(false)}>
         <div className="flex gap-5 w-full font-semibold mb-8 justify-center text-gray-400">
           <span onClick={()=>setActiveTab('details')} className="hover:text-button hover:scale-105 transition-all">Details</span> 
           <span onClick={()=> setActiveTab('comments')} className="hover:text-button hover:scale-105 transition-all">Comments</span>
@@ -322,9 +324,9 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
         ) : taskDetails && activeTab==='comments' ?(
           <CommentsSection taskId={taskDetails.id} />
         ): <p>Error loading task details</p>}
-      </Popup>
+      </Popup> */}
       {/* Edit task popup */}
-      <Popup
+      {/* <Popup
         trigger={editTask}
         onBlur={() => {
           setEditTask(false);
@@ -424,7 +426,7 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
                   </div>
                 </div>
               ) : null}
-              {/* Display Selected Users */}
+
               <div className="flex flex-wrap gap-2 mb-2 h-10 overflow-auto">
                 {selectedUsers.map((user) => (
                   <div
@@ -461,9 +463,9 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
             </div>
           </form>
         </div>
-      </Popup>
+      </Popup> */}
       {/* Assign user popup */}
-      <Popup trigger={assignUser} onBlur={() => setAssignUser(false)}>
+      {/* <Popup trigger={assignUser} onBlur={() => setAssignUser(false)}>
         <div className="w-full flex justify-center gap-5 my-4">
           <input
             type="email"
@@ -497,7 +499,7 @@ const TaskCard = ({ task, updateTask, updateTaskList, card }) => {
             <p className="text-center text-gray-400">No users found</p>
           )}
         </div>
-      </Popup>
+      </Popup> */}
     </div>
   );
 };

@@ -7,6 +7,7 @@ export default function CommentsSection({ taskId }) {
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
   const currentUserId = localStorage.getItem("user_id");
+  const currentUserName = localStorage.getItem("name");
 
   // Fetch comments
   useEffect(() => {
@@ -78,7 +79,7 @@ export default function CommentsSection({ taskId }) {
   return (
     <div className="flex flex-col h-full">
       {/* Comments Area */}
-      <div className="flex-1 overflow-y-auto space-y-4 pr-2 max-h-52">
+      <div className="flex-1 overflow-y-auto space-y-4 pr-2  ">
         {loading ? (
           <p className="text-sm text-gray-500">Loading comments...</p>
         ) : comments.length === 0 ? (
@@ -88,7 +89,7 @@ export default function CommentsSection({ taskId }) {
             <div key={comment.id} className="flex items-start gap-3">
               {/* Avatar */}
               <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full text-sm font-bold">
-                {comment.user?.name?.[0]?.toUpperCase() || 'U'}
+                {comment.user?.name?.[0]?.toUpperCase() || currentUserName?.[0]?.toUpperCase()} 
               </div>
 
               {/* Comment Content */}

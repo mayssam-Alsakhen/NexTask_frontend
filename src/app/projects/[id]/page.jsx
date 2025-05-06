@@ -10,7 +10,7 @@ import Popup from "@/Components/popup/Popup";
 import ProjectUsersSection from "@/Components/projectusersection/ProjectUserSection";
 import ProjectTasksDetails from "@/Components/ProjectTasksDetails/ProjectTasksDetails";
 import TaskProgressEditor from "@/Components/TaskProgressEditor/TaskProgressEditor";
-import PieChartWithNeedle from "@/Components/utils/HalfPieChart";
+import HalfPieChart from "@/Components/utils/HalfPieChart";
 
 const ProjectDetails = ({ params }) => {
   const [tasks, setTasks] = useState([]);
@@ -43,8 +43,6 @@ const ProjectDetails = ({ params }) => {
             }
           }
         );
-        console.log("Project Details:", response.data.data);
-
         if (response.data) {
           setProject(response.data.data);
         } else {
@@ -196,10 +194,10 @@ const ProjectDetails = ({ params }) => {
             </button>
           </div>): null)}
         </div>
-        <div className="flex justify-around sm:justify-between flex-wrap items-center mt-2 border-b border-gray-300 p-2 md:mx-4  text-xs md:text-base">
+        <div className="flex justify-around sm:justify-between flex-wrap items-center mt-2 border-b border-gray-300 p-2 md:mx-4 text-xs md:text-base">
         <p className='text-gray-500'>Due Date: {project.due_date? project.due_date:<span className='text-donetext fon'> Open</span> }</p>
-            <div>Project Status:   <span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} rounded text-sm px-3 py-1`}>{project.status}</span>            </div>
-        <div className="w-full md:w-56"><PieChartWithNeedle value={calculateProjectProgress()}/></div>
+            <div>Project Status:  <span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} rounded text-sm px-3 py-1`}>{project.status}</span>  </div>
+        <div className="w-full md:w-56"><HalfPieChart value={calculateProjectProgress()}/></div>
         </div>
         <p className="mt-4 md:px-6 text-lg text-gray-700 italic text-center">
           {project.description || "No description available"}

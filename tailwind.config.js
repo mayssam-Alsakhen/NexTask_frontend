@@ -47,7 +47,7 @@ export const theme = {
       'baseText': '#333',
       'prime': '#03045e',
       'second': '#dee5ff',
-      'main': '#88acd5',
+      'main': '#5b84b4',
       'pending': '#fffcab',
       'progress': '#ffe2a3',
       'testing': '	#a9e4ff',

@@ -198,7 +198,6 @@ export default function TaskPopupContent({ task, onClose, updateTask }) {
               + Assign User
             </p>
           </div>
-
           {/* Save/Cancel */}
           <div className="flex justify-end gap-4 mt-4">
             <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">

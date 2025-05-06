@@ -2,10 +2,15 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import AssignUsers from '../AssignUsers/AssignUsers';
 
 export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
   const [adminProjects, setAdminProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState('');
+  const [addedUserIds, setAddedUserIds] = useState([]);
+  const [removedUserIds, setRemovedUserIds] = useState([]);
+  const [usersToAddToProject, setUsersToAddToProject] = useState([]);
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -53,6 +58,7 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
     const newTask = {
       ...formData,
       project_id: selectedProject,
+      assigned_users: addedUserIds,
     };
 
     try {
@@ -71,8 +77,10 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
         isImportant: '0',
       });
       setSelectedProject('');
+      setAddedUserIds([]);
+      setUsersToAddToProject([]);
 
-      // Optional callback
+    
       if (onTaskCreated) onTaskCreated(res.data.task);
       toast.success('Task added successfully!');
     } catch (error) {
@@ -83,7 +91,7 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-prime w-full">
       <h2 className="text-xl font-bold mb-4">Add New Task</h2>
 
       {loading ? (
@@ -167,7 +175,18 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
                   No
                 </label>
               </div>
-
+                <div>
+                <AssignUsers
+                btnlabel='Assign to Task'
+                task={{ project: { users: [] }, users: [] }} 
+                addedUserIds={addedUserIds}
+                setAddedUserIds={setAddedUserIds}
+                removedUserIds={removedUserIds}
+                setRemovedUserIds={setRemovedUserIds}
+                usersToAddToProject={usersToAddToProject}
+                setUsersToAddToProject={setUsersToAddToProject}
+              />
+                </div>
               <button
                 type="submit"
                 className="px-4 py-2 bg-blue-600 text-white rounded hover:shadow"
