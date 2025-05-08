@@ -4,9 +4,9 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import AssignUsers from '../AssignUsers/AssignUsers';
 
-export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
+export default function AddTaskForm({ projectId, defaultCategory = "Pending", onTaskCreated, defaultDueDate }) {
   const [adminProjects, setAdminProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState('');
+  const [selectedProject, setSelectedProject] = useState(projectId || '');
   const [addedUserIds, setAddedUserIds] = useState([]);
   const [removedUserIds, setRemovedUserIds] = useState([]);
   const [usersToAddToProject, setUsersToAddToProject] = useState([]);
@@ -15,7 +15,7 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
     title: '',
     description: '',
     due_date: defaultDueDate || '',
-    category: '',
+    category: defaultCategory,
     isImportant: '0',
   });
   const [loading, setLoading] = useState(true);
@@ -26,31 +26,41 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const res = await axios.get(`http://127.0.0.1:8000/api/projects/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    if (!projectId) {
+      const fetchProjects = async () => {
+        try {
+          const res = await axios.get(`http://127.0.0.1:8000/api/projects/user/${userId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-        const adminOnly = res.data.data.filter(
-          (project) => project.pivot?.is_admin === 1
-        );
+          const adminOnly = res.data.data.filter(
+            (project) => project.pivot?.is_admin === 1
+          );
 
-        setAdminProjects(adminOnly);
-      } catch (err) {
-        console.error('Failed to fetch projects:', err);
-        setError('Failed to load your admin projects');
-      } finally {
-        setLoading(false);
+          setAdminProjects(adminOnly);
+        } catch (err) {
+          console.error('Failed to fetch projects:', err);
+          setError('Failed to load your admin projects');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      if (userId && token) {
+        fetchProjects();
       }
-    };
-
-    if (userId && token) {
-      fetchProjects();
+    } else {
+      setLoading(false);
     }
-  }, []);
+  }, [projectId, userId, token]);
+
+  useEffect(() => {
+    if (projectId) {
+      setSelectedProject(projectId);
+    }
+  }, [projectId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,14 +83,16 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
         title: '',
         description: '',
         due_date: '',
-        category: '',
+        category: defaultCategory,
         isImportant: '0',
       });
-      setSelectedProject('');
       setAddedUserIds([]);
       setUsersToAddToProject([]);
 
-    
+      if (!projectId) {
+        setSelectedProject('');
+      }
+
       if (onTaskCreated) onTaskCreated(res.data.task);
       toast.success('Task added successfully!');
     } catch (error) {
@@ -101,19 +113,21 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Project Dropdown */}
-          <select
-            value={selectedProject}
-            onChange={(e) => setSelectedProject(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
-            required
-          >
-            <option value="">-- Choose Project --</option>
-            {adminProjects.map((proj) => (
-              <option key={proj.id} value={proj.id}>
-                {proj.name}
-              </option>
-            ))}
-          </select>
+          {!projectId && (
+            <select
+              value={selectedProject}
+              onChange={(e) => setSelectedProject(e.target.value)}
+              className="p-2 border border-gray-300 rounded"
+              required
+            >
+              <option value="">-- Choose Project --</option>
+              {adminProjects.map((proj) => (
+                <option key={proj.id} value={proj.id}>
+                  {proj.name}
+                </option>
+              ))}
+            </select>
+          )}
 
           {/* Show form only if project selected */}
           {selectedProject && (
@@ -140,18 +154,6 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
                 className="p-2 border border-gray-300 rounded"
                 required
               />
-              <select
-                value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                className="p-2 border border-gray-300 rounded"
-                required
-              >
-                <option value="">Select Category</option>
-                <option value="Pending">Pending</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Test">Test</option>
-                <option value="Completed">Completed</option>
-              </select>
               <div className="flex gap-5 items-center">
                 <span>Important:</span>
                 <label>
@@ -175,18 +177,18 @@ export default function AddTaskForm({ onTaskCreated ,defaultDueDate}) {
                   No
                 </label>
               </div>
-                <div>
+              <div>
                 <AssignUsers
-                btnlabel='Assign to Task'
-                task={{ project: { users: [] }, users: [] }} 
-                addedUserIds={addedUserIds}
-                setAddedUserIds={setAddedUserIds}
-                removedUserIds={removedUserIds}
-                setRemovedUserIds={setRemovedUserIds}
-                usersToAddToProject={usersToAddToProject}
-                setUsersToAddToProject={setUsersToAddToProject}
-              />
-                </div>
+                  btnlabel="Assign to Task"
+                  task={{ project: { users: [] }, users: [] }}
+                  addedUserIds={addedUserIds}
+                  setAddedUserIds={setAddedUserIds}
+                  removedUserIds={removedUserIds}
+                  setRemovedUserIds={setRemovedUserIds}
+                  usersToAddToProject={usersToAddToProject}
+                  setUsersToAddToProject={setUsersToAddToProject}
+                />
+              </div>
               <button
                 type="submit"
                 className="px-4 py-2 bg-blue-600 text-white rounded hover:shadow"

@@ -171,7 +171,7 @@ const ProjectUsersSection = ({ projectId }) => {
         >
           {users.length > 0 ? (
             users.map((user) => (
-              <li key={user.id} className="flex justify-between items-center px-1 py-1 border-b mb-3 rounded-lg bg-[#cfe0fc] border-gray-300 hover:bg-gray-100">
+              <li key={user.id} className="flex justify-between items-center px-3 py-1 border-2 mb-3 rounded-lg border-main hover:bg-blue-100">
                 <div className="flex items-center gap-4 min-w-[300px]">
                   <div className="w-10 h-10 bg-white rounded-full flex justify-center items-center">{user.name.charAt(0).toUpperCase()}</div>
                   <div>
@@ -181,9 +181,9 @@ const ProjectUsersSection = ({ projectId }) => {
                 </div>
                 <span className="text-baseText font-bold">{getUserTaskCount(user.id)} {getUserTaskCount(user.id) > 1 ? 'tasks' : 'task'} </span>
                 {user.pivot?.is_admin ? (
-                  <span className=" bg-done p-1 w-24 text-center text-sm mr-2">Admin</span>
+                  <span className="bg-main  p-1 w-24 text-center text-sm mr-2">Admin</span>
                 ) : (
-                  <span className="bg-testing p-1 w-24 text-center text-sm mr-2">Member</span>
+                  <span className="bg-main p-1 w-24 text-center text-sm mr-2">Member</span>
 
                 )}
                 {isCurrentUserAdmin() && (
@@ -201,7 +201,7 @@ const ProjectUsersSection = ({ projectId }) => {
                   )}
                 </div>
                 )}
-                <Popup trigger={removeUser !== null} onBlur={() => setRemoveUser(null)}>
+                <Popup trigger={removeUser !== null }>
                   <div className="text-prime text-xl font-bold p-4">
                     <p>Are you sure you want to remove user from this project</p>
                     <div className="flex justify-center gap-16 mt-10">

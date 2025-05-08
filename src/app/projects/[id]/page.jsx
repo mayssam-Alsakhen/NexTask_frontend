@@ -177,6 +177,8 @@ const ProjectDetails = ({ params }) => {
                 <span>{new Date(project.created_at).toLocaleString()}</span>
               </div>
             </div>
+            <div><span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} rounded text-sm px-3 py-1`}>{project.status}</span>  </div>
+
           </div>
           {project.users.map((user) => (user.pivot.is_admin && user.pivot.user_id == currentUser) ? (
             <div key={user.id} className="flex justify-end gap-3">
@@ -184,19 +186,19 @@ const ProjectDetails = ({ params }) => {
               onClick={() => setEdit(true)}
               className="flex items-center gap-1 px-3 py-1 text-sm text-button border border-button rounded hover:bg-button hover:text-white transition"
             >
-              <FaEdit /> Edit
+              <FaEdit />
             </button>
             <button
               onClick={() => setDel(true)}
               className="flex items-center gap-1 px-3 py-1 text-sm text-red-500 border border-red-500 rounded hover:bg-red-500 hover:text-white transition"
             >
-              <MdDelete /> Delete
+              <MdDelete />
             </button>
           </div>): null)}
         </div>
-        <div className="flex justify-around sm:justify-between flex-wrap items-center mt-2 border-b border-gray-300 p-2 md:mx-4 text-xs md:text-base">
+        <div className="flex md:justify-around justify-between flex-wrap items-center mt-2 border-b border-gray-300 p-2 md:mx-4 text-xs md:text-base">
         <p className='text-gray-500'>Due Date: {project.due_date? project.due_date:<span className='text-donetext fon'> Open</span> }</p>
-            <div>Project Status:  <span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} rounded text-sm px-3 py-1`}>{project.status}</span>  </div>
+            {/* <div><span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} rounded text-sm px-3 py-1`}>{project.status}</span>  </div> */}
         <div className="w-full md:w-56"><HalfPieChart value={calculateProjectProgress()}/></div>
         </div>
         <p className="mt-4 md:px-6 text-lg text-gray-700 italic text-center">

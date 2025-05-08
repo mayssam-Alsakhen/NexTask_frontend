@@ -1,12 +1,8 @@
 "use client";
 import React, { useState, useEffect, useContext } from 'react'
-import { MdOutlinePendingActions } from "react-icons/md";
 import AddButton from '@/Components/add/AddButton'
 import Popup from '@/Components/popup/Popup'
 import SearchInput from '@/Components/search input/SearchInput';
-import { FaRegCheckCircle } from "react-icons/fa";
-import { GiProgression } from "react-icons/gi";
-import { LuTestTubeDiagonal } from "react-icons/lu";
 import axios from 'axios'
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -14,7 +10,7 @@ import { LiaEdit } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaTasks } from "react-icons/fa";
 import { MdOutlineGroup } from "react-icons/md";
-import Tooltip from '@/Components/utils/Tooltip';
+
 
 function page() {
   const { user, loading } = useContext(AuthContext);
@@ -28,14 +24,14 @@ function page() {
 
   const fetchProjects = async () => {
     if (!user) return;
-  
+
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/projects/user/${user.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-  
+
       if (response.data && response.data.data) {
         setProjects(response.data.data);
       }
@@ -44,7 +40,7 @@ function page() {
       alert("Failed to fetch projects");
     }
   };
-  
+
   useEffect(() => {
     setCurrentUser(localStorage.getItem("user_id"))
     if (loading) return;
@@ -52,10 +48,10 @@ function page() {
       router.push("/login");
       return;
     }
-  
+
     fetchProjects(); // fetch on first load
   }, [loading, user, router]);
-  
+
 
   const handleDelete = async (id) => {
     try {
@@ -116,7 +112,7 @@ function page() {
       console.error("Search error:", error);
     }
   };
-  
+
 
   if (loading) return <p>Loading...</p>;
   if (!user) return null; // Prevent rendering before redirection
@@ -124,7 +120,7 @@ function page() {
   return (
     <div className='p-3 lg:mt-10 mt-12'>
       <div className=' flex justify-between '>
-  <SearchInput onSearch={handleSearch} onChange={handleSearchChange} />
+        <SearchInput onSearch={handleSearch} onChange={handleSearchChange} />
         <AddButton text={"Add A Project"} link={"/addProject"} />
       </div>
       <div className='flex flex-wrap lg:gap-x-6 gap-x-4 gap-y-10 justify-center w-full mt-6'>
@@ -138,14 +134,20 @@ function page() {
             {/* icons */}
             <div>
               <div className='flex justify-between items-center'>
-            <h2 className='text-xl font-semibold text-button mb-1'> {project.name} </h2>
-           <p className='text-sm text-gray-500'>{project.due_date? project.due_date:<span className='text-donetext fon'> Open</span> }</p>
-           </div>
+                <h2 className='text-xl font-semibold text-button mb-1'> {project.name} </h2>
+                <p className='text-sm text-gray-500'>{project.due_date ? project.due_date : <span className='text-donetext fon'> Open</span>}</p>
+              </div>
             </div>
             <p className='line-clamp-3 h-16 text-baseText text-sm'>{project.description}</p>
             {/* Task & User Count */}
             <div className="flex justify-between items-center text-baseText text-sm mb-2">
-              <div className="flex items-center gap-1">
+              <div
+                className="flex items-center gap-1 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(`/projects/${project.id}/tasks`);
+                }}
+              >
                 <FaTasks className='text-pendingtext' />
                 <span>{project.tasks.length} Tasks</span>
               </div>
@@ -158,19 +160,19 @@ function page() {
               {/* <Link href={`/projects/${project.id}`} className='hover:underline'>Details</Link> */}
             </div>
             <div className='flex justify-between'>
-            <span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} rounded-full text-center text-sm px-3 py[0.5px]`}>{project.status}</span>
-            {project.pivot.is_admin && project.pivot.user_id== currentUser ? (<div className="opacity-100 text-button transition-opacity flex justify-end gap-2 ">
-              <button className=" hover:font-bold" name='edit'>
-                <LiaEdit onClick={(e) => {
-                  e.stopPropagation();
-                  setEdit(project.id);
-                  setFormData({ name: project.name, description: project.description });
-                }} />
-              </button>
-              <button className="hover:text-red-600" onClick={(e) =>{e.stopPropagation();setDel(project.id)}} name='delete'>
-                <MdDeleteOutline />
-              </button>
-            </div>) : null}
+              <span className={`${project.status == 'Completed' ? 'bg-done' : project.status == 'In Progress' ? 'bg-progress' : project.status == 'Pending' ? 'bg-pending' : 'bg-testing'} rounded-full text-center text-sm px-3 py[0.5px]`}>{project.status}</span>
+              {project.pivot.is_admin && project.pivot.user_id == currentUser ? (<div className="opacity-100 text-button transition-opacity flex justify-end gap-2 ">
+                <button className=" hover:font-bold" name='edit'>
+                  <LiaEdit onClick={(e) => {
+                    e.stopPropagation();
+                    setEdit(project.id);
+                    setFormData({ name: project.name, description: project.description });
+                  }} />
+                </button>
+                <button className="hover:text-red-600" onClick={(e) => { e.stopPropagation(); setDel(project.id) }} name='delete'>
+                  <MdDeleteOutline />
+                </button>
+              </div>) : null}
             </div>
           </div>
         ))}

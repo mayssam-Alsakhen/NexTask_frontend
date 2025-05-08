@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import AddTaskForm from "../AddTaskForm/AddTaskForm";
 import axios from "axios";
 import CategoryColumn from '@/Components/categoryColumn/CategoryColumn';
 import Popup from "../popup/Popup";
@@ -246,42 +247,13 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
 
         {/* Popup for adding a new task */}
         <Popup trigger={addTask} onBlur={() => setAddTask(false)}>
-          <form onSubmit={handleAddTask}>
-            <input
-              type="text"
-              value={taskTitle}
-              onChange={(e) => setTaskTitle(e.target.value)}
-              placeholder="Task Title"
-              className="w-full p-2 my-2 border-b-2 border-prime focus:border-designing outline-none "
-            />
-            <input
-              type="text"
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-              placeholder="Task Description"
-              className="w-full p-2 my-2 border-b-2 border-prime focus:border-designing outline-none"
-            />
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="w-full p-2 my-2 border-b-2 border-prime focus:border-designing outline-none"
-            />
-            <select
-              onChange={(e) => setIsImportant(e.target.value)}
-              className="w-full p-2 my-2 border-b-2 border-prime focus:border-designing outline-none"
-            >
-              <option value="">Important</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-            <button
-              type="submit"
-              className="w-full bg-prime text-second p-2 rounded-lg mt-2"
-            >
-              Add Task
-            </button>
-          </form>
+<AddTaskForm
+    projectId={projectId}
+    onTaskCreated={(newTask) => {
+      setTasks((prev) => [...prev, newTask]);
+      setRefresh((prev) => !prev);
+    }}
+  />
         </Popup>
       </div>
     </DndProvider>

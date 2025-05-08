@@ -42,14 +42,14 @@ const handleDateClick = (arg) => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       const userTasks = data.tasks.filter(t => t.users.some(u => u.id == uid));
-      setEvents(userTasks.map(t => ({
+      setEvents(userTasks.map(t => (  {
         id: t.id,
         title: t.title,
         date: t.due_date,
         due_date: t.due_date,
         description: t.description,
         category: t.category,
-        project_id: t.project_id,
+        project_id: t.project?.id,
         project: t.project?.name,
         is_important: t.is_important,
         users: t.users,
