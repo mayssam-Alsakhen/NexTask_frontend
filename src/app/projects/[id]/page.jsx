@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import Popup from "@/Components/popup/Popup";
 import ProjectUsersSection from "@/Components/projectusersection/ProjectUserSection";
 import ProjectTasksDetails from "@/Components/ProjectTasksDetails/ProjectTasksDetails";
-import TaskProgressEditor from "@/Components/TaskProgressEditor/TaskProgressEditor";
 import HalfPieChart from "@/Components/utils/HalfPieChart";
 
 const ProjectDetails = ({ params }) => {
@@ -198,8 +197,7 @@ const ProjectDetails = ({ params }) => {
         </div>
         <div className="flex md:justify-around justify-between flex-wrap items-center mt-2 border-b border-gray-300 p-2 md:mx-4 text-xs md:text-base">
         <p className='text-gray-500'>Due Date: {project.due_date? project.due_date:<span className='text-donetext fon'> Open</span> }</p>
-            {/* <div><span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} rounded text-sm px-3 py-1`}>{project.status}</span>  </div> */}
-        <div className="w-full md:w-56"><HalfPieChart value={calculateProjectProgress()}/></div>
+        <div className="w-full md:w-56"><HalfPieChart value={project.progress}/></div>
         </div>
         <p className="mt-4 md:px-6 text-lg text-gray-700 italic text-center">
           {project.description || "No description available"}
@@ -208,8 +206,6 @@ const ProjectDetails = ({ params }) => {
       {/* task section */}
       <div className="mt-7">
         <div className="flex items-center justify-between mb-2">
-          {/* <h3 className="text-lg font-semibold">Project Task</h3> */}
-          {/* <Link href={`/projects/${id}/tasks`} className="text-[#1E6AB0] hover:text-[#1E6AB0] text-sm font-semibold">View All Tasks</Link> */}
         </div>
         <div className=" flex flex-wrap justify-center gap-4 text-black ">
           <ProjectTasksDetails borderColor="border-pending" taskCount={taskCounts.pending} handleNavigate={() => handleNavigate('pending')} statusTitle="🕒 Pending" projectId={project.id} />
@@ -270,8 +266,8 @@ const ProjectDetails = ({ params }) => {
           <option value="">Select Status</option>
           <option value="Pending">Pending</option>
           <option value="In Progress">In Progress</option>
-          <option value="Testing">Testing</option>
-          <option value="Done">Done</option>
+          <option value="Test">Testing</option>
+          <option value="Completed">Completed</option>
         </select>
 
         {/* New Due Date Field */}

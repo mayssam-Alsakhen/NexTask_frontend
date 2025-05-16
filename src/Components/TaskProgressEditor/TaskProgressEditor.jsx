@@ -20,12 +20,11 @@ export default function TaskProgressEditor({ task, projectId }) {
   const handleSave = async () => {
     setIsEditing(false);
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(`http://127.0.0.1:8000/api/tasks/${task.id}/progress`, {
+      await axios.patch(`http://127.0.0.1:8000/api/tasks/${task.id}/progress`, {
         progress,
       }, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
     } catch (err) {

@@ -19,7 +19,7 @@ function page() {
 
   return (
     <div className='lg:mt-10 mt-12 p-2'>
-     <ProjectTaskSection api={'http://127.0.0.1:8000/api/tasks'} title='My Tasks' addIcon='hidden' />
+     <ProjectTaskSection api={'http://127.0.0.1:8000/api/tasks'} title='My Tasks' addIcon='hidden'/>
     </div>
   )
 }

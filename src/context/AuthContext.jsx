@@ -11,14 +11,11 @@ export const AuthProvider = ({ children }) => {
     
     useEffect(() => {
         const token = localStorage.getItem("token");
-        console.log("Token found in localStorage:", token);
-    
         if (token) {
             axios.get("http://127.0.0.1:8000/api/me", {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {
-                console.log("User data fetched:", response.data); 
                 if (response.data) {
                     setUser(response.data); 
                 } else {
@@ -43,14 +40,12 @@ export const AuthProvider = ({ children }) => {
 
     // Define a login function
     const login = (userData, token) => {
-        console.log("AuthContext: User logged in:", userData);
         setUser(userData); // Set user data on login
         localStorage.setItem("token", token); // Store token in localStorage
     };
 
     // Define a logout function
     const logout = () => {
-        console.log("AuthContext: User logged out.");
         setUser(null); // Remove user data on logout
         localStorage.removeItem("token"); // Remove the token from localStorage
     };

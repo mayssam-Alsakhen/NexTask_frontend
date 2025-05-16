@@ -8,6 +8,7 @@ export default function UserDropdown() {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [editPopup, setEditPopup] = useState(false);
+  const [userName, setUserName] = useState('')
   const dropdownRef = useRef(null);
 
   const router = useRouter();
@@ -19,13 +20,14 @@ export default function UserDropdown() {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
+        setUserName(localStorage.getItem("name"));
         const response = await axios.get("http://127.0.0.1:8000/api/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        setUser(response.data); // Adjust if your response format is different
+        setUser(response.data);
       } catch (error) {
         console.error("Error fetching user:", error);
       }
@@ -65,7 +67,7 @@ export default function UserDropdown() {
   }, []);
 
   const getInitial = () => {
-    if (!user || !user.name) return "?";
+    if (!user || !user.name) return  userName.charAt(0).toUpperCase();
     return user.name.charAt(0).toUpperCase();
   };
 

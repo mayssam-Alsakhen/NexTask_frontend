@@ -1,12 +1,7 @@
 "use client";
-
-// import Sidebar from "@/Components/sidebar/Sidebar";
-// import Navbar from "@/Components/Navbar/Navbar";
 import { AuthProvider } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
 import React, { useState, Suspense, lazy } from "react";
-
-const Sidebar = lazy(() => import("@/Components/sidebar/Sidebar"));
 const Navbar = lazy(() => import("@/Components/Navbar/Navbar"));
 
 
@@ -26,9 +21,6 @@ export default function ClientLayout({ children }) {
           <Navbar handleDrawer={handleDrawerPosChange} />
         </Suspense>
         )}
-         <Suspense fallback={<div>Loading Sidebar...</div>}>
-            {/* <Sidebar drawerPos={drawerPos} onDrawerPosChange={setDrawerPos} /> */}
-          </Suspense>
         <div
           className={`transition-all duration-500 ease-in-out ${
             drawerPos === 2

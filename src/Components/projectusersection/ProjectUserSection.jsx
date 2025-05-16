@@ -8,6 +8,7 @@ import { IoPersonRemoveOutline } from "react-icons/io5";
 const ProjectUsersSection = ({ projectId }) => {
   const [users, setUsers] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
   const [matchedUsers, setMatchedUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [removeUser, setRemoveUser] = useState(null);
@@ -201,7 +202,7 @@ const ProjectUsersSection = ({ projectId }) => {
                   )}
                 </div>
                 )}
-                <Popup trigger={removeUser !== null }>
+                <Popup trigger={removeUser !== null } onBlur={() => setShowPopup(false)}>
                   <div className="text-prime text-xl font-bold p-4">
                     <p>Are you sure you want to remove user from this project</p>
                     <div className="flex justify-center gap-16 mt-10">

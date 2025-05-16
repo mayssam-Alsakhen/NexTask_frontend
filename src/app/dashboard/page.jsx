@@ -1,14 +1,32 @@
 "use client";
 import DashboardCards from '@/Components/dashboardCards/DashboardCards'
-import ProjectSummary from '@/Components/projectsummary/ProjectSummary'
+import ProjectOverviewSection from '@/Components/ProjectOverviewSection/ProjectOverviewSection'
 import TaskSummary from '@/Components/tasksummary/TaskSummary'
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import DashboardHeader from '@/Components/Dashboard header/DashboardHeader';
+import DashboardTaskListCard from '@/Components/DashboardTaskListCard/DashboardTaskListCard';
+import TaskStatusChart from '@/Components/task status chart/TaskStatusChart';
+import UserActivityFeed from '@/Components/UserActivityFeed/UserActivityFeed';
+import CompletedTasksChart from '@/Components/CompletedTasksChart/CompletedTasksChart';
+import ProjectStatusDonut from '@/Components/ProjectStatusDonut/ProjectStatusDonut';
 
 function Dashboard() {
   const { user, loading } = useContext(AuthContext);
   const router = useRouter();
+  const [summary, setSummary] = useState(null);
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/api/dashboard/summary', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => setSummary(res.data))
+      .catch((err) => console.error(err));
+  }, []);
 
   useEffect(() => {
     console.log("AuthContext - loading:", loading); // Check loading state
@@ -19,18 +37,37 @@ function Dashboard() {
     }
 }, [loading, user, router]);
 
-if (loading) return <p>Loading...</p>; // Show loading state
-if (!user) return null; // Don't render anything if user is not set
+if (loading || !summary) return <div>Loading...</div>;
+  if (!user) return null;
 
   return (
-    <div className='w-full h-full flex flex-col gap-y-20 p-3 mt-12'>
+    <div className=' w-full h-full flex flex-col gap-y-10 p-3 lg:mt-20 mt-12'>
+      <div><DashboardHeader/></div>
       <div className=' flex flex-wrap gap-x-12 gap-y-6 justify-center'>
-      <DashboardCards title={"Tasks"} total={20} fpart={"Completed"} fpartnb={6} spart={"Other"} spartnb={14} />
-      <DashboardCards title={"Projects"} total={8} fpart={"Completed"} fpartnb={2} spart={"Other"} spartnb={6} />
-      <DashboardCards title={"Action Required"} total={4} fpart={"Due soon"} fpartnb={3} spart={"overdue"} spartnb={1} />
+      <DashboardTaskListCard
+        title="Upcoming Tasks" // 7 days
+        filter="upcoming_tasks"
+      />
+      <DashboardTaskListCard
+        title="Due Today or Overdue"
+        filter="due_or_overdue"
+      />
+      <DashboardTaskListCard
+        title="Unassigned Tasks"
+        filter="unassigned_tasks"
+      />
       </div>
-      <ProjectSummary />
-      <TaskSummary />
+      <div className='flex flex-wrap gap-6 justify-center'>
+      <ProjectOverviewSection />
+      <ProjectStatusDonut/>
+      </div>
+      <div className='flex flex-wrap gap-6 justify-center'>
+        <TaskStatusChart/>
+      <CompletedTasksChart/>
+      </div>
+      <div className='mx-12'>
+        <UserActivityFeed userId={user.id} />
+        </div>
     </div>
   )
 }

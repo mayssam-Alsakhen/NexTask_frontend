@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
 import { MdMoreVert } from "react-icons/md";
-import CommentsSection from "../CommentsSection/CommentsSection";
 import TaskProgressEditor from "../TaskProgressEditor/TaskProgressEditor"; 
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { FaRegComment } from "react-icons/fa";
@@ -12,9 +11,7 @@ import Link from "next/link";
 const TaskCard = ({ task, updateTaskList, card }) => {
   const [del, setDel] = useState(false);
   const [taskDots, setTaskDots] = useState(null);
-  const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [activeTab, setActiveTab] = useState("details");
   const [isAdmin, setIsAdmin] = useState(false);
   const [usersLoading, setUsersLoading] = useState(true);
   useEffect(() => {
