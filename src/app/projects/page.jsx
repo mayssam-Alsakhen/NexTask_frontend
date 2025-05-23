@@ -10,7 +10,7 @@ import { LiaEdit } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaTasks } from "react-icons/fa";
 import { MdOutlineGroup } from "react-icons/md";
-import LoaderSpinner from '@/Components/Loader spinner/LoaderSpinner';
+import LoaderSpinner from '@/Components/loader spinner/LoaderSpinner';
 import { toast } from 'react-toastify';
 
 function page() {
