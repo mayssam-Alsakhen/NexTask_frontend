@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from 'react'
 import { AuthContext } from '@/context/AuthContext';
 import ProjectTaskSection from '@/Components/project task section/ProjectTaskSection';
 import { useRouter } from 'next/navigation';
+import LoaderSpinner from '@/Components/loader spinner/LoaderSpinner';
 
 function page() {
   const { user, loading } = useContext(AuthContext);
@@ -10,11 +11,11 @@ function page() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login"); // Redirect only after checking authentication
+      router.push("/login");
     }
   }, [loading, user, router]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <div className='flex justify-center mt-20'> <LoaderSpinner child='Loading...' /> </div>;
   if (!user) return null; // Prevent rendering before redirection
 
   return (

@@ -43,21 +43,23 @@ export const theme = {
     },
 
     colors: {
-      'button': '#1E6AB0',
+      'button': '#628ecb',
+      'buttonHover': '#8aaee0',
+      'box':"#d5deef",
       'baseText': '#333',
-      'prime': '#03045e',
-      'second': '#dee5ff',
-      'main': '#5b84b4',
+      'prime': '#395886',
+      'main': '#5e8cc4',
       'pending': '#fffcab',
       'progress': '#ffe2a3',
-      'testing': '	#a9e4ff',
+      'testing': '#b1c9ef',
       'done': '#a9ffb7',
       'important': '#f8acb9',
       'importanttext': '#f16667',
       'progresstext': '#cb40f5',
       'pendingtext': '#f4d201',
       'donetext': '#04c005',
-      'testingtext': '#35a8c0'
+      'testingtext': '#35a8c0',
+      'second': '#dee5ff',
     }
   },
 };

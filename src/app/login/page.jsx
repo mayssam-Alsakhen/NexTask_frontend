@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import Image from 'next/image';
 import axios from 'axios';
 import './login.css' 
 import { useRouter } from "next/navigation";
@@ -20,20 +21,14 @@ function Login() {
           const response = await axios.post('http://127.0.0.1:8000/api/login', loginData, {
               headers: { 'Content-Type': 'application/json' }
           });
-  
-          console.log("Login Response:", response.data);
-  
+
           if (response.data.token) {
-              // Store token
               localStorage.setItem('token', response.data.token);
   
               // Fetch user details after login
               const meResponse = await axios.get('http://127.0.0.1:8000/api/me', {
                   headers: { Authorization: `Bearer ${response.data.token}` }
               });
-  
-              console.log("Me Response:", meResponse.data);
-  
               // Store user data
               localStorage.setItem('user', JSON.stringify(meResponse.data));
               localStorage.setItem("user_id", meResponse.data.id);
@@ -45,18 +40,15 @@ function Login() {
               setErrorMessage(response.data.error || "Login failed");
           }
       } catch (error) {
-          console.error("Error:", error);
-          setErrorMessage(error.response?.data?.error || "An error occurred during login");
+          setErrorMessage(error.response?.data?.message || "An error occurred during login");
       }
   };
   
-    
       const handleRegisterSubmit = async (e) => {
         e.preventDefault();
         setErrorMessage('');
         try {
-          const response = await axios.post('http://127.0.0.1:8000/api/register', registerData,{headers:{'Content-Type': 'application/json'}} );
-          console.log(response.data);   
+          const response = await axios.post('http://127.0.0.1:8000/api/register', registerData,{headers:{'Content-Type': 'application/json'}} ); 
           if (response.data.token) {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user_id', response.data.user.id);
@@ -66,14 +58,12 @@ function Login() {
             setErrorMessage("Registration failed");
         }
         } catch (error) {
-          console.error(error);
-          setErrorMessage(error.response?.data?.error || "An error occurred during registration");
+          setErrorMessage(error.response?.data?.message || "An error occurred during registration");
         }
       };
     
       const handleInputChange = (e, formType) => {
         const { name, value } = e.target;
-        console.log(name, value);
         if (formType === 'login') {
           setLoginData({ ...loginData, [name]: value });
         } else if (formType === 'register') {
@@ -94,14 +84,11 @@ setErrorMessage('');
 
   return (
     <div>
-          <video autoPlay muted loop className='fixed top-0 left-0 -z-10 w-full h-full object-cover'>
-  <source src="/login.mp4" type="video/mp4" />
-</video>
-<div className=' min-h-[100vh] w-full flex items-center justify-center'>
-<div className={`wrapper ${action} flex items-center overflow-hidden relative md:w-[420px] sm:w-80 h-[450px] border-2 border-solide border-[#ffffff2a] backdrop-blur-3xl rounded-xl`}>
+<div className='min-h-[100vh] bg-[url(/BGG.jpg)] bg-cover bg-center w-full bg-no-repeat flex items-center justify-evenly flex-wrap'>
+<div className={`wrapper ${action} flex items-center overflow-hidden relative md:w-[420px] sm:w-80 h-[450px] border-2 border-solide border-[#99baf32a] bg-main bg-opacity-10 backdrop-blur-3xl rounded-xl`}>
     <div className='formBox login w-full md:p-10 sm:p-3 '>
         <form onSubmit={handleLoginSubmit}>
-            <h1 className='text-4xl text-center'>Login</h1>
+            <h1 className='text-4xl text-center text-prime'>Login</h1>
             <div className='inputBox relative w-full h-[50px] my-8 mx-0'>
                 <input type="email" name='email' required className='w-full h-full outline-none border border-solid border-[#ffffff2a] p-3 rounded-[40px] bg-[transparent]'
                 onChange={(e) => handleInputChange(e, 'login')}
@@ -135,7 +122,7 @@ setErrorMessage('');
                 <label>Username</label>
             </div>
             <div className='inputBox  relative w-full h-[50px] my-8 mx-0'>
-                <input type="email"  name="email" required className='w-full h-full outline-none border border-solid border-[#ffffff2a] p-3 rounded-[40px] bg-[transparent]'
+                <input type="email"  name="email" required className='w-full h-full outline-none border border-solid border-[#ffffff2a] p-3 rounded-[40px] bg-transparent'
                 onChange={(e) => handleInputChange(e, 'register')}
                 />
                 <label>Email</label>
@@ -154,6 +141,9 @@ setErrorMessage('');
             </div>
         </form>
     </div>
+ </div>
+ <div className='hidden lg:block max-w-[50%]'>
+ <Image src="/login.png" alt="Login" width={600} height={500} />
  </div>
  </div>
   </div>

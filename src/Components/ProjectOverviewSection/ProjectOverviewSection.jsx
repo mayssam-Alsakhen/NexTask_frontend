@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-
+import { toast } from 'react-toastify';
+import LoaderSpinner from '../loader spinner/LoaderSpinner';
 export default function ProjectOverviewSection() {
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
@@ -27,15 +29,17 @@ export default function ProjectOverviewSection() {
           setProjects(sorted);
         }
       } catch (error) {
-        console.error('Error fetching projects:', error);
-        alert('Failed to fetch projects');
+        toast.error(error.response?.data?.message ||'Failed to fetch top projects by progress');
+      }
+      finally {
+        setLoading(false);
       }
     };
 
     fetchProjects();
   }, []);
 
-  const visibleProjects = showAll ? projects : projects.slice(0, 6);
+  const visibleProjects = showAll ? projects : projects.slice(0, 9);
 
   return (
     <div className="bg-white/60 py-3 px-6 rounded-lg lg:w-[60%] md:w-[50%] w-full shadow-md">
@@ -46,7 +50,8 @@ export default function ProjectOverviewSection() {
           showAll ? 'overflow-y-auto' : 'overflow-hidden'
         }`}
       >
-        {visibleProjects.length > 0 ? (
+        { loading? <LoaderSpinner child={'Loading...'}/> : 
+        visibleProjects.length > 0 ? (
           visibleProjects.map((project) => {
             const progress = project.progress ?? 0;
 

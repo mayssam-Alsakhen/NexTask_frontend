@@ -88,17 +88,22 @@ export default function CommentsSection({ taskId }) {
           comments.map((comment) => (
             <div key={comment.id} className="flex items-start gap-3">
               {/* Avatar */}
-              <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full text-sm font-bold">
+              <div className="w-8 h-8 bg-button text-white flex items-center justify-center rounded-full text-sm font-bold">
                 {comment.user?.name?.[0]?.toUpperCase() || currentUserName?.[0]?.toUpperCase()} 
               </div>
 
               {/* Comment Content */}
-              <div className="flex-1 bg-gray-100 px-4 py-2 rounded-xl shadow-sm">
+              <div className="flex-1 bg-box px-4 py-2 rounded-xl shadow-sm">
                 <div className="flex justify-between items-center text-xs text-gray-500">
                   <span>{comment.user?.name || `${localStorage.getItem("name")}`}</span>
-                  <span>{new Date(comment.created_at).toLocaleString()}</span>
+                  <span>{new Date(comment.created_at).toLocaleDateString()} {new Date(comment.created_at).toLocaleTimeString(
+                    [], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}</span>
                 </div>
-                <p className="mt-1 text-sm text-gray-800">{comment.content}</p>
+                <p className="mt-1 text-sm text-baseText">{comment.content}</p>
               </div>
 
               {/* Delete Icon (placeholder) */}
@@ -126,7 +131,7 @@ export default function CommentsSection({ taskId }) {
         />
         <button
           onClick={handleAddComment}
-          className="mt-2 bg-blue-500 text-white px-4 py-1.5 rounded-lg text-sm hover:bg-blue-600"
+          className="mt-2 bg-button text-white px-4 py-1.5 rounded-lg text-sm hover:bg-buttonHover"
         >
           Add Comment
         </button>

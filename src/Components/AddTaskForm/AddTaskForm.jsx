@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import AssignUsers from '../AssignUsers/AssignUsers';
+import LoaderSpinner from '../loader spinner/LoaderSpinner';
+
 
 export default function AddTaskForm({ projectId, defaultCategory = "Pending", onTaskCreated, defaultDueDate }) {
   const [adminProjects, setAdminProjects] = useState([]);
@@ -41,8 +43,8 @@ export default function AddTaskForm({ projectId, defaultCategory = "Pending", on
 
           setAdminProjects(adminOnly);
         } catch (err) {
-          console.error('Failed to fetch projects:', err);
-          setError('Failed to load your admin projects');
+          toast.error('Failed to fetch projects')
+          setError('Failed to load your projects');
         } finally {
           setLoading(false);
         }
@@ -96,7 +98,6 @@ export default function AddTaskForm({ projectId, defaultCategory = "Pending", on
       if (onTaskCreated) onTaskCreated(res.data.task);
       toast.success('Task added successfully!');
     } catch (error) {
-      console.error('Failed to create task:', error);
       toast.error('Failed to create task. Please try again.');
       setError('Failed to create task. Please try again.');
     }
@@ -104,10 +105,10 @@ export default function AddTaskForm({ projectId, defaultCategory = "Pending", on
 
   return (
     <div className="p-4 text-prime w-full">
-      <h2 className="text-xl font-bold mb-4">Add New Task</h2>
+      <h2 className="text-xl font-bold mb-4 text-button">Add New Task</h2>
 
       {loading ? (
-        <p>Loading your admin projects...</p>
+        <LoaderSpinner child={'Loading your projects...'}/>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (
@@ -137,21 +138,21 @@ export default function AddTaskForm({ projectId, defaultCategory = "Pending", on
                 placeholder="Task Title"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="p-2 border border-gray-300 rounded"
+                className="p-2 border border-testing focus:border-2 outline-none rounded "
                 required
               />
               <textarea
                 placeholder="Description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="p-2 border border-gray-300 rounded"
+                className="p-2 border border-testing focus:border-2 outline-none rounded"
                 rows="3"
               />
               <input
                 type="date"
                 value={formData.due_date}
                 onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                className="p-2 border border-gray-300 rounded"
+                className="p-2 border border-testing focus:border-2 outline-none rounded"
                 required
               />
               <div className="flex gap-5 items-center">
@@ -187,11 +188,12 @@ export default function AddTaskForm({ projectId, defaultCategory = "Pending", on
                   setRemovedUserIds={setRemovedUserIds}
                   usersToAddToProject={usersToAddToProject}
                   setUsersToAddToProject={setUsersToAddToProject}
+                  boxContainer={'hidden'}
                 />
               </div>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:shadow"
+                className="px-4 py-2 bg-button text-white rounded hover:bg-buttonHover hover:font-bold transition-all hover:shadow"
               >
                 Add Task
               </button>

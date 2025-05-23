@@ -8,11 +8,13 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Label
 } from 'recharts';
+import { toast } from 'react-toastify';
+import LoaderSpinner from '../loader spinner/LoaderSpinner';
 
 const CompletedTasksChart = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCompletedTasks = async () => {
@@ -30,10 +32,12 @@ const CompletedTasksChart = () => {
 
         setData(formatted);
       } catch (error) {
-        console.error('Error fetching completed tasks:', error);
+        toast.error(error.response?.data?.message || 'Failed to fetch completed tasks');
+      }
+      finally {
+        setLoading(false);
       }
     };
-
     fetchCompletedTasks();
   }, []);
 
@@ -41,6 +45,7 @@ const CompletedTasksChart = () => {
     <div className='bg-white/60 p-2 lg:w-[60%] md:w-[50%] w-full rounded-lg shadow-md'>
       <h3 className="text-xl font-semibold mb-8 md:px-6 pt-2 ">Completed Tasks Over Time</h3>
     <div className="h-[400px]">
+      {loading ? <LoaderSpinner child={'Loading...'} /> : data.length === 0 ? <div className='flex justify-center items-center h-full'>No completed tasks</div> :
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}
          margin={{ top: 20, right: 3, left: -10, bottom: 15 }}
@@ -59,6 +64,7 @@ const CompletedTasksChart = () => {
           />
         </LineChart>
       </ResponsiveContainer>
+}
     </div>
     </div>
   );

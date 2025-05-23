@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { checkIfUserIsAdmin } from "../utils/checkAdmin";
+import { toast } from "react-toastify";
 
 export default function TaskProgressEditor({ task, projectId }) {
   const [canEdit, setCanEdit] = useState(false);
@@ -28,7 +29,7 @@ export default function TaskProgressEditor({ task, projectId }) {
         },
       });
     } catch (err) {
-      console.error("Update failed:", err.message);
+      toast.error("Update failed:")
     }
   };
 
@@ -38,7 +39,7 @@ export default function TaskProgressEditor({ task, projectId }) {
       <p className="text-xs text-right">{progress}%</p>
       <div className="mb-2 w-full bg-gray-200 rounded-full h-2">
         <div
-          className="bg-blue-200 h-2 rounded-full transition-all duration-300 ease-in-out"
+          className="bg-buttonHover h-2 rounded-full transition-all duration-300 ease-in-out"
           style={{ width: `${progress}%` }}
         />
       </div>

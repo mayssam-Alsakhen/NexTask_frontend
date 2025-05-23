@@ -1,7 +1,5 @@
 "use client";
-import DashboardCards from '@/Components/dashboardCards/DashboardCards'
 import ProjectOverviewSection from '@/Components/ProjectOverviewSection/ProjectOverviewSection'
-import TaskSummary from '@/Components/tasksummary/TaskSummary'
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
@@ -12,6 +10,7 @@ import TaskStatusChart from '@/Components/task status chart/TaskStatusChart';
 import UserActivityFeed from '@/Components/UserActivityFeed/UserActivityFeed';
 import CompletedTasksChart from '@/Components/CompletedTasksChart/CompletedTasksChart';
 import ProjectStatusDonut from '@/Components/ProjectStatusDonut/ProjectStatusDonut';
+import { toast } from 'react-toastify';
 
 function Dashboard() {
   const { user, loading } = useContext(AuthContext);
@@ -25,7 +24,9 @@ function Dashboard() {
         },
       })
       .then((res) => setSummary(res.data))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        toast.error("Error fetching dashboard summary");
+      });
   }, []);
 
   useEffect(() => {
@@ -57,6 +58,9 @@ if (loading || !summary) return <div>Loading...</div>;
         filter="unassigned_tasks"
       />
       </div>
+      <div className='lg:mx-12 md:mx-7 mx-0'>
+        <UserActivityFeed userId={user.id} />
+        </div>
       <div className='flex flex-wrap gap-6 justify-center'>
       <ProjectOverviewSection />
       <ProjectStatusDonut/>
@@ -65,9 +69,6 @@ if (loading || !summary) return <div>Loading...</div>;
         <TaskStatusChart/>
       <CompletedTasksChart/>
       </div>
-      <div className='mx-12'>
-        <UserActivityFeed userId={user.id} />
-        </div>
     </div>
   )
 }

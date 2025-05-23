@@ -1,6 +1,8 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import LoaderSpinner from '../loader spinner/LoaderSpinner';
 
 const AssignUsers = ({
   task,
@@ -10,12 +12,15 @@ const AssignUsers = ({
   addedUserIds,
   setAddedUserIds,
   usersToAddToProject,
-  setUsersToAddToProject
+  setUsersToAddToProject,
+  input,
+  userContainer
 }) => {
   const [searchEmail, setSearchEmail] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [projectUsers, setProjectUsers] = useState(task.project?.users || []);
   const assignedUserIds = task.users.map((u) => u.id) || [];
+  const [searching , setSearching] = useState(false);
 
   if (!task) {
     return <div>Loading task data...</div>;
@@ -43,12 +48,17 @@ const AssignUsers = ({
         setAddedUserIds((prev) => [...prev, user.id]);
         setProjectUsers((prev) => [...prev, user]);
       } catch (error) {
-        console.error('Error adding user to project:', error);
+        toast.error('Error adding user to project');
       }
     }
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (query) => {
+    if (query.length < 2) {
+      setSearchResults([]);
+      return;
+    }
+    setSearching(true);
     if (!searchEmail) return;
     try {
       const res = await axios.post(
@@ -59,18 +69,34 @@ const AssignUsers = ({
         }
       );
       setSearchResults(Array.isArray(res.data) ? res.data : res.data ? [res.data] : []);
-    } catch (error) {
-      console.error('Search failed', error);
+    } catch (err) {
+      if (err.response?.status === 404) {
+              setSearchResults([]);
+            } else {
+              toast.error(err.response?.data?.message||"Error searching for users.");
+              setSearchResults([]);
+            }
+    }
+    finally{
+      setSearching(false);
     }
   };
 
+  useEffect(() => {
+      const timer = setTimeout(() => {
+        handleSearch(searchEmail.trim());
+      }, 400);
+      return () => clearTimeout(timer);
+    }, [searchEmail]);
+  
+
   return (
     <div>
-      <h3 className="font-semibold mb-2">Assigned Users</h3>
-      <div className="flex flex-wrap gap-2 mb-4">
+      <h3 className="font-semibold mb-2">Assign Users</h3>
+      <div className={`${userContainer} flex flex-wrap gap-2 mb-6`}>
         {task.users.map((user) =>
           !removedUserIds.includes(user.id) && (
-            <span key={user.id} className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-2">
+            <span key={user.id} className="bg-box px-3 py-1 rounded-full flex items-center gap-2 mt-4">
               {user.name}
               <button onClick={() => handleRemove(user.id)} className="text-red-500">×</button>
             </span>
@@ -78,17 +104,21 @@ const AssignUsers = ({
         )}
       </div>
 
-      <input
-        type="text"
-        placeholder="Search user by email"
-        value={searchEmail}
-        onChange={(e) => setSearchEmail(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-        className="border p-2 w-full mb-2"
-      />
-      <button type='button' onClick={handleSearch} className="bg-gray-800 text-white px-4 py-1 mb-4 rounded">
-        Search
-      </button>
+          <input
+            type="text"
+            placeholder="Type at least 2 letters of email..."
+            className={`w-full bg-transparent ${input} p-2 border-b-2 border-testing focus:border-buttonHover outline-none`}
+            value={searchEmail}
+            onChange={e => setSearchEmail(e.target.value)}
+          />
+
+          {searching && (
+                <LoaderSpinner child={'Searching…'}/>
+      )}
+      
+                {searchResults.length === 0 && !searching && searchEmail.length >= 2 && (
+                  <p className="text-gray-500">No users found</p>
+                )}
 
       {searchResults.map((user) => {
         const isInProject = projectUsers.some((u) => u.id === user.id);
@@ -113,9 +143,9 @@ const AssignUsers = ({
         }
 
         return (
-          <div key={user.id} className="flex justify-between items-center border p-2 mb-1 rounded">
+          <div key={user.id} className="flex justify-between items-center border border-testing p-2 my-2 rounded">
             <div>{user.name} ({user.email})</div>
-            <button type='button' onClick={onClickAction} className="text-sm bg-blue-600 text-white px-2 py-1 rounded">
+            <button type='button' onClick={onClickAction} className="text-sm bg-button hover:bg-buttonHover text-white px-2 py-1 rounded">
               {buttonLabel}
             </button>
           </div>

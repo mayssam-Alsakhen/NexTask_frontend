@@ -10,14 +10,15 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import LoaderSpinner from "../loader spinner/LoaderSpinner";
 
 export default function Calendar() {
   const [events, setEvents] = useState([]);
-  // const [selectedTask, setSelectedTask] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [addTaskMessage, setAddTaskMessage] = useState(null);
-const [openPopup, setOpenPopup] = useState(false);
-const router = useRouter();
+  const [loading, setLoading]= useState(true);
+  const [openPopup, setOpenPopup] = useState(false);
+  const router = useRouter();
 
 const handleDateClick = (arg) => {
   setSelectedDate(arg.dateStr); // Save the clicked date
@@ -58,7 +59,13 @@ const handleDateClick = (arg) => {
         textColor: '#333'
       })));
     } catch (e) {
-      console.error(e);
+      if(e.response.status===401){
+        
+      }
+      toast.error("Error fetching tasks");
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -66,6 +73,7 @@ const handleDateClick = (arg) => {
     fetchTasks();
   }, []);
 
+if(loading) return <div className="flex justify-center mt-20"> <LoaderSpinner child={'Loading tasks...'}/></div>
   return (
     <div className="md:px-4 w-full h-full">
       <FullCalendar

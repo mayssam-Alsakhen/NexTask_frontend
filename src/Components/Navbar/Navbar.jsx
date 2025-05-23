@@ -25,7 +25,7 @@
 }`}><Link href="/projects"><span>Projects</span> </Link></li>
           <li className={`px-3 py-1 rounded transition-all duration-200 ${
   pathname === '/tasks' ? 'bg-gray-200 text-main font-bold' : 'hover:bg-gray-100 hover:text-main'
-}`}><Link href="/tasks"><span>My Tasks</span></Link></li>
+}`}><Link href="/tasks"><span className=' whitespace-nowrap'>My Tasks</span></Link></li>
           <li className={`px-3 py-1 rounded transition-all duration-200 ${
   pathname === '/calendar' ? 'bg-gray-200 text-main font-bold' : 'hover:bg-gray-100 hover:text-main'
 }`}><Link href="/calendar"><span>Calendar</span></Link></li>

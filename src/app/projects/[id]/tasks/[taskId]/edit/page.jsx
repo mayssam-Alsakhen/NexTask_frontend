@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FaArrowRightLong } from "react-icons/fa6";
+import { CiUser } from "react-icons/ci";
 import axios from 'axios';
 import AssignUsers from '@/Components/AssignUsers/AssignUsers';
 
@@ -122,7 +123,7 @@ const [usersToAddToProject, setUsersToAddToProject] = useState([]);
    
   return ( 
     <div className=" mt-12 px-4 flex gap-6 text-prime">
-      <form onSubmit={handleSubmit} className="md:w-2/3 space-y-4 h-[90vh] overflow-y-auto p-4 md:py-0 border-r md:border-gray-400">
+      <form onSubmit={handleSubmit} className="md:w-2/3 space-y-4 h-[90vh] overflow-y-auto p-4 md:py-0 md:border-r border-gray-400">
       <h2 className="text-2xl font-bold">Edit Task</h2>
         <input name="title" value={form.title} onChange={handleChange} placeholder="Title" className="w-full p-2 border" />
         <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" className="w-full p-2 border" />
@@ -169,7 +170,7 @@ const [usersToAddToProject, setUsersToAddToProject] = useState([]);
         <button type="submit" className="bg-main text-white px-4 py-2 rounded">Update Task</button>
       </form>
       {/*  */}
-      <div className={`w-full md:w-1/3 p-4 h-[90vh] overflow-y-auto md:translate-x-0 bg-white ${users?'sm:translate-x-0' : 'sm:translate-x-full'}  right-0 bottom-0 fixed transition-transform duration-300 ease-in-out`}>
+      <div className={`w-full md:w-1/3 p-4 h-[93vh] overflow-y-auto md:translate-x-0 bg-[#f1f6ff] ${users?'sm:translate-x-0' : 'sm:translate-x-full'}  right-0 bottom-0 fixed transition-transform duration-300 ease-in-out`}>
  {/* here assign user component should be */}
  <AssignUsers
   task={task}
@@ -180,10 +181,11 @@ const [usersToAddToProject, setUsersToAddToProject] = useState([]);
   setAddedUserIds={setAddedUserIds}
   usersToAddToProject={usersToAddToProject}
   setUsersToAddToProject={setUsersToAddToProject}
+  input={'fixed bottom-12 left-0'}
 />
 
 </div>
-        <button className='fixed bottom-2 right-2 z-50 text-2xl bg-main text-white rounded-full p-2 md:hidden' onClick={()=>setUsers(!users)}>{users? <FaArrowRightLong /> :''} </button>
+        <button className='fixed bottom-2 right-2 z-50 text-2xl bg-main text-white rounded-full p-2 md:hidden' onClick={()=>setUsers(!users)}>{users? <FaArrowRightLong /> :<CiUser />} </button>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const checkIfUserIsAdmin = async (projectId) => {
   console.log("checkIfUserIsAdmin called for projectId:", projectId); 
@@ -22,7 +23,8 @@ export const checkIfUserIsAdmin = async (projectId) => {
     const user = projectUsers.find((u) => u.id == currentUserId);
     return user?.pivot?.is_admin === 1;
   } catch (error) {
-    console.error("Admin check failed:", error.message);
+    toast.error("Admin check failed:", error.message);
+    
     return false;
     
   }

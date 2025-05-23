@@ -4,7 +4,7 @@ import { PieChart, Pie } from "recharts";
 
 export default function HalfPieChart({ value }) {
   const data = [
-    { value: value, fill: "#8bafe1" }, // blue
+    { value: value, fill: "#5e8cc4" }, // blue
     { value: 100 - value, fill: "#d5dceb" }, // light gray
   ];
 

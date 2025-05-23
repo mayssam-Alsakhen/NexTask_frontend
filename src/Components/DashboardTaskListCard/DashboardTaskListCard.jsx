@@ -6,6 +6,7 @@ import { GoDot } from "react-icons/go";
 import { CiClock2 } from "react-icons/ci";
 import { CiWarning } from "react-icons/ci";
 import { TbUserQuestion } from "react-icons/tb";
+import LoaderSpinner from "../loader spinner/LoaderSpinner";
 
 export default function DashboardTaskListCard({ title, filter }) {
   const router = useRouter();
@@ -25,10 +26,16 @@ export default function DashboardTaskListCard({ title, filter }) {
       }
     )
     .then((res) => {
-      setTasks(res.data);
+      setTasks(res.data.filter(task => task.category !== "Completed"));
       console.log("Tasks response", res.data)
     })
-    .catch(console.error)
+    .catch(err => {
+      if (err.response?.status === 401) {
+        toast.error("Unauthorized access. Please log in again.");
+      } else {
+        toast.error(err.response?.data?.message ||"Error fetching tasks.");
+      }
+    })
     .finally(() => {
       setLoading(false);
       console.log("filter...." + filter);
@@ -47,7 +54,7 @@ export default function DashboardTaskListCard({ title, filter }) {
       </div>
       <div className="bg-white/60 h-[300px] rounded-md p-6">
       {loading ? (
-        <p className="text-center text-gray-500">Loading…</p>
+        <LoaderSpinner child={"Loading..."}/>
       ) : (
         displayTasks.length === 0 ? ( <div className="text-center text-gray-500">No Tasks</div>):
         <div className=" flex-1 overflow-y-auto max-h-64 space-y-3">
@@ -87,7 +94,7 @@ export default function DashboardTaskListCard({ title, filter }) {
           {tasks.length > 3 && (
             <button
               onClick={() => setShowAll((v) => !v)}
-              className="w-full text-center text-blue-500 hover:underline mt-2"
+              className="w-full text-center text-button hover:underline mt-2"
             >
               {showAll ? "Show less" : `See all (${tasks.length}) →`}
             </button>

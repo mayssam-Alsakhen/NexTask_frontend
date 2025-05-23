@@ -6,18 +6,16 @@ import axios from "axios";
 import CategoryColumn from '@/Components/categoryColumn/CategoryColumn';
 import Popup from "../popup/Popup";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { checkIfUserIsAdmin } from "../utils/checkAdmin";
+import { toast } from "react-toastify";
+import LoaderSpinner from "../loader spinner/LoaderSpinner";
 
 const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
   const [tasks, setTasks] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [addTask, setAddTask] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [taskTitle, setTaskTitle] = useState("");
-  const [taskDescription, setTaskDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [isImportant, setIsImportant] = useState();
   const [selectedStatus, setSelectedStatus] = useState("all");  
-  const [usersLoading, setUsersLoading] = useState(true); 
   const [isAdmin, setIsAdmin] = useState(false);
 
   // Update a single task
@@ -34,38 +32,18 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
 
-  // Fetch project users to check admin status
+  // check if user is admin
   useEffect(() => {
     if (!projectId) {
-      setUsersLoading(false);
       return;
     }
-    const fetchProjectUsers = async () => {
-      try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/api/projects/${projectId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        
-        const currentUserId = localStorage.getItem("user_id");
-        const currentUser = response.data.data.users?.find(
-          user => user.id == currentUserId
-        );
-        
-        setIsAdmin(currentUser?.pivot?.is_admin === 1);
-      } catch (error) {
-        console.error("Error fetching project users:", error);
-      } finally {
-        setUsersLoading(false);
-      }
+    const checkAdminStatus = async () => {
+      const result = await checkIfUserIsAdmin(projectId);
+      setIsAdmin(result);
     };
-
-    fetchProjectUsers();
+    checkAdminStatus();
   }, [projectId]);
+
 
   // Fetch tasks from the API when the component mounts or refresh changes
   useEffect(() => {
@@ -81,7 +59,8 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
         );
         setTasks(response.data.tasks);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        toast.error(error.response?.data?.message||'Error fetching tasks')
+        
       } finally {
         setLoading(false);
       }
@@ -133,49 +112,11 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
       );
       setRefresh((prev) => !prev);
     } catch (error) {
-      console.error("Error updating task category:", error);
-      // Optionally revert category change if error occurs
+      toast.error(error.response?.data?.message ||"Error updating task category");
     }
   };
 
-  // Add a new task handler
-  const handleAddTask = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/tasks",
-        {
-          project_id: projectId,
-          title: taskTitle,
-          description: taskDescription,
-          due_date: dueDate,
-          isImportant: isImportant,
-          assigned_users: [],
-          category: "Pending",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (response.status === 201) {
-        setTasks([...tasks, response.data.task]);
-        setAddTask(false);
-        setTaskTitle("");
-        setTaskDescription("");
-        setDueDate("");
-        setIsImportant("No");
-        setRefresh((prev) => !prev);
-      } else {
-        console.error("Error adding task:", response.data);
-      }
-    } catch (error) {
-      console.error("Request failed:", error);
-    }
-  };
-
-  if (loading || usersLoading) return <p>Loading ...</p>;
+  if (loading) return <div className="flex justify-center mt-10"><LoaderSpinner child={'Loading...'}/></div>;
 
   const handleFilterChange = (event) => {
     setSelectedStatus(event.target.value);
@@ -186,7 +127,7 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
       <div className="flex flex-col h-full">
         {/* Header with title and add task button */}
         <div className="flex justify-between items-center mb-2 text-prime">
-          <h3 className="text-lg font-semibold">{title}</h3>
+          <h3 className="text-lg text-button font-semibold">{title}</h3>
           <span className="flex items-center gap-3 text-2xl cursor-pointer">
             <div>
               <select

@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaRegClock } from "react-icons/fa";
+import LoaderSpinner from "../loader spinner/LoaderSpinner";
+import { toast } from "react-toastify";
 
 export default function UserActivityCard({ userId }) {
   const [activities, setActivities] = useState([]);
@@ -18,7 +20,9 @@ export default function UserActivityCard({ userId }) {
       .then((res) => {
         setActivities(res.data.data || []);
       })
-      .catch(console.error)
+      .catch(err =>{
+        toast.error((err.response?.data?.message || "Error fetching activities."));
+      })
       .finally(() => setLoading(false));
   }, [userId]);
 
@@ -29,7 +33,7 @@ export default function UserActivityCard({ userId }) {
       <h3 className="text-xl font-semibold mb-8">Recent Activity</h3>
 
       {loading ? (
-        <p className="text-gray-500 text-sm">Loading…</p>
+        <LoaderSpinner child={'Loading...'}/>
       ) : (
         <>
           <div className="flex-1 relative overflow-y-auto pr-2">
@@ -51,7 +55,7 @@ export default function UserActivityCard({ userId }) {
                     className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-100 transition group relative"
                   >
                     {/* Timeline bubble */}
-                    <div className="w-5 h-5 mt-1 rounded-full bg-[#8aaee0] flex justify-center items-center absolute left-0 top-0 translate-y-4">
+                    <div className="w-5 h-5 mt-1 rounded-full bg-buttonHover flex justify-center items-center absolute left-0 top-0 translate-y-4">
                       <div className="w-3 h-3 bg-white rounded-full" />
                     </div>
 
@@ -73,7 +77,7 @@ export default function UserActivityCard({ userId }) {
           {activities.length > 3 && (
             <button
               onClick={() => setShowAll((prev) => !prev)}
-              className="w-full text-center text-blue-500 hover:underline mt-2"
+              className="w-full text-center text-button hover:underline mt-2"
             >
               {showAll ? "Show less ↑" : `See all (${activities.length}) →`}
             </button>

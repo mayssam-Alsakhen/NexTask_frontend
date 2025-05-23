@@ -38,9 +38,9 @@ export default function Popup({ trigger, onBlur, children }) {
         className="relative px-5 py-3 rounded-2xl mx-auto md:w-[60%] sm:w-[90%] shadow-2xl border-2 border-gray-200 bg-white flex-col flex items-center overflow-y-auto min-h-64 max-h-[90vh] 
         animate-fade-in-up"
       >
-          {/* <button onClick={onBlur} className="self-end text-2xl text-prime">
+          <button onClick={onBlur} className="self-end text-2xl">
   <IoClose />
-</button> */}
+</button>
         {children}
       </div>
     </div>

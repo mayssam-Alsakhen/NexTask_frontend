@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import LoaderSpinner from '../loader spinner/LoaderSpinner';
 
 const ProjectStatusChart = () => {
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -15,7 +18,10 @@ const ProjectStatusChart = () => {
         });
         setProjects(response.data.data);
       } catch (error) {
-        console.error("Error fetching projects:", error);
+        toast.error(error.response?.data?.message || 'Failed to fetch projects');
+      }
+      finally {
+        setLoading(false);
       }
     };
 
@@ -37,7 +43,8 @@ const ProjectStatusChart = () => {
   return (
     <div className='bg-white/60 lg:w-[35%] md:w-[40%] w-full shadow-md rounded-lg p-3 flex flex-col items-center'>
       <h3 className='text-xl font-semibold mb-8'>Project Status Overview</h3>
-      {projects.length > 0 ? (
+      { loading? <LoaderSpinner child={'Loading...'}/>:
+      projects.length > 0 ? (
         <PieChart width={300} height={300}>
           <Pie
             data={data}
@@ -56,7 +63,7 @@ const ProjectStatusChart = () => {
           <Legend />
         </PieChart>
       ) : (
-        <p>Loading chart or no projects found...</p>
+        <p>no projects found</p>
       )}
     </div>
   );

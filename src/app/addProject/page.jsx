@@ -4,11 +4,14 @@ import axios from 'axios';
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Popup from '@/Components/popup/Popup';
+import LoaderSpinner from '@/Components/loader spinner/LoaderSpinner';
+import { toast } from 'react-toastify';
 
 export default function AddProject () {
   const { user, loading } = useContext(AuthContext);
   const router = useRouter();
   const [assign, setAssign] = useState(false);
+  const [searching, setSearching] = useState(false)
   const [searchQuery, setSearchQuery] = useState('');
   const [matchedUsers, setMatchedUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -27,19 +30,23 @@ export default function AddProject () {
     }
   }, [loading, user, router]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!user) return null;
-
-  const handleSearchUsers = async () => {
+  const handleSearchUsers = async (query) => {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("You must be logged in to search users.");
+      toast.error("You must be logged in to search users.");
       return;
     }  
+
+    if (query.length < 2) {
+      setMatchedUsers([]);
+      return;
+    }
+    setSearching(true);
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/user/search", 
-        { email: searchQuery },
+        { email: query },
         {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         }
@@ -49,8 +56,16 @@ export default function AddProject () {
       } else {
         setMatchedUsers(response.data || []); 
       }
-    } catch (error) {
-      alert("Error searching users. Please check your API.");
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setMatchedUsers([]);
+      } else {
+        toast.error(err.response?.data?.message||"Error searching for users.");
+        setMatchedUsers([]);
+      }
+    }
+    finally{
+      setSearching(false)
     }
   };
 
@@ -59,6 +74,16 @@ export default function AddProject () {
       setSelectedUsers([...selectedUsers, user]);
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSearchUsers(searchQuery.trim());
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!user) return null;
 
   const handleRemoveUser = (userId) => {
     setSelectedUsers(selectedUsers.filter((user) => user.id !== userId));
@@ -73,7 +98,7 @@ export default function AddProject () {
     e.preventDefault();
     const user_id = localStorage.getItem("user_id");
     if (!user_id) {
-      alert('You must be logged in to add a project.');
+      toast.error('You must be logged in to add a project.');
       return;
     }
 
@@ -94,25 +119,23 @@ export default function AddProject () {
 
       if (response.data.status === 200) {
         setFormData({ name: '', description: '', user_id: '', due_date: '', openDeadline: false });
-        alert('Project added successfully');
+        toast.success('Project added successfully');
         router.push('/projects');
       } else {
-        alert(response.data.error || 'An error occurred');
+        console.log(response.data.error || 'An error occurred');
       }
     } catch (error) {
-      alert('Error submitting the form');
+      toast.error('Error submitting the form');
     }
   };
 
   return (
-    <div className='flex justify-center items-center h-screen'>
-      <div className="w-[420px] py-8 sm:px-6 px-12 bg-[#d9e4ff] rounded-lg shadow-slate-500 md:shadow-xl text-prime">
+    <div className='mt-12 text-prime'>
         <h2 className='sm:text-lg md:text-2xl text-center font-bold mb-4 sm:mt-6 md:mt-0'>Project Details</h2>
-        <form onSubmit={handleSubmit} className='h-full'>
+        <form onSubmit={handleSubmit} className='w-full md:w-[600px] mx-auto'>
           <div className='h-full flex flex-col gap-4 text-prime'>
-            <input type="text" name="name" onChange={handleInputChange} placeholder="Project Title" className='outline-none p-2'/>
-            <textarea name="description" onChange={handleInputChange} placeholder='Description' rows={5} className='p-2 outline-none'></textarea>
-
+            <input type="text" name="name" onChange={handleInputChange} placeholder="Project Title" className='outline-none bg-transparent border border-main rounded focus:border-2 p-2 transition-all'/>
+            <textarea name="description" onChange={handleInputChange} placeholder='Description' rows={5} className='outline-none bg-transparent border border-main rounded focus:border-2 p-2 transition-al'></textarea>
             {/* Due Date Section */}
             <div className="flex flex-col gap-2">
               <label className="flex items-center gap-2 text-sm">
@@ -136,7 +159,7 @@ export default function AddProject () {
                 value={formData.due_date}
                 onChange={handleInputChange}
                 disabled={formData.openDeadline}
-                className="outline-none p-2 bg-white disabled:bg-gray-200"
+                className="outline-none bg-transparent border border-main rounded focus:border-2 p-2 transition-al disabled:bg-gray-200"
               />
             </div>
 
@@ -166,29 +189,29 @@ export default function AddProject () {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button 
-              className='font-bold hover:text-designing hover:shadow-lg bg-prime text-second self-end px-6 py-1 rounded-lg'
-              onClick={handleSearchUsers}
-            >
-              Search
-            </button>
           </div>
+             {searching && (
+                      <LoaderSpinner child={'Searching…'}/>
+            )}
           <div className='w-full p-2'>
-            {matchedUsers.length > 0 ? (
+          {matchedUsers.length === 0 && !searching && searchQuery.length >= 2 && (
+            <p className="text-gray-500">No users found</p>
+          )}
+            { (
               matchedUsers.map((user) => (
-                <div key={user.id} className='w-full flex items-center gap-2 text-lg py-1 cursor-pointer hover:bg-second p-2 rounded-lg' onClick={() => handleSelectUser(user)}>
-                  <div className='md:w-9 md:h-9 sm:w-7 sm:h-7 md:text-base sm:text-sm rounded-full bg-blue-300 flex justify-center items-center font-semibold'>
+                <div key={user.id} className='w-full flex justify-between items-center gap-2 text-lg py-1 hover:bg-box p-2 rounded-lg'>
+                  <div className='flex items-center gap-2'>
+                  <div className='md:w-9 md:h-9 sm:w-7 sm:h-7 md:text-base sm:text-sm rounded-full bg-testing flex justify-center items-center font-semibold'>
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <p>{user.name}</p>
+                  </div>
+                  <p onClick={() => handleSelectUser(user)} className=' cursor-pointer hover:font-semibold text-button hover:text-buttonHover'>add</p>
                 </div>
               ))
-            ) : (
-              <p className='text-center text-gray-400'>No users found</p>
             )}
           </div>
         </Popup>
-      </div>
     </div>
   );
 }

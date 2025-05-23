@@ -4,7 +4,7 @@
 .wrapper .formBox.login{
   transition: translate  .18s ease;
   translate: 0;
-  background: transparent;
+  /* background: transparent; */
 }
 .wrapper.active .formBox.login{
   transition: none;
@@ -24,7 +24,7 @@
 /*  */
 .inputBox input:focus,
 .inputBox input:valid {
-    border-color: rgb(65, 131, 197);
+    border-color: #395886;
 }
 
 .inputBox label {
@@ -40,17 +40,15 @@
 
 .inputBox input:focus~label,
 .inputBox input:valid~label {
-    top: 1px;
+    top: -5px;
     font-size: .8em;
-    background: #05142ce5;
     padding: 0 6px;
-    color: rgb(65, 131, 197);
+    color: #395886;
+    /* rgb(65, 131, 197); */
 }
 
-/*  'prime': "#0A356D",
-      'second': '#E5F0FF' */
 form button {
-  background: linear-gradient(15deg, #042148 50%, #E5F0FF 50%);
+  background: linear-gradient(15deg, #628ecb 50%, #b1c9ef 50%);
   background-size: 200% 100%;
   color: #E5F0FF;
   border: none;
@@ -61,5 +59,5 @@ form button {
 
 form button:hover {
   background-position: -100% 0;
-  color: #050d2b;
+  color: #395886;
 }

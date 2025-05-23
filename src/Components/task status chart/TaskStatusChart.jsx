@@ -1,10 +1,12 @@
 import axios from 'axios';
-import { set } from 'date-fns';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import LoaderSpinner from '../loader spinner/LoaderSpinner';
 
 const TaskStatusChart = () => {
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -18,7 +20,10 @@ const TaskStatusChart = () => {
         );
         setTasks(response.data.tasks);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
+        toast.error(error.response?.data?.message || 'Failed to fetch tasks');
+      }
+      finally {
+        setLoading(false);
       }
     };
 
@@ -38,9 +43,12 @@ const TaskStatusChart = () => {
   const COLORS = ['#d5deef', '#b1c9ef', '#638ecb', '#395886'];
 
   return (
-    <div className='bg-white/60 lg:w-[35%] md:[40%] shadow-md rounded-lg p-3 flex flex-col items-center'>
+    <div className='bg-white/60 lg:w-[35%] md:[40%] w-full shadow-md rounded-lg p-3 flex flex-col items-center'>
       <h3 className='text-xl font-semibold mb-8'>Task Status Overview</h3>
-      {tasks.length > 0 ? (
+      { loading ? (
+        <LoaderSpinner child={'Loading...'} />
+      ) :
+      tasks.length > 0 ? (
         <PieChart width={300} height={300}>
           <Pie
             data={data}
