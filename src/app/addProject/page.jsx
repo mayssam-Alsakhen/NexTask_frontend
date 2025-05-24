@@ -129,7 +129,7 @@ export default function AddProject () {
     }
   };
 
-  return (
+  return ( 
     <div className='mt-12 text-prime'>
         <h2 className='sm:text-lg md:text-2xl text-center font-bold mb-4 sm:mt-6 md:mt-0'>Project Details</h2>
         <form onSubmit={handleSubmit} className='w-full md:w-[600px] mx-auto'>
@@ -175,7 +175,7 @@ export default function AddProject () {
               ))}
             </div>
 
-            <button type="submit" className='hover:shadow-button hover:font-extrabold py-2 rounded-lg border-prime border-[1px]'>ADD</button>
+            <button type="submit" className=' bg-button text-white hover:bg-buttonHover hover:shadow-button hover:font-extrabold py-2 rounded-lg transition-all'>ADD</button>
           </div>
         </form>
 

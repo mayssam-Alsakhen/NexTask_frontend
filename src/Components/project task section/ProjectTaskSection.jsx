@@ -138,8 +138,8 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
                 <option value="all">All Tasks</option>
                 <option value="pending">Pending</option>
                 <option value="in progress">In Progress</option>
-                <option value="completed">Done</option>
                 <option value="test">Testing</option>
+                <option value="completed">Completed</option>
               </select>
             </div>
 
