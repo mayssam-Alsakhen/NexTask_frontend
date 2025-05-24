@@ -27,6 +27,38 @@ const ProjectDetails = ({ params }) => {
   const { id } = use(params);
   const [currentUser, setCurrentUser] = useState(null);
 
+
+// Download report handler
+const downloadReport = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${id}/report`,
+      {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/pdf',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      }
+    );
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `project-${id}-report.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error('Download error:', err);
+    toast.error('Could not download report. Check console for details.');
+  }
+};
+
+
+
   useEffect(() => {
     setCurrentUser(localStorage.getItem("user_id"));
     if (!loading && !user) {
@@ -152,6 +184,16 @@ const ProjectDetails = ({ params }) => {
       <div>
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-1">
+{/*  */}
+
+<button
+onClick={downloadReport}
+ className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Download Report
+      </button>
+
+            {/*  */}
             <h1 className="md:text-2xl text-lg font-bold text-button ">{project.name}</h1>
               <span className={`${project.status=='Completed'?'bg-done':project.status=='In Progress'?'bg-progress':project.status=='Pending'?'bg-pending':'bg-testing'} text-baseText rounded-full md:text-sm text-xs px-2 md:px-3 py-[0.5px]`}>
                 {project.status}
