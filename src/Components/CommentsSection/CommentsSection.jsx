@@ -52,9 +52,9 @@ export default function CommentsSection({ taskId }) {
       );
   
       const added = res.data.data;
+      setNewComment('');
       setComments((prev) => [...prev, added]);
       console.log('Comment added:', added);
-      setNewComment('');
     } catch (err) {
       console.error('Failed to add comment:', err);
     }

@@ -10,7 +10,7 @@ export const checkIfUserIsAdmin = async (projectId) => {
     console.log("User ID:", currentUserId);
 
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/projects/${projectId}`,
+      `http://127.0.0.1:8000/api/projects/${projectId}/is-admin`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -19,13 +19,14 @@ export const checkIfUserIsAdmin = async (projectId) => {
     );
     console.log('API response:', res);
     
-    const projectUsers = res.data.data.users;
-    const user = projectUsers.find((u) => u.id == currentUserId);
-    return user?.pivot?.is_admin === 1;
-  } catch (error) {
-    toast.error("Admin check failed:", error.message);
-    
-    return false;
-    
-  }
-};
+      // const projectUsers = res.data.data.users;
+      // const user = projectUsers.find((u) => u.id == currentUserId);
+      // return user?.pivot?.is_admin === 1;
+      return res.data.is_admin;
+    } catch (error) {
+      toast.error( error.message);
+      
+      return false;
+      
+    }
+  };

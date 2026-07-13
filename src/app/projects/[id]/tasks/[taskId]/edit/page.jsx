@@ -6,6 +6,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { CiUser } from "react-icons/ci";
 import axios from 'axios';
 import AssignUsers from '@/Components/AssignUsers/AssignUsers';
+import { toast } from 'react-toastify';
 
 const EditTaskPage = () => {
   const { id, taskId } = useParams();
@@ -43,7 +44,7 @@ const [usersToAddToProject, setUsersToAddToProject] = useState([]);
           assigned_users: taskData.users.map((u) => u.id),
         });
       } catch (error) {
-        console.error('Failed to fetch task', error);
+        toast.error(error);
       }
     };
 
@@ -114,7 +115,14 @@ const [usersToAddToProject, setUsersToAddToProject] = useState([]);
   
       router.push(`/projects/${id}/tasks/${taskId}`);
     } catch (error) {
-      console.error('Task update failed:', error);
+      if (error.response && error.response.status === 400) {
+        toast.error('Invalid input data. Please check your form.');
+      } else if (error.response && error.response.status === 422) {
+        toast.error('Project due date cannot be earlier than the due date of any of its tasks. Please adjust the project or task dates.');
+      } else if (error.response && error.response.status === 403) {
+        toast.error('You do not have permission to update this task.');   
+      } else 
+      toast.error(error);
     }
   };
   if (!task) {

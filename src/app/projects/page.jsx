@@ -39,7 +39,7 @@ function page() {
       if (response.data && response.data.data) {
         setProjects(response.data.data);
       }
-    } catch (error) {
+    } catch (err) {
       toast.error(err.response?.data?.message||"Failed to fetch projects");
     } finally {
       setLoadingProjects(false);
@@ -58,13 +58,14 @@ function page() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/projects/${id}`, {
+      await axios.delete(`http://127.0.0.1:8000/api/projects/${del}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem("token")}`
         }
       });
+
       setDel(false);
-      setProjects(projects.filter(project => project.id !== id));
+      setProjects(projects.filter(project => project.id !== del));
     } catch (err) {
       toast.error(err.response?.data?.message||"Failed to delete project");
     }
@@ -110,7 +111,7 @@ function page() {
         },
       });
       setProjects(response.data.projects);
-    } catch (error) {
+    } catch (err) {
       toast.error(err.response?.data?.message||"Failed to search projects");
     } finally {
       setSearching(false);
@@ -188,13 +189,12 @@ function page() {
           ))}
         </div>
       )}
-
       <Popup trigger={del} onBlur={() => setDel(false)}>
        <div className="text-prime text-xl font-bold p-4">
           <p>Are you sure you want to delete this project</p>
           <div className="flex justify-center text-white gap-16 mt-10">
             <button onClick={() => setDel(false)} className="w-16 py-1 bg-button hover:bg-buttonHover rounded-lg hover:shadow-lg">No</button>
-            <button onClick={handleDelete} className="w-16 py-1 hover:bg-red-500 bg-button rounded-lg hover:shadow-lg">Yes</button>
+            <button onClick={()=> handleDelete(del)} className="w-16 py-1 hover:bg-red-500 bg-button rounded-lg hover:shadow-lg">Yes</button>
           </div>
         </div>
       </Popup>

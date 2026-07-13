@@ -97,7 +97,7 @@ const TaskPage = () => {
       <h1 className="md:text-2xl text-lg font-bold text-button">{task.title}</h1>
       <span className={`${task.category=='Completed'?'bg-done':task.category=='In Progress'?'bg-progress':task.category=='Pending'?'bg-pending':'bg-testing'} text-baseText rounded-full md:text-sm text-xs px-2 md:px-3 py-[0.5px]`}>{task.category}</span>
         </div>
-        <p className="text-gray-500 " onClick={()=>router.push(`/projects/${project.id}`)}>{project.name}</p>
+        <p className="text-gray-500 cursor-pointer hover:underline hover:text-button" onClick={()=>router.push(`/projects/${project.id}`)}>{project.name}</p>
       </div>
       <div className="flex justify-between flex-wrap items-end my-5 border-b border-gray-300 p-2 md:mx-4 text-xs md:text-base">
       <p className="md:mt-2 text-gray-500">Due Date: {task.due_date}</p>

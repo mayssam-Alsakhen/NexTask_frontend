@@ -98,7 +98,7 @@ export default function AddTaskForm({ projectId, defaultCategory = "Pending", on
       if (onTaskCreated) onTaskCreated(res.data.task);
       toast.success('Task added successfully!');
     } catch (error) {
-      toast.error('Failed to create task. Please try again.');
+      toast.error(`Failed to create task. Please try again. ${error}`);
       setError('Failed to create task. Please try again.');
     }
   };
@@ -145,7 +145,7 @@ export default function AddTaskForm({ projectId, defaultCategory = "Pending", on
                 placeholder="Description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="p-2 border border-testing focus:border-2 outline-none rounded"
+                className="p-2 ju border border-testing focus:border-2 outline-none rounded"
                 rows="3"
               />
               <input

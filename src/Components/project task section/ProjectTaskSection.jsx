@@ -157,7 +157,7 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
           {Object.entries(categorizedTasks).map(
             ([category, taskList]) => (
               <CategoryColumn
-              mainClass={`lg:w-[25%]  bg-main min-w-60 lg:h-[80vh] h-[75vh] overflow-y-hidden`}
+              mainClass={`lg:w-[25%] bg-main min-w-60 lg:h-[80vh] h-[75vh] overflow-y-hidden`}
                 cardDir={`flex-col gap-2 overflow-y-auto`}
                 key={category}
                 category={category}
