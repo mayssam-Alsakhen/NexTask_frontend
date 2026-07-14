@@ -29,7 +29,7 @@ const [usersToAddToProject, setUsersToAddToProject] = useState([]);
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const res = await axios.get(`http://127.0.0.1:8000/api/tasks/${taskId}`, {
+        const res = await axios.get(`/api/tasks/${taskId}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         const taskData = res.data.task;
@@ -75,7 +75,7 @@ const [usersToAddToProject, setUsersToAddToProject] = useState([]);
       // Step 3: Add new users to the project if needed
       for (const user of usersToAddToProject) {
         await axios.post(
-          `http://127.0.0.1:8000/api/projects/${id}/add-user`,
+          `/api/projects/${id}/add-user`,
           { email: user.email },
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -88,7 +88,7 @@ const [usersToAddToProject, setUsersToAddToProject] = useState([]);
   
       // Step 5: Submit task update
       await axios.put(
-        `http://127.0.0.1:8000/api/tasks/${taskId}`,
+        `/api/tasks/${taskId}`,
         {
           title: form.title,
           description: form.description,
@@ -104,7 +104,7 @@ const [usersToAddToProject, setUsersToAddToProject] = useState([]);
 
       // Step 6: Submit progress update separately
     await axios.patch(
-      `http://127.0.0.1:8000/api/tasks/${taskId}/progress`,
+      `/api/tasks/${taskId}/progress`,
       {
         progress: Number(form.progress),
       },

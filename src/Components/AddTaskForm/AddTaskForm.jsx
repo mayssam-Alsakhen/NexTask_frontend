@@ -31,7 +31,7 @@ export default function AddTaskForm({ projectId, defaultCategory = "Pending", on
     if (!projectId) {
       const fetchProjects = async () => {
         try {
-          const res = await axios.get(`http://127.0.0.1:8000/api/projects/user/${userId}`, {
+          const res = await axios.get(`/api/projects/user/${userId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -74,7 +74,7 @@ export default function AddTaskForm({ projectId, defaultCategory = "Pending", on
     };
 
     try {
-      const res = await axios.post('http://127.0.0.1:8000/api/tasks', newTask, {
+      const res = await axios.post('/api/tasks', newTask, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

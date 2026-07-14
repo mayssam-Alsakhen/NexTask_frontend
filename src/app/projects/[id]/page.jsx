@@ -69,7 +69,7 @@ const ProjectDetails = ({ params }) => {
     if (!id) return;
     const fetchProjectDetails = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/projects/${id}`, {
+        const response = await axios.get(`/api/projects/${id}`, {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem("token")}`
@@ -87,7 +87,7 @@ const ProjectDetails = ({ params }) => {
     // fetch tasks of this project
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/tasks?project_id=${id}`, {
+        const response = await axios.get(`/api/tasks?project_id=${id}`, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
         });
         setTasks(response.data.tasks);
@@ -126,7 +126,7 @@ const ProjectDetails = ({ params }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/projects/${id}`, {
+      await axios.delete(`/api/projects/${id}`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
       });
       setDel(false);
@@ -140,7 +140,7 @@ const ProjectDetails = ({ params }) => {
     e.preventDefault();
     try {
       await axios.put(
-        `http://127.0.0.1:8000/api/projects/${id}`,
+        `/api/projects/${id}`,
         formData,
         {
           headers: {

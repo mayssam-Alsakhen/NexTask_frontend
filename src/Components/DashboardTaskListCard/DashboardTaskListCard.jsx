@@ -16,7 +16,7 @@ export default function DashboardTaskListCard({ title, filter }) {
 
   useEffect(() => {
     setLoading(true);
-    axios.post("http://127.0.0.1:8000/api/dashboard/tasks/filter",
+    axios.post("/api/dashboard/tasks/filter",
       { filter },
       {
         headers: {

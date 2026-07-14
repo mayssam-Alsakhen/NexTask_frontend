@@ -21,7 +21,7 @@ export default function TaskProgressEditor({ task, projectId }) {
   const handleSave = async () => {
     setIsEditing(false);
     try {
-      await axios.patch(`http://127.0.0.1:8000/api/tasks/${task.id}/progress`, {
+      await axios.patch(`/api/tasks/${task.id}/progress`, {
         progress,
       }, {
         headers: {

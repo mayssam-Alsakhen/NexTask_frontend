@@ -50,7 +50,7 @@ export default function AddProject() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/user/search",
+        "/api/user/search",
         { email: query },
         {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -113,7 +113,7 @@ export default function AddProject() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/ai/generate-project-tasks",
+        "/api/ai/generate-project-tasks",
         {
           description: formData.description,
         },
@@ -151,7 +151,7 @@ export default function AddProject() {
     setCreatingProject(true);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/projects', updatedFormData, {
+      const response = await axios.post('/api/projects', updatedFormData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem("token")}`
@@ -165,7 +165,7 @@ export default function AddProject() {
         for (const task of generatedTasks) {
 
           await axios.post(
-            "http://127.0.0.1:8000/api/tasks",
+            "/api/tasks",
             {
               title: task.title,
               description: task.description,

@@ -28,7 +28,7 @@ const TaskPage = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/tasks/${taskId}`, {
+        const response = await axios.get(`/api/tasks/${taskId}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         const taskData = response.data.task;
@@ -64,7 +64,7 @@ const TaskPage = () => {
 
   const handleTaskDelete = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/tasks/${task.id}`, {
+      await axios.delete(`/api/tasks/${task.id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       toast.success('Task deleted successfully!')

@@ -21,7 +21,7 @@ export default function UserDropdown() {
       try {
         const token = localStorage.getItem("token");
         setUserName(localStorage.getItem("name"));
-        const response = await axios.get("http://127.0.0.1:8000/api/me", {
+        const response = await axios.get("/api/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -39,7 +39,7 @@ export default function UserDropdown() {
   const handleLogout = async () => {
     try {
         const token = localStorage.getItem("token");
-        await axios.post("http://127.0.0.1:8000/api/logout", {}, {
+        await axios.post("/api/logout", {}, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

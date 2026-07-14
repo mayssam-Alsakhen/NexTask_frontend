@@ -18,7 +18,7 @@ function Login() {
       setErrorMessage('');
       
       try {
-          const response = await axios.post('http://127.0.0.1:8000/api/login', loginData, {
+          const response = await axios.post('/api/login', loginData, {
               headers: { 'Content-Type': 'application/json' }
           });
 
@@ -26,7 +26,7 @@ function Login() {
               localStorage.setItem('token', response.data.token);
   
               // Fetch user details after login
-              const meResponse = await axios.get('http://127.0.0.1:8000/api/me', {
+              const meResponse = await axios.get('/api/me', {
                   headers: { Authorization: `Bearer ${response.data.token}` }
               });
               // Store user data
@@ -48,7 +48,7 @@ function Login() {
         e.preventDefault();
         setErrorMessage('');
         try {
-          const response = await axios.post('http://127.0.0.1:8000/api/register', registerData,{headers:{'Content-Type': 'application/json'}} ); 
+          const response = await axios.post('/api/register', registerData,{headers:{'Content-Type': 'application/json'}} ); 
           if (response.data.token) {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user_id', response.data.user.id);

@@ -19,7 +19,7 @@ const CompletedTasksChart = () => {
   useEffect(() => {
     const fetchCompletedTasks = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/analytics/completed-tasks', {
+        const response = await axios.get('/api/analytics/completed-tasks', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

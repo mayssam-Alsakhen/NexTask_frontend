@@ -10,7 +10,7 @@ export const checkIfUserIsAdmin = async (projectId) => {
     console.log("User ID:", currentUserId);
 
     const res = await axios.get(
-      `http://127.0.0.1:8000/api/projects/${projectId}/is-admin`,
+      `/api/projects/${projectId}/is-admin`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

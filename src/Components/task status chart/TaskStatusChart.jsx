@@ -11,7 +11,7 @@ const TaskStatusChart = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/tasks',
+        const response = await axios.get('/api/tasks',
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

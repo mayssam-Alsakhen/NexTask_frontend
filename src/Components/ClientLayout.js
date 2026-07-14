@@ -3,6 +3,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
 import React, { useState, Suspense, lazy } from "react";
 const Navbar = lazy(() => import("@/Components/Navbar/Navbar"));
+import "@/../lib/axiosConfig";
 
 
 export default function ClientLayout({ children }) {

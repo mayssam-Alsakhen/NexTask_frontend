@@ -102,7 +102,7 @@ const ProjectTaskSection = ({ projectId, api, title, addIcon}) => {
 
     try {
       await axios.put(
-        `http://127.0.0.1:8000/api/tasks/${taskId}`,
+        `/api/tasks/${taskId}`,
         { category: newCategory },
         {
           headers: {

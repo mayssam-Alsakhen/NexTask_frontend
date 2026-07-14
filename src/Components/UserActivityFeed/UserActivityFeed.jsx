@@ -12,7 +12,7 @@ export default function UserActivityCard({ userId }) {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/users/${userId}/activities`, {
+      .get(`/api/users/${userId}/activities`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

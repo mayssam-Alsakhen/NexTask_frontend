@@ -39,7 +39,7 @@ const handleDateClick = (arg) => {
   const fetchTasks = async () => {
     try {
       const uid = localStorage.getItem('user_id');
-      const { data } = await axios.get('http://127.0.0.1:8000/api/tasks', {
+      const { data } = await axios.get('/api/tasks', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       const userTasks = data.tasks.filter(t => t.users.some(u => u.id == uid));

@@ -19,7 +19,7 @@ const ProjectUsersSection = ({ projectId }) => {
   useEffect(() => {
     const fetchProjectUsers = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/projects/${projectId}`, {
+        const res = await fetch(`/api/projects/${projectId}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
         const data = await res.json();
@@ -43,7 +43,7 @@ const ProjectUsersSection = ({ projectId }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/user/search",
+        "/api/user/search",
         { email: query },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -74,7 +74,7 @@ const ProjectUsersSection = ({ projectId }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `http://127.0.0.1:8000/api/projects/${projectId}/add-user`,
+        `/api/projects/${projectId}/add-user`,
         { email },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -93,7 +93,7 @@ const ProjectUsersSection = ({ projectId }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://127.0.0.1:8000/api/projects/${projectId}/users/${removeUser}`,
+        `/api/projects/${projectId}/users/${removeUser}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("User removed!");
@@ -108,7 +108,7 @@ const ProjectUsersSection = ({ projectId }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://127.0.0.1:8000/api/projects/${projectId}/users/${id}/admin`,
+        `/api/projects/${projectId}/users/${id}/admin`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -123,7 +123,7 @@ const ProjectUsersSection = ({ projectId }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://127.0.0.1:8000/api/projects/${projectId}/remove-admin/${id}`,
+        `/api/projects/${projectId}/remove-admin/${id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

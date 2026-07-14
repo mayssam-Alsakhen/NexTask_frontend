@@ -30,7 +30,7 @@ function page() {
     if (!user) return;
     setLoadingProjects(true);
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/projects/user/${user.id}`, {
+      const response = await axios.get(`/api/projects/user/${user.id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -58,7 +58,7 @@ function page() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/projects/${del}`, {
+      await axios.delete(`/api/projects/${del}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem("token")}`
         }
@@ -74,7 +74,7 @@ function page() {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://127.0.0.1:8000/api/projects/${edit}`, formData, {
+      await axios.put(`/api/projects/${edit}`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem("token")}`
@@ -105,7 +105,7 @@ function page() {
     setSearchTerm(value);
     setSearching(true);
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/search-project?search=${value}`, {
+      const response = await axios.get(`/api/search-project?search=${value}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

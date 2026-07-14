@@ -14,7 +14,7 @@ export default function ProjectOverviewSection() {
     const fetchProjects = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/projects/user/${localStorage.getItem('user_id')}`,
+          `/api/projects/user/${localStorage.getItem('user_id')}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,

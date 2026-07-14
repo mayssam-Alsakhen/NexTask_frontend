@@ -15,7 +15,7 @@ export default function EditProfilePopup({ trigger, onBlur, onUpdateUser }) {
   useEffect(() => {
     if (trigger) {
       axios
-        .get('http://127.0.0.1:8000/api/me', {
+        .get('/api/me', {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         .then((response) => {
@@ -47,7 +47,7 @@ export default function EditProfilePopup({ trigger, onBlur, onUpdateUser }) {
     try {
         const userId = localStorage.getItem('user_id');
       const response = await axios.put(
-        `http://127.0.0.1:8000/api/user/${userId}`, // Make sure to use dynamic user ID or fetch from context
+        `/api/user/${userId}`, // Make sure to use dynamic user ID or fetch from context
         {
           name,
           password: newPassword,

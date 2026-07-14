@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            axios.get("http://127.0.0.1:8000/api/me", {
+            axios.get("/api/me", {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {

@@ -14,7 +14,7 @@ export default function CommentsSection({ taskId }) {
     const fetchComments = async () => {
       console.log("Fetching comments for task ID:", taskId);
       try {
-        const res = await axios.get(`http://127.0.0.1:8000/api/comments/${taskId}`, {
+        const res = await axios.get(`/api/comments/${taskId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -39,7 +39,7 @@ export default function CommentsSection({ taskId }) {
   
     try {
       const res = await axios.post(
-        `http://127.0.0.1:8000/api/comments`,
+        `/api/comments`,
         {
           task_id: taskId,
           content: newComment,
@@ -63,7 +63,7 @@ export default function CommentsSection({ taskId }) {
     // Delete comment
   const handleDeleteComment = async (commentId) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/comments/${commentId}`, {
+      await axios.delete(`/api/comments/${commentId}`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

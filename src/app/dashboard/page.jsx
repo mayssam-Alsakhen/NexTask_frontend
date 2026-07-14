@@ -18,7 +18,7 @@ function Dashboard() {
   const [summary, setSummary] = useState(null);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/dashboard/summary', {
+    axios.get('/api/dashboard/summary', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

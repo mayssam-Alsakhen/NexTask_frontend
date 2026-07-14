@@ -62,7 +62,7 @@ const AssignUsers = ({
     if (!searchEmail) return;
     try {
       const res = await axios.post(
-        'http://127.0.0.1:8000/api/user/search',
+        '/api/user/search',
         { email: searchEmail },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },

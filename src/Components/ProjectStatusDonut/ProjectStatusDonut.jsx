@@ -11,7 +11,7 @@ const ProjectStatusChart = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/projects/user/${localStorage.getItem('user_id')}`, {
+        const response = await axios.get(`/api/projects/user/${localStorage.getItem('user_id')}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
